@@ -1,5 +1,5 @@
 {
-	"name": "decorator-sample",
+	"name": "noveler",
 	"description": "Sample for the decorator API",
 	"version": "0.0.1",
 	"publisher": "vscode-samples",
@@ -43,5 +43,8 @@
 		"@typescript-eslint/parser": "^5.30.0",
 		"eslint": "^8.13.0",
 		"typescript": "^4.8.4"
+	},
+	"dependencies": {
+		"@types/lodash": "^4.14.186"
 	}
 }
