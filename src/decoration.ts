@@ -28,9 +28,10 @@ class Decoration {
 		punctuationHandlers: [
 			{
 				decorationType: vscode.window.createTextEditorDecorationType({
-					color: { id: 'quote' },
+					color: { id: 'number' },
 				}),
-				regEx: /“.*?(?=《)|(?<=》).*?”|“.*?”/g,
+				// 包括小数
+				regEx: /\d+(\.\d+)?/g,
 			},
 			{
 				decorationType: vscode.window.createTextEditorDecorationType({
@@ -40,10 +41,15 @@ class Decoration {
 			},
 			{
 				decorationType: vscode.window.createTextEditorDecorationType({
-					color: { id: 'number' },
+					color: { id: 'quote' },
 				}),
-				// 包括小数
-				regEx: /\d+(\.\d+)?/g,
+				regEx: /“.*?”/g,
+			},
+			{
+				decorationType: vscode.window.createTextEditorDecorationType({
+					color: { id: 'squareBracket' },
+				}),
+				regEx: /【.*?】/g,
 			},
 		],
 	}

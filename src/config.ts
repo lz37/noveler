@@ -1,8 +1,14 @@
 import * as vscode from 'vscode'
 import * as _ from 'lodash'
 
+const ProjectName = 'noveler'
+
 class Config {
-	private _value: IConfig
+	public update = (extension = ProjectName) => {
+		this.value = vscode.workspace.getConfiguration().get(extension) as IConfig
+		return this.value
+	}
+	private _value: IConfig = this.update()
 	public get value() {
 		return this._value
 	}
@@ -10,11 +16,11 @@ class Config {
 		this._value = value
 	}
 	public constructor(extension = ProjectName) {
-		this._value = vscode.workspace.getConfiguration().get(extension) as IConfig
+		this.update(extension)
 		if (_.isEmpty(this.value)) {
 			// @todo 使用默认配置初始化
 		}
 	}
 }
 
-export default new Config('noveler')
+export default new Config(ProjectName)

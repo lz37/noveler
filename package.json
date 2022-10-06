@@ -65,7 +65,7 @@
 				"id": "number",
 				"description": "数字的颜色",
 				"defaults": {
-					"dark": "#add8e6",
+					"dark": "#6cd8e6",
 					"light": "#00008b"
 				}
 			},
@@ -83,6 +83,14 @@
 				"defaults": {
 					"dark": "#90ee90",
 					"light": "#006400"
+				}
+			},
+			{
+				"id": "squareBracket",
+				"description": "方括号的颜色",
+				"defaults": {
+					"dark": "#edbefa",
+					"light": "#8b008b"
 				}
 			}
 		]
