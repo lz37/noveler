@@ -7,7 +7,7 @@ interface IRole {
 		light: string
 		dark: string
 	}
-	description: string
+	description?: string
 }
 declare const ProjectName = 'noveler'
 

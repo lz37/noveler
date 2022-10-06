@@ -18,6 +18,48 @@
 	],
 	"main": "./out/extension.js",
 	"contributes": {
+		"configuration": {
+			"title": "Noveler",
+			"properties": {
+				"noveler": {
+					"type": "object",
+					"description": "Noveler的配置",
+					"properties": {
+						"roles": {
+							"type": "array",
+							"description": "角色列表",
+							"items": {
+								"type": "object",
+								"properties": {
+									"name": {
+										"type": "string",
+										"description": "角色名称"
+									},
+									"color": {
+										"type": "object",
+										"description": "角色姓名高亮颜色",
+										"properties": {
+											"light": {
+												"type": "string",
+												"description": "在浅色主题下的颜色"
+											},
+											"dark": {
+												"type": "string",
+												"description": "在深色主题下的颜色"
+											}
+										}
+									},
+									"description": {
+										"type": "string",
+										"description": "角色描述, 用于鼠标悬停时显示"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
 		"colors": [
 			{
 				"id": "number",
