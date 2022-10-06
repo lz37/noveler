@@ -2,8 +2,8 @@
 	"name": "noveler",
 	"description": "Sample for the decorator API",
 	"version": "0.1.0",
-	"publisher": "vscode-samples",
-	"license": "MIT",
+	"publisher": "zerozawa",
+	"license": "GPL-3.0",
 	"engines": {
 		"vscode": "^1.71.2"
 	},
