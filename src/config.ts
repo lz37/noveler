@@ -1,5 +1,6 @@
 import * as vscode from 'vscode'
 import * as _ from 'lodash'
+import defaultConf from './DefaultConf'
 
 const ProjectName = 'noveler'
 
@@ -18,7 +19,8 @@ class Config {
 	public constructor(extension = ProjectName) {
 		this.update(extension)
 		if (_.isEmpty(this.value)) {
-			// @todo 使用默认配置初始化
+			vscode.workspace.getConfiguration().update(extension, defaultConf, vscode.ConfigurationTarget.Workspace)
+			this.value = defaultConf
 		}
 	}
 }

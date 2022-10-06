@@ -1,7 +1,7 @@
 {
 	"name": "noveler",
 	"description": "Sample for the decorator API",
-	"version": "0.0.1",
+	"version": "0.1.0",
 	"publisher": "vscode-samples",
 	"license": "MIT",
 	"engines": {
@@ -19,7 +19,7 @@
 	"main": "./out/extension.js",
 	"contributes": {
 		"configuration": {
-			"title": "Noveler",
+			"title": "noveler",
 			"properties": {
 				"noveler": {
 					"type": "object",

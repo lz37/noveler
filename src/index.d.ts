@@ -9,7 +9,6 @@ interface IRole {
 	}
 	description?: string
 }
-declare const ProjectName = 'noveler'
 
 interface DecorationHandler {
 	decorationType: import('vscode').TextEditorDecorationType

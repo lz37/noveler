@@ -1,6 +1,6 @@
 import * as vscode from 'vscode'
-import decoration from './decoration'
-import config from './config'
+import decoration from './Decoration'
+import config from './Config'
 
 // this method is called when vs code is activated
 export const activate = (context: vscode.ExtensionContext) => {
@@ -20,6 +20,14 @@ export const activate = (context: vscode.ExtensionContext) => {
 		vscode.workspace.onDidChangeTextDocument((event) => {
 			if (activeEditor && event.document === activeEditor.document) {
 				decoration.triggerUpdateDecorations(activeEditor, true)
+			}
+		}),
+		vscode.workspace.onDidChangeConfiguration((event) => {
+			if (event.affectsConfiguration('noveler')) {
+				config.update()
+				decoration.destroyDecorations(activeEditor)
+				decoration.updateHandler(config.value)
+				decoration.triggerUpdateDecorations(activeEditor)
 			}
 		}),
 	)

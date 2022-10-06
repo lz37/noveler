@@ -1,24 +1,9 @@
 import * as vscode from 'vscode'
-import config from './config'
+import config from './Config'
 
 class Decoration {
-	public constructor() {
-		const newRoleHandlers: DecorationHandler[] = []
-		config.value.roles.forEach((role) => {
-			newRoleHandlers.push({
-				decorationType: vscode.window.createTextEditorDecorationType({
-					light: {
-						color: role.color.light,
-					},
-					dark: {
-						color: role.color.dark,
-					},
-				}),
-				regEx: new RegExp(role.name, 'g'),
-				hoverMessage: new vscode.MarkdownString(role.description),
-			})
-		})
-		this.handlers.roleHandlers = newRoleHandlers
+	public constructor(config: IConfig) {
+		this.updateHandler(config)
 	}
 	private _handlers: {
 		roleHandlers: DecorationHandler[]
@@ -86,6 +71,38 @@ class Decoration {
 			this.updateDecoration(handler, activeEditor)
 		})
 	}
+
+	private destroyDecoration = (handler: DecorationHandler, activeEditor: vscode.TextEditor | undefined) => {
+		activeEditor?.setDecorations(handler.decorationType, [])
+	}
+	public destroyDecorations = (activeEditor: vscode.TextEditor | undefined) => {
+		this.handlers.punctuationHandlers.forEach((handler) => {
+			this.destroyDecoration(handler, activeEditor)
+		})
+		this.handlers.roleHandlers.forEach((handler) => {
+			this.destroyDecoration(handler, activeEditor)
+		})
+	}
+
+	public updateHandler = (config: IConfig) => {
+		const newRoleHandlers: DecorationHandler[] = []
+		config.roles.forEach((role) => {
+			newRoleHandlers.push({
+				decorationType: vscode.window.createTextEditorDecorationType({
+					light: {
+						color: role.color.light,
+					},
+					dark: {
+						color: role.color.dark,
+					},
+				}),
+				regEx: new RegExp(role.name, 'g'),
+				hoverMessage: new vscode.MarkdownString(role.description),
+			})
+		})
+		this.handlers.roleHandlers = newRoleHandlers
+	}
+
 	private timeout: NodeJS.Timer | undefined = undefined
 
 	public triggerUpdateDecorations = (activeEditor: vscode.TextEditor | undefined, throttle = false) => {
@@ -101,4 +118,4 @@ class Decoration {
 	}
 }
 
-export default new Decoration()
+export default new Decoration(config.value)

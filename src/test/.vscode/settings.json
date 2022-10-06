@@ -1,14 +1,14 @@
 {
-  "noveler":{
+  "noveler": {
     "roles": [
       {
-        "name": "萧炎",
-        "color":{
-          "light": "#0000ff",
-          "dark": "#00ff00"
+        "name": "汪言",
+        "color": {
+          "light": "#ffff00",
+          "dark": "#ffff00"
         },
-        "description": "男主"
+        "description": "**主角**，性别为男爱好为女"
       }
     ]
-  },
+  }
 }
