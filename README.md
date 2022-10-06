@@ -4,12 +4,12 @@
 
 ### 1. 提供常见语法高亮
 
-![高亮图片](./images/highlight-sample.png)
+![高亮图片](https://raw.githubusercontent.com/lz37/noveler/master/images/highlight-sample.png)
 提供人物名称高亮
 
 ### 2. 自定义人物名称高亮
 
-在settings.json设置，以下是例子
+在 settings.json 设置，以下是例子
 
 ```json
 {
@@ -34,13 +34,13 @@
 }
 ```
 
-![人物姓名高亮图片](./images/roles-highlight-sample.png)
+![人物姓名高亮图片](https://raw.githubusercontent.com/lz37/noveler/master/images/roles-highlight-sample.png)
 
 ### 3. 自定义人物名悬停信息
 
 支持`markdown`语法
 
-在settings.json设置，以下是例子
+在 settings.json 设置，以下是例子
 
 ```json
 {
@@ -59,6 +59,6 @@
 }
 ```
 
-![人物信息悬停图片](./images/roles-hover-message-sample.png)
+![人物信息悬停图片](https://raw.githubusercontent.com/lz37/noveler/master/images/roles-hover-message-sample.png)
 
 更多功能正在开发中……
