@@ -1,21 +1,21 @@
 import * as vscode from 'vscode'
-import * as decoration from './decoration'
+import decoration from './decoration'
+import config from './config'
 
 // this method is called when vs code is activated
-export function activate(context: vscode.ExtensionContext) {
-	console.log('decorator sample is activated')
+export const activate = (context: vscode.ExtensionContext) => {
 
 	let activeEditor = vscode.window.activeTextEditor
 
 	if (activeEditor) {
-		decoration.triggerUpdateDecorations()
+		decoration.triggerUpdateDecorations(activeEditor)
 	}
 
 	vscode.window.onDidChangeActiveTextEditor(
 		(editor) => {
 			activeEditor = editor
 			if (editor) {
-				decoration.triggerUpdateDecorations()
+				decoration.triggerUpdateDecorations(activeEditor)
 			}
 		},
 		null,
@@ -25,7 +25,7 @@ export function activate(context: vscode.ExtensionContext) {
 	vscode.workspace.onDidChangeTextDocument(
 		(event) => {
 			if (activeEditor && event.document === activeEditor.document) {
-				decoration.triggerUpdateDecorations(true)
+				decoration.triggerUpdateDecorations(activeEditor, true)
 			}
 		},
 		null,

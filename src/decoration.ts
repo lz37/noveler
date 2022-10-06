@@ -1,80 +1,98 @@
 import * as vscode from 'vscode'
+import config from './config'
 
-const activeEditor = vscode.window.activeTextEditor
-const updateDecoration = (handler: DecorationHandler) => {
-	if (!activeEditor) {
-		return
+class Decoration {
+	public constructor() {
+		const newRoleHandlers: DecorationHandler[] = []
+		config.value.roles.forEach((role) => {
+			newRoleHandlers.push({
+				decorationType: vscode.window.createTextEditorDecorationType({
+					light: {
+						color: role.color.light,
+					},
+					dark: {
+						color: role.color.dark,
+					},
+				}),
+				regEx: new RegExp(role.name, 'g'),
+				hoverMessage: new vscode.MarkdownString(role.description),
+			})
+		})
+		this.handlers.roleHandlers = newRoleHandlers
 	}
-	const text = activeEditor.document.getText()
-	const options: vscode.DecorationOptions[] = []
-	let match
-	while ((match = handler.regEx.exec(text))) {
-		const startPos = activeEditor.document.positionAt(match.index)
-		const endPos = activeEditor.document.positionAt(match.index + match[0].length)
-		const decoration = { range: new vscode.Range(startPos, endPos), hoverMessage: handler.hoverMessage }
-		options.push(decoration)
+	private _handlers: {
+		roleHandlers: DecorationHandler[]
+		punctuationHandlers: DecorationHandler[]
+	} = {
+		roleHandlers: [],
+		punctuationHandlers: [
+			{
+				decorationType: vscode.window.createTextEditorDecorationType({
+					color: { id: 'quote' },
+				}),
+				regEx: /“.*?(?=《)|(?<=》).*?”|“.*?”/g,
+			},
+			{
+				decorationType: vscode.window.createTextEditorDecorationType({
+					color: { id: 'bookTitleMark' },
+				}),
+				regEx: /《.*?》/g,
+			},
+			{
+				decorationType: vscode.window.createTextEditorDecorationType({
+					color: { id: 'number' },
+				}),
+				// 包括小数
+				regEx: /\d+(\.\d+)?/g,
+			},
+		],
 	}
-	activeEditor.setDecorations(handler.decorationType, options)
-}
-
-const quoteHandler: DecorationHandler = {
-	decorationType: vscode.window.createTextEditorDecorationType({
-		color: 'green',
-		light: {
-			color: 'darkgreen',
-		},
-		dark: {
-			color: 'lightgreen',
-		},
-	}),
-	regEx: /".*?"|“.*?”/g,
-}
-
-const bookTitleMarkHandler: DecorationHandler = {
-	decorationType: vscode.window.createTextEditorDecorationType({
-		color: 'red',
-		light: {
-			color: 'darkred',
-		},
-		dark: {
-			color: 'lightred',
-		},
-	}),
-	regEx: /《.*?》/g,
-}
-/**
- * 包括小数
- */
-const numberHandler: DecorationHandler = {
-	decorationType: vscode.window.createTextEditorDecorationType({
-		color: 'yellow',
-		light: {
-			color: 'darkyellow',
-		},
-		dark: {
-			color: 'lightyellow',
-		},
-	}),
-	regEx: /\d+(\.\d+)?/g,
-}
-
-/**主要的更新函数，Decoration的更新操作在此完成 */
-function updateDecorations() {
-	updateDecoration(numberHandler)
-	updateDecoration(bookTitleMarkHandler)
-	updateDecoration(quoteHandler)
-}
-
-let timeout: NodeJS.Timer | undefined = undefined
-
-export function triggerUpdateDecorations(throttle = false) {
-	if (timeout) {
-		clearTimeout(timeout)
-		timeout = undefined
+	public get handlers() {
+		return this._handlers
 	}
-	if (throttle) {
-		timeout = setTimeout(updateDecorations, 500)
-	} else {
-		updateDecorations()
+	private set handlers(value) {
+		this._handlers = value
+	}
+	private updateDecoration = (handler: DecorationHandler, activeEditor: vscode.TextEditor | undefined) => {
+		if (!activeEditor) {
+			return
+		}
+		const text = activeEditor.document.getText()
+		const options: vscode.DecorationOptions[] = []
+		let match
+		while ((match = handler.regEx.exec(text))) {
+			const startPos = activeEditor.document.positionAt(match.index)
+			const endPos = activeEditor.document.positionAt(match.index + match[0].length)
+			const decoration: vscode.DecorationOptions = {
+				range: new vscode.Range(startPos, endPos),
+				hoverMessage: handler.hoverMessage,
+			}
+			options.push(decoration)
+		}
+		activeEditor.setDecorations(handler.decorationType, options)
+	}
+	/**主要的更新函数，Decoration的更新操作在此完成 */
+	private updateDecorations = (activeEditor: vscode.TextEditor | undefined) => {
+		this.handlers.punctuationHandlers.forEach((handler) => {
+			this.updateDecoration(handler, activeEditor)
+		})
+		this.handlers.roleHandlers.forEach((handler) => {
+			this.updateDecoration(handler, activeEditor)
+		})
+	}
+	private timeout: NodeJS.Timer | undefined = undefined
+
+	public triggerUpdateDecorations = (activeEditor: vscode.TextEditor | undefined, throttle = false) => {
+		if (this.timeout) {
+			clearTimeout(this.timeout)
+			this.timeout = undefined
+		}
+		if (throttle) {
+			this.timeout = setTimeout(this.updateDecorations, 500, activeEditor)
+		} else {
+			this.updateDecorations(activeEditor)
+		}
 	}
 }
+
+export default new Decoration()

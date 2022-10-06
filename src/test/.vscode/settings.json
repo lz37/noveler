@@ -1,0 +1,14 @@
+{
+  "noveler":{
+    "roles": [
+      {
+        "name": "萧炎",
+        "color":{
+          "light": "#00ff00",
+          "dark": "#00ff00"
+        },
+        "description": "男主"
+      }
+    ]
+  },
+}
