@@ -1,31 +1,64 @@
-# Decorator Sample
+# Noveler —— 一个在 vscode 上码中文小说的插件
 
-This folder contains a sample VS code extension that demonstrates the editor decorator API.
+## 提供的功能：
 
-The sample creates a decoration for each number that appears in the active editor. It
-demonstrates some of the decorator features such as borders, background colors, cursors
-and hovers.
+### 1. 提供常见语法高亮
 
-The sample also shows the use of a user defined themeable color. Instead of hardcoding a color value this allows users (and themes) to redefine the color in the user settings.
+![高亮图片](./images/highlight-sample.png)
+提供人物名称高亮
 
-![sample](preview.png)
+### 2. 自定义人物名称高亮
 
-## VSCode API
+在settings.json设置，以下是例子
 
-The sample code show the usage of the vscode.[`TextEditor.setDecorations`](https://code.visualstudio.com/api/references/vscode-api#TextEditor.setDecorations) and [`vscode.window.createTextEditorDecorationType`](https://code.visualstudio.com/api/references/vscode-api#window.createTextEditorDecorationType) APIs as well as the `colors` contribution point.
+```json
+{
+	"noveler": {
+		"roles": [
+			{
+				"name": "汪言",
+				"color": {
+					"light": "#ffff00",
+					"dark": "#ffff00"
+				}
+			},
+			{
+				"name": "王永磊",
+				"color": {
+					"dark": "#00ff00",
+					"light": "#00ff00"
+				}
+			}
+		]
+	}
+}
+```
 
-## Running the Sample
+![人物姓名高亮图片](./images/roles-highlight-sample.png)
 
-* `npm install` to initialize the project
-* `npm run watch` to start the compiler in watch mode
-* open this folder in VS Code and press `F5`
-* this will open the `[Extension Development Host]` window, running the extension:
-  * Open any document that contains single and multi-digit numbers.
-  * The extension will decorate single and multiple-digit numbers as shown in the screenshot above.
-  * In the user settings, add
-    ```
-    "workbench.colorCustomizations": {
-        "myextension.largeNumberBackground": "#ff00ff"
-    }
-    ```
-    to customize the large number decoration color.
+### 3. 自定义人物名悬停信息
+
+支持`markdown`语法
+
+在settings.json设置，以下是例子
+
+```json
+{
+	"noveler": {
+		"roles": [
+			{
+				"name": "汪言",
+				"color": {
+					"light": "#ffff00",
+					"dark": "#ffff00"
+				},
+				"description": "**男主**，性别为男爱好为女"
+			}
+		]
+	}
+}
+```
+
+![人物信息悬停图片](./images/roles-hover-message-sample.png)
+
+更多功能正在开发中……
