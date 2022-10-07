@@ -1,6 +1,6 @@
 {
 	"name": "noveler",
-	"description": "Sample for the decorator API",
+	"description": "一个在 vscode 上辅助码中文小说的插件",
 	"version": "0.1.2",
 	"publisher": "zerozawa",
 	"license": "GPL-3.0",

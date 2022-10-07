@@ -1,4 +1,4 @@
-# Noveler —— 一个在 vscode 上码中文小说的插件
+# Noveler —— 一个在 vscode 上辅助码中文小说的插件
 
 ## 提供的功能
 
