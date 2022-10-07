@@ -1,5 +1,6 @@
 interface IConfig {
-	roles: IRole[]
+	roles: IRole[],
+	autoInsert: AutoInsertHandler,
 }
 interface IRole {
 	name: string
@@ -8,6 +9,11 @@ interface IRole {
 		dark: string
 	}
 	description?: string
+}
+interface AutoInsertHandler{
+	enabled: boolean
+	indentionLength: number
+	spaceLines: number
 }
 
 interface DecorationHandler {

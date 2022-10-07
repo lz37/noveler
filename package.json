@@ -1,7 +1,7 @@
 {
 	"name": "noveler",
 	"description": "一个在 vscode 上辅助码中文小说的插件",
-	"version": "0.1.2",
+	"version": "0.2.0",
 	"publisher": "zerozawa",
 	"license": "GPL-3.0",
 	"engines": {
@@ -53,6 +53,24 @@
 										"type": "string",
 										"description": "角色描述, 用于鼠标悬停时显示"
 									}
+								}
+							}
+						},
+						"autoInsert": {
+							"type": "object",
+							"description": "自动补全 缩进/空行 配置，注意，此功能与vscode原生功能 editor.wrappingIndent 和 editor.autoIndent 冲突，请注意取舍。建议只在工作区的 settings.json 中配置，避免污染全局",
+							"properties": {
+								"enabled": {
+									"type": "boolean",
+									"description": "是否启用自动补全缩进"
+								},
+								"indentionLength": {
+									"type": "number",
+									"description": "自动补全缩进长度"
+								},
+								"spaceLines": {
+									"type": "number",
+									"description": "自动补全空行行数"
 								}
 							}
 						}

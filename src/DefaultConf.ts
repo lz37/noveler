@@ -9,4 +9,9 @@ export default {
 			description: '在此处添加角色描述，支持markdown语法',
 		},
 	],
+	autoInsert: {
+		enabled: false,
+		indentionLength: 4,
+		spaceLines: 1,
+	},
 } as IConfig

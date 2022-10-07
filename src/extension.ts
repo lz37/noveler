@@ -1,6 +1,7 @@
 import * as vscode from 'vscode'
 import decoration from './Decoration'
 import config from './Config'
+import IndentionCreate from './Indention'
 
 // this method is called when vs code is activated
 export const activate = (context: vscode.ExtensionContext) => {
@@ -20,6 +21,10 @@ export const activate = (context: vscode.ExtensionContext) => {
 		vscode.workspace.onDidChangeTextDocument((event) => {
 			if (activeEditor && event.document === activeEditor.document) {
 				decoration.triggerUpdateDecorations(activeEditor, true)
+				const autoInsertHandler = config.value.autoInsert
+				if (autoInsertHandler && autoInsertHandler.enabled && autoInsertHandler.indentionLength > 0) {
+					IndentionCreate(event, autoInsertHandler.indentionLength, autoInsertHandler.spaceLines)
+				}
 			}
 		}),
 		vscode.workspace.onDidChangeConfiguration((event) => {
