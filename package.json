@@ -1,14 +1,14 @@
 {
 	"name": "noveler",
 	"description": "Sample for the decorator API",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"publisher": "zerozawa",
 	"license": "GPL-3.0",
 	"engines": {
 		"vscode": "^1.71.2"
 	},
 	"repository": {
-		"url": "https://github.com/Microsoft/vscode-extension-samples"
+		"url": "https://github.com/lz37/noveler"
 	},
 	"categories": [
 		"Other"

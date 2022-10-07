@@ -1,6 +1,6 @@
 # Noveler —— 一个在 vscode 上码中文小说的插件
 
-## 提供的功能：
+## 提供的功能
 
 ### 1. 提供常见语法高亮
 
@@ -13,24 +13,24 @@
 
 ```json
 {
-	"noveler": {
-		"roles": [
-			{
-				"name": "汪言",
-				"color": {
-					"light": "#ffff00",
-					"dark": "#ffff00"
-				}
-			},
-			{
-				"name": "王永磊",
-				"color": {
-					"dark": "#00ff00",
-					"light": "#00ff00"
-				}
-			}
-		]
-	}
+    "noveler": {
+        "roles": [
+            {
+                "name": "汪言",
+                "color": {
+                    "light": "#ffff00",
+                    "dark": "#ffff00"
+                }
+            },
+            {
+                "name": "王永磊",
+                "color": {
+                    "dark": "#00ff00",
+                    "light": "#00ff00"
+                }
+            }
+        ]
+    }
 }
 ```
 
@@ -44,18 +44,18 @@
 
 ```json
 {
-	"noveler": {
-		"roles": [
-			{
-				"name": "汪言",
-				"color": {
-					"light": "#ffff00",
-					"dark": "#ffff00"
-				},
-				"description": "**男主**，性别为男爱好为女"
-			}
-		]
-	}
+    "noveler": {
+        "roles": [
+            {
+                "name": "汪言",
+                "color": {
+                    "light": "#ffff00",
+                    "dark": "#ffff00"
+                },
+                "description": "**男主**，性别为男爱好为女"
+            }
+        ]
+    }
 }
 ```
 
