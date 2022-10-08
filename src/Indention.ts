@@ -23,11 +23,16 @@ export default (event: vscode.TextDocumentChangeEvent, indentionNumber: number, 
 	for (let i = 0; i < indentionNumber; i++) {
 		indention += ' '
 	}
-	const position = editor.selection.active
+	// 获得 multi-cursor 模式下的 position
+	const positions = editor.selections.map((selection) => {
+		return selection.active
+	})
 	editor.edit((editBuilder) => {
-		// 将光标移动到下一行开头
-		const newPosition = position.with(position.line + 1, 0)
-		// 自动补全缩进
-		editBuilder.insert(newPosition, indention)
+		positions.forEach((position, index) => {
+			// 将光标移动到下一行开头
+			const newPosition = position.with(position.line + index + 1, 0)
+			// 自动补全缩进
+			editBuilder.insert(newPosition, indention)
+		})
 	})
 }

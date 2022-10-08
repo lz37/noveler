@@ -1,7 +1,7 @@
 {
 	"name": "noveler",
 	"description": "一个在 vscode 上辅助码中文小说的插件",
-	"version": "0.2.0",
+	"version": "0.2.1",
 	"publisher": "zerozawa",
 	"license": "GPL-3.0",
 	"engines": {
@@ -19,7 +19,7 @@
 	"main": "./out/extension.js",
 	"contributes": {
 		"configuration": {
-			"title": "noveler",
+			"title": "Noveler",
 			"properties": {
 				"noveler": {
 					"type": "object",
