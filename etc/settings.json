@@ -14,6 +14,10 @@
 			"enabled": true,
 			"indentionLength": 4,
 			"spaceLines": 1
+		},
+		"statusBar": {
+			"enabled": true,
+			"timeUnit": 10
 		}
 	},
 	"editor.wrappingIndent": "none",

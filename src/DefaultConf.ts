@@ -14,4 +14,8 @@ export default {
 		indentionLength: 4,
 		spaceLines: 1,
 	},
+	statusBar: {
+		enabled: false,
+		timeUnit: 10,
+	},
 } as IConfig

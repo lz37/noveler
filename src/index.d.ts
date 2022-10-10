@@ -1,6 +1,7 @@
 interface IConfig {
-	roles: IRole[],
-	autoInsert: AutoInsertHandler,
+	roles: IRole[]
+	autoInsert: IAutoInsertHandler
+	statusBar: IStatus
 }
 interface IRole {
 	name: string
@@ -10,13 +11,18 @@ interface IRole {
 	}
 	description?: string
 }
-interface AutoInsertHandler{
+interface IAutoInsertHandler {
 	enabled: boolean
 	indentionLength: number
 	spaceLines: number
 }
 
-interface DecorationHandler {
+interface IStatus {
+	enabled: boolean
+	timeUnit: number
+}
+
+interface IDecorationHandler {
 	decorationType: import('vscode').TextEditorDecorationType
 	regEx: RegExp
 	hoverMessage?: import('vscode').MarkdownString | import('vscode').MarkdownString[]

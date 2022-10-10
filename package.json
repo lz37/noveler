@@ -1,7 +1,7 @@
 {
 	"name": "noveler",
 	"description": "一个在 vscode 上辅助码中文小说的插件",
-	"version": "0.2.1",
+	"version": "0.3.0",
 	"publisher": "zerozawa",
 	"license": "GPL-3.0",
 	"engines": {
@@ -71,6 +71,20 @@
 								"spaceLines": {
 									"type": "number",
 									"description": "自动补全空行行数"
+								}
+							}
+						},
+						"statusBar": {
+							"type": "object",
+							"description": "状态栏配置",
+							"properties": {
+								"enabled": {
+									"type": "boolean",
+									"description": "是否启用状态栏"
+								},
+								"timeUnit": {
+									"type": "number",
+									"description": "判定为休息时间的时间单位，单位为秒钟"
 								}
 							}
 						}

@@ -9,7 +9,7 @@ const isEnter = (str: string) => {
 
 export default (event: vscode.TextDocumentChangeEvent, indentionNumber: number, spaceLines: number) => {
 	// 检测输入是否是回车，是的话在输入回车后添加两个空格
-	if (!isEnter(event.contentChanges[0].text)) {
+	if (!isEnter(event.contentChanges[0]?.text)) {
 		return
 	}
 	const editor = vscode.window.activeTextEditor

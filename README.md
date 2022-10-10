@@ -84,6 +84,25 @@
 }
 ```
 
+![自动补全缩进图片](https://raw.githubusercontent.com/lz37/noveler/master/images/auto-insert-sample.gif)
+
+### 5. 计速器
+
+配置：
+
+```json
+{
+    "noveler": {
+        "statusBar": {
+            "enabled": true, // 是否启用
+            "timeUnit": 10 // 计速器的时间单位，单位为秒(一段timeUnit的时间不码字，计速器会停止计时)
+        }
+    }
+}
+```
+
+![计速器图片](https://raw.githubusercontent.com/lz37/noveler/master/images/status-bar-sample.gif)
+
 祝您写作愉快 :)
 
 更多功能正在开发中……

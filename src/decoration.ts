@@ -6,8 +6,8 @@ class Decoration {
 		this.updateHandler(config)
 	}
 	private _handlers: {
-		roleHandlers: DecorationHandler[]
-		punctuationHandlers: DecorationHandler[]
+		roleHandlers: IDecorationHandler[]
+		punctuationHandlers: IDecorationHandler[]
 	} = {
 		roleHandlers: [],
 		punctuationHandlers: [
@@ -41,10 +41,7 @@ class Decoration {
 	public get handlers() {
 		return this._handlers
 	}
-	private set handlers(value) {
-		this._handlers = value
-	}
-	private updateDecoration = (handler: DecorationHandler, activeEditor: vscode.TextEditor | undefined) => {
+	private updateDecoration = (handler: IDecorationHandler, activeEditor: vscode.TextEditor | undefined) => {
 		if (!activeEditor) {
 			return
 		}
@@ -72,7 +69,7 @@ class Decoration {
 		})
 	}
 
-	private destroyDecoration = (handler: DecorationHandler, activeEditor: vscode.TextEditor | undefined) => {
+	private destroyDecoration = (handler: IDecorationHandler, activeEditor: vscode.TextEditor | undefined) => {
 		activeEditor?.setDecorations(handler.decorationType, [])
 	}
 	public destroyDecorations = (activeEditor: vscode.TextEditor | undefined) => {
@@ -85,7 +82,7 @@ class Decoration {
 	}
 
 	public updateHandler = (config: IConfig) => {
-		const newRoleHandlers: DecorationHandler[] = []
+		const newRoleHandlers: IDecorationHandler[] = []
 		config.roles.forEach((role) => {
 			newRoleHandlers.push({
 				decorationType: vscode.window.createTextEditorDecorationType({
@@ -100,7 +97,7 @@ class Decoration {
 				hoverMessage: new vscode.MarkdownString(role.description),
 			})
 		})
-		this.handlers.roleHandlers = newRoleHandlers
+		this._handlers.roleHandlers = newRoleHandlers
 	}
 
 	private timeout: NodeJS.Timer | undefined = undefined

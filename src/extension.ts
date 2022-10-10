@@ -1,7 +1,8 @@
 import * as vscode from 'vscode'
 import decoration from './Decoration'
 import config from './Config'
-import IndentionCreate from './Indention'
+import indentionCreate from './Indention'
+import status from './Status'
 
 // this method is called when vs code is activated
 export const activate = (context: vscode.ExtensionContext) => {
@@ -12,6 +13,7 @@ export const activate = (context: vscode.ExtensionContext) => {
 	}
 
 	context.subscriptions.push(
+		status.item,
 		vscode.window.onDidChangeActiveTextEditor((editor) => {
 			activeEditor = editor
 			if (editor) {
@@ -23,9 +25,11 @@ export const activate = (context: vscode.ExtensionContext) => {
 				decoration.triggerUpdateDecorations(activeEditor, true)
 				const autoInsertHandler = config.value.autoInsert
 				if (autoInsertHandler && autoInsertHandler.enabled && autoInsertHandler.indentionLength > 0) {
-					IndentionCreate(event, autoInsertHandler.indentionLength, autoInsertHandler.spaceLines)
+					indentionCreate(event, autoInsertHandler.indentionLength, autoInsertHandler.spaceLines)
 				}
 			}
+			// 如果有输入内容
+			status.update(event)
 		}),
 		vscode.workspace.onDidChangeConfiguration((event) => {
 			if (event.affectsConfiguration('noveler')) {
@@ -33,6 +37,7 @@ export const activate = (context: vscode.ExtensionContext) => {
 				decoration.destroyDecorations(activeEditor)
 				decoration.updateHandler(config.value)
 				decoration.triggerUpdateDecorations(activeEditor)
+				status.updateConf(config.value.statusBar)
 			}
 		}),
 	)
