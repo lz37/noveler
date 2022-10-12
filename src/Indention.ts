@@ -1,6 +1,6 @@
 import * as vscode from 'vscode'
 
-// @audit 此功能与vscode editor.wrappingIndent 与 editor.autoIndent 配置冲突
+// @note 此功能与vscode editor.wrappingIndent 与 editor.autoIndent 配置冲突
 
 /**判断是否是回车 */
 const isEnter = (str: string) => {

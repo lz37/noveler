@@ -3,6 +3,7 @@ import decoration from './Decoration'
 import config from './Config'
 import indentionCreate from './Indention'
 import status from './Status'
+import { ViewLoader } from './ViewLoader'
 
 // this method is called when vs code is activated
 export const activate = (context: vscode.ExtensionContext) => {
@@ -11,8 +12,12 @@ export const activate = (context: vscode.ExtensionContext) => {
 	if (activeEditor) {
 		decoration.triggerUpdateDecorations(activeEditor)
 	}
+	const disposable = vscode.commands.registerCommand('webview.open', () => {
+		ViewLoader.showWebview(context)
+	})
 
 	context.subscriptions.push(
+		disposable,
 		status.item,
 		vscode.window.onDidChangeActiveTextEditor((editor) => {
 			activeEditor = editor
