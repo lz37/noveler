@@ -12,12 +12,26 @@ export const activate = (context: vscode.ExtensionContext) => {
 	if (activeEditor) {
 		decoration.triggerUpdateDecorations(activeEditor)
 	}
-	const disposable = vscode.commands.registerCommand('webview.open', () => {
-		ViewLoader.showWebview(context)
-	})
 
 	context.subscriptions.push(
-		disposable,
+		vscode.commands.registerCommand('webview.open', async () => {
+			if (!activeEditor) {
+				activeEditor = vscode.window.activeTextEditor
+			}
+			if (!activeEditor) {
+				return
+			}
+			const texts = activeEditor.document
+				.getText()
+				.split('\n')
+				.join('\r')
+				.split('\r')
+				.map((text) => text.trim())
+			ViewLoader.showWebview(context)
+			if (await ViewLoader.popSignal()) {
+				ViewLoader.postMessageToWebview({texts})
+			}
+		}),
 		status.item,
 		vscode.window.onDidChangeActiveTextEditor((editor) => {
 			activeEditor = editor

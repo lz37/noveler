@@ -27,3 +27,5 @@ interface IDecorationHandler {
 	regEx: RegExp
 	hoverMessage?: import('vscode').MarkdownString | import('vscode').MarkdownString[]
 }
+
+type Dto = import('./dto').default

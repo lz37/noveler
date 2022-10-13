@@ -7,12 +7,20 @@ export class ViewLoader {
 	private panel: vscode.WebviewPanel
 	private context: vscode.ExtensionContext
 	private disposables: vscode.Disposable[]
+	/**作为队列 */
+	private static signals: Array<boolean> = []
+	public static popSignal = async () => {
+		while (this.signals.length === 0) {
+			await new Promise((resolve) => setTimeout(resolve, 100))
+		}
+		return this.signals.shift()
+	}
 
 	constructor(context: vscode.ExtensionContext) {
 		this.context = context
 		this.disposables = []
 
-		this.panel = vscode.window.createWebviewPanel('reactApp', 'React App', vscode.ViewColumn.One, {
+		this.panel = vscode.window.createWebviewPanel('reactApp', 'React App', vscode.ViewColumn.Two, {
 			enableScripts: true,
 			retainContextWhenHidden: true,
 			localResourceRoots: [vscode.Uri.file(path.join(this.context.extensionPath, 'out', 'app'))],
@@ -23,8 +31,8 @@ export class ViewLoader {
 
 		// listen messages from webview
 		this.panel.webview.onDidReceiveMessage(
-			(message) => {
-				console.log('msg', message)
+			(message: boolean) => {
+				ViewLoader.signals.push(message)
 			},
 			null,
 			this.disposables,
@@ -78,19 +86,22 @@ export class ViewLoader {
 		)
 
 		return `
-      <!DOCTYPE html>
-        <html lang="en">
-        <head>
-          <meta charset="UTF-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>React App</title>
-        </head>
+		<!DOCTYPE html>
+			<html lang="en">
+			<head>
+				<meta charset="UTF-8">
+				<meta name="viewport" content="width=device-width, initial-scale=1.0">
+				<title>React App</title>
+			</head>
 
-        <body>
-          <div id="root"></div>
-          <script src="${bundleScriptPath}"></script>
-        </body>
-      </html>
-    `
+			<body>
+				<div id="root"></div>
+				<script>
+					const vscode = acquireVsCodeApi();
+				</script>
+				<script src="${bundleScriptPath}"></script>
+			</body>
+		</html>
+	`
 	}
 }
