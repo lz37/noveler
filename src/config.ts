@@ -5,15 +5,19 @@ import defaultConf from './DefaultConf'
 const ProjectName = 'noveler'
 
 class Config {
-	public update = (extension = ProjectName) => {
+	update = (extension = ProjectName) => {
 		this._value = vscode.workspace.getConfiguration().get(extension) as IConfig
 		return this.value
 	}
+	updateSettingsJson = (setting: IConfig, extension = ProjectName) => {
+		vscode.workspace.getConfiguration().update(extension, setting, vscode.ConfigurationTarget.Workspace)
+		this.update()
+	}
 	private _value: IConfig
-	public get value() {
+	get value() {
 		return this._value
 	}
-	public constructor(extension = ProjectName) {
+	constructor(extension = ProjectName) {
 		this._value = this.update(extension)
 		if (_.isEmpty(this.value)) {
 			vscode.workspace.getConfiguration().update(extension, defaultConf, vscode.ConfigurationTarget.Workspace)

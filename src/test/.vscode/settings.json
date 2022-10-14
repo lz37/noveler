@@ -18,6 +18,11 @@
 		"statusBar": {
 			"enabled": true,
 			"timeUnit": 10
+		},
+		"preview": {
+			"fontSize": 18,
+			"indentionLength": 8,
+			"spaceLines": 1
 		}
 	},
 	"editor.wrappingIndent": "none",

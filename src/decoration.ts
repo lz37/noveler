@@ -83,7 +83,7 @@ class Decoration {
 
 	public updateHandler = (config: IConfig) => {
 		const newRoleHandlers: IDecorationHandler[] = []
-		config.roles.forEach((role) => {
+		config.roles?.forEach((role) => {
 			newRoleHandlers.push({
 				decorationType: vscode.window.createTextEditorDecorationType({
 					light: {

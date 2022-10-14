@@ -2,5 +2,9 @@
 **/*.ts
 **/*.map
 .gitignore
+.eslintignore
+.prettierrc
 tslint.json
 tsconfig.json
+images
+etc

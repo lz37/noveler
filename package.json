@@ -1,7 +1,7 @@
 {
 	"name": "noveler",
 	"description": "一个在 vscode 上辅助码中文小说的插件",
-	"version": "0.3.0",
+	"version": "0.4.0",
 	"publisher": "zerozawa",
 	"license": "GPL-3.0",
 	"engines": {
@@ -20,9 +20,16 @@
 	"contributes": {
 		"commands": [
 			{
-				"command": "webview.open",
-				"title": "Open Webview",
-				"category": "Webview React"
+				"command": "noveler.preview",
+				"title": "preview",
+				"category": "noveler"
+			}
+		],
+		"keybindings": [
+			{
+				"command": "noveler.preview",
+				"key": "alt+\\",
+				"mac": "alt+\\"
 			}
 		],
 		"configuration": {
@@ -94,6 +101,24 @@
 									"description": "判定为休息时间的时间单位，单位为秒钟"
 								}
 							}
+						},
+						"preview": {
+							"type": "object",
+							"description": "预览配置",
+							"properties": {
+								"fontSize": {
+									"type": "number",
+									"description": "预览字体大小"
+								},
+								"indentionLength": {
+									"type": "number",
+									"description": "预览缩进长度"
+								},
+								"spaceLines": {
+									"type": "number",
+									"description": "预览段落间空行行数"
+								}
+							}
 						}
 					}
 				}
@@ -150,7 +175,6 @@
 		"@types/node": "^16.11.7",
 		"@types/react": "^18.0.21",
 		"@types/react-dom": "^18.0.6",
-		"@types/react-router-dom": "^5.3.3",
 		"@types/vscode": "^1.32.0",
 		"@typescript-eslint/eslint-plugin": "^5.30.0",
 		"@typescript-eslint/parser": "^5.30.0",
@@ -164,9 +188,9 @@
 		"webpack-cli": "^4.10.0"
 	},
 	"dependencies": {
+		"antd": "^4.23.5",
 		"lodash": "^4.17.21",
 		"react": "^18.2.0",
-		"react-dom": "^18.2.0",
-		"react-router-dom": "^6.4.2"
+		"react-dom": "^18.2.0"
 	}
 }

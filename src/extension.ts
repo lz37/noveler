@@ -7,41 +7,67 @@ import { ViewLoader } from './ViewLoader'
 
 // this method is called when vs code is activated
 export const activate = (context: vscode.ExtensionContext) => {
-	let activeEditor = vscode.window.activeTextEditor
+	const activeEditor = vscode.window.activeTextEditor
 
 	if (activeEditor) {
 		decoration.triggerUpdateDecorations(activeEditor)
 	}
 
 	context.subscriptions.push(
-		vscode.commands.registerCommand('webview.open', async () => {
-			if (!activeEditor) {
-				activeEditor = vscode.window.activeTextEditor
-			}
-			if (!activeEditor) {
+		vscode.commands.registerCommand('noveler.preview', async () => {
+			const editor = vscode.window.activeTextEditor
+			if (!editor) {
 				return
 			}
-			const texts = activeEditor.document
-				.getText()
-				.split('\n')
-				.join('\r')
-				.split('\r')
-				.map((text) => text.trim())
 			ViewLoader.showWebview(context)
-			if (await ViewLoader.popSignal()) {
-				ViewLoader.postMessageToWebview({texts})
+			if ((await ViewLoader.popSignal())?.option === 0) {
+				ViewLoader.postMessageToWebview({
+					text: editor.document.getText(),
+					scrollPos: 0,
+					maxLine: editor.document.lineCount,
+					style: ViewLoader.style,
+				})
 			}
+			// 活动编辑器改回原值
+			vscode.window.showTextDocument(editor.document, editor.viewColumn)
 		}),
+		// 滚动条滚动时
+		vscode.window.onDidChangeTextEditorVisibleRanges(async (event) => {
+			const editor = vscode.window.activeTextEditor
+			if (!editor) {
+				return
+			}
+			// 获取滚动条位置
+			const scroll = event.visibleRanges[0].start.line
+			// 发送消息
+			ViewLoader.postMessageToWebview({
+				text: editor.document.getText(),
+				scrollPos: scroll,
+				maxLine: editor.document.lineCount,
+				style: ViewLoader.style,
+			})
+		}),
+		// 状态栏的输入字数输入速度输入时间显示
 		status.item,
-		vscode.window.onDidChangeActiveTextEditor((editor) => {
-			activeEditor = editor
-			if (editor) {
-				decoration.triggerUpdateDecorations(activeEditor)
+		vscode.window.onDidChangeActiveTextEditor(async (editor) => {
+			if (!editor) {
+				return
 			}
+			decoration.triggerUpdateDecorations(editor)
+			ViewLoader.postMessageToWebview({
+				text: editor.document.getText(),
+				scrollPos: 0,
+				maxLine: editor.document.lineCount,
+				style: ViewLoader.style,
+			})
 		}),
-		vscode.workspace.onDidChangeTextDocument((event) => {
-			if (activeEditor && event.document === activeEditor.document) {
-				decoration.triggerUpdateDecorations(activeEditor, true)
+		vscode.workspace.onDidChangeTextDocument(async (event) => {
+			const editor = vscode.window.activeTextEditor
+			if (!editor) {
+				return
+			}
+			if (event.document === editor.document) {
+				decoration.triggerUpdateDecorations(editor, true)
 				const autoInsertHandler = config.value.autoInsert
 				if (autoInsertHandler && autoInsertHandler.enabled && autoInsertHandler.indentionLength > 0) {
 					indentionCreate(event, autoInsertHandler.indentionLength, autoInsertHandler.spaceLines)
@@ -49,15 +75,32 @@ export const activate = (context: vscode.ExtensionContext) => {
 			}
 			// 如果有输入内容
 			status.update(event)
+			ViewLoader.postMessageToWebview({
+				text: editor.document.getText(),
+				scrollPos: 0,
+				maxLine: editor.document.lineCount,
+				style: ViewLoader.style,
+			})
 		}),
-		vscode.workspace.onDidChangeConfiguration((event) => {
-			if (event.affectsConfiguration('noveler')) {
-				config.update()
-				decoration.destroyDecorations(activeEditor)
-				decoration.updateHandler(config.value)
-				decoration.triggerUpdateDecorations(activeEditor)
-				status.updateConf(config.value.statusBar)
+		vscode.workspace.onDidChangeConfiguration(async (event) => {
+			if (!event.affectsConfiguration('noveler')) {
+				return
 			}
+			config.update()
+			decoration.updateHandler(config.value)
+			status.updateConf(config.value.statusBar)
+			const editor = vscode.window.activeTextEditor
+			if (editor) {
+				decoration.destroyDecorations(editor)
+				decoration.triggerUpdateDecorations(editor)
+			}
+			ViewLoader.style = config.value.preview
+			ViewLoader.postMessageToWebview({
+				text: editor ? editor.document.getText() : '',
+				scrollPos: 0,
+				maxLine: editor ? editor.document.lineCount : 0,
+				style: ViewLoader.style,
+			})
 		}),
 	)
 }

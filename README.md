@@ -105,6 +105,16 @@
 
 ![计速器图片](https://raw.githubusercontent.com/lz37/noveler/master/images/status-bar-sample.gif)
 
+### 6. 小说预览
+
+也许这个设计多此一举，但说不准就有人需要它呢
+
+在vscode中，有许多种方法可以实现比此功能更加强大的预览功能，不过在达到目标之前，你可能会耗费很大一番功夫，如果你不想花费时间在上面，可以尝试使用此功能
+
+`ctrl + shift + p`输入`noveler: preview`，或者是使用快捷键`alt + \`（注意快捷键冲突），即可打开预览窗口，你可以将窗口缩放成移动端样式或者是网页端样式，实时预览你的小说（来检查一个段落的字数是否过多，或者连续的长段落过多，连续的短段落过多之类的）
+
+![预览图片](https://raw.githubusercontent.com/lz37/noveler/master/images/preview-sample.gif)
+
 祝您写作愉快 :)
 
 更多功能正在开发中……

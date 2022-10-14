@@ -9,7 +9,7 @@ class Status {
 		this.maxTime = 0
 		this.accumulateTime = 0
 		this.inputLength = 0
-		this.updateConf(statusConf)
+		statusConf && this.updateConf(statusConf)
 		setInterval(() => {
 			if (Date.now() < this.maxTime) {
 				this.updateItem(this.inputLength, ++this.accumulateTime, false)
@@ -19,11 +19,11 @@ class Status {
 		}, 1000)
 	}
 	public readonly item: vscode.StatusBarItem
-	private enabled = defaultConf.statusBar.enabled
-	private timeUnit = defaultConf.statusBar.timeUnit
-	public updateConf = (conf: IStatus) => {
-		this.enabled = conf.enabled
-		this.timeUnit = conf.timeUnit
+	private enabled = defaultConf.statusBar!.enabled
+	private timeUnit = defaultConf.statusBar!.timeUnit
+	public updateConf = (conf: IStatus | undefined) => {
+		this.enabled = conf == undefined ? defaultConf.statusBar!.enabled : conf.enabled
+		this.timeUnit = conf == undefined ? defaultConf.statusBar!.timeUnit : conf.timeUnit
 		if (this.enabled) {
 			this.item.show()
 		} else {
@@ -64,7 +64,7 @@ class Status {
 			.reduce((a, b) => {
 				return a + b
 			}, 0)
-		if(this.inputLength < 0) {
+		if (this.inputLength < 0) {
 			this.inputLength = 0
 		}
 		this.updateItem(this.inputLength, this.accumulateTime, false)

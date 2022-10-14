@@ -18,4 +18,9 @@ export default {
 		enabled: false,
 		timeUnit: 10,
 	},
+	preview: {
+		fontSize: 14,
+		indentionLength: 4,
+		spaceLines: 1,
+	},
 } as IConfig
