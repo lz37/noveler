@@ -1,7 +1,7 @@
 {
 	"name": "noveler",
 	"description": "一个在 vscode 上辅助码中文小说的插件",
-	"version": "0.4.0",
+	"version": "0.4.2",
 	"publisher": "zerozawa",
 	"license": "GPL-3.0",
 	"engines": {
@@ -160,18 +160,18 @@
 		]
 	},
 	"scripts": {
+		"vscode:prepublish": "rm -r out && yarn compile && webpack --mode production",
 		"compile": "npm-run-all compile:*",
-		"compile:extension": "tsc -p ./",
+		"compile:extension": "webpack --mode development --config webpack4ext.config.js",
 		"compile:view": "webpack --mode development",
 		"watch": "npm-run-all -p watch:*",
-		"watch:extension": "tsc -watch -p ./",
+		"watch:extension": "webpack --watch --mode development --config webpack4ext.config.js",
 		"watch:view": "webpack --watch --mode development",
 		"pretest": "npm run compile && npm run lint",
 		"lint": "eslint src --ext ts",
 		"test": "node ./out/test/runTest.js"
 	},
 	"devDependencies": {
-		"@types/lodash": "^4.14.186",
 		"@types/node": "^16.11.7",
 		"@types/react": "^18.0.21",
 		"@types/react-dom": "^18.0.6",
@@ -189,7 +189,6 @@
 	},
 	"dependencies": {
 		"antd": "^4.23.5",
-		"lodash": "^4.17.21",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0"
 	}

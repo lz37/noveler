@@ -1,14 +1,15 @@
 import * as vscode from 'vscode'
-import * as _ from 'lodash'
 import defaultConf from './DefaultConf'
 
 const ProjectName = 'noveler'
 
 class Config {
+	/**更新this.value */
 	update = (extension = ProjectName) => {
 		this._value = vscode.workspace.getConfiguration().get(extension) as IConfig
 		return this.value
 	}
+	/**更新workplace的settings.json文件 */
 	updateSettingsJson = (setting: IConfig, extension = ProjectName) => {
 		vscode.workspace.getConfiguration().update(extension, setting, vscode.ConfigurationTarget.Workspace)
 		this.update()
@@ -19,7 +20,7 @@ class Config {
 	}
 	constructor(extension = ProjectName) {
 		this._value = this.update(extension)
-		if (_.isEmpty(this.value)) {
+		if (Object.keys(this.value).length===0) {
 			vscode.workspace.getConfiguration().update(extension, defaultConf, vscode.ConfigurationTarget.Workspace)
 			this._value = defaultConf
 			const plaintestConf = vscode.workspace.getConfiguration('', { languageId: 'plaintext' })

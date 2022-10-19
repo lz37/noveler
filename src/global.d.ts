@@ -1,29 +1,10 @@
-interface IConfig {
-	roles?: IRole[]
-	autoInsert?: IAutoInsertHandler
-	statusBar?: IStatus
-	preview?: IPreview
-}
+type IConfig=import("./types").IConfig
 
-interface IRole {
-	name: string
-	color: {
-		light: string
-		dark: string
-	}
-	description?: string
-}
+type IRole=import("./types").IRole
 
-interface IAutoInsertHandler {
-	enabled: boolean
-	indentionLength: number
-	spaceLines: number
-}
+type IAutoInsertHandler=import("./types").IAutoInsertHandler
 
-interface IStatus {
-	enabled: boolean
-	timeUnit: number
-}
+type IStatus=import("./types").IStatus
 
 type IPreview=import('./dto').IPreview
 

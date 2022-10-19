@@ -4,7 +4,7 @@ import { WebViewConfHandlerEnum } from '../../src/Dto'
 import Layout from './Layout'
 
 export default () => {
-	const [dto, setDto] = useState<Dto>({ text: '', scrollPos: 0, maxLine: 0, style: DefaultConf.preview })
+	const [dto, setDto] = useState<Dto>({ text: '', scrollPos: 0, maxLine: 0, style: DefaultConf.preview! })
 	let lastDto = dto
 
 	const handleReloadWebview = (signal: WebViewConfHandler) => {

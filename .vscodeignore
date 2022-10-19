@@ -1,10 +1,15 @@
 .vscode/**
 **/*.ts
 **/*.map
-.gitignore
 .eslintignore
+.eslintrc.js
+.gitignore
 .prettierrc
-tslint.json
 tsconfig.json
+tsconfig.json
+webpack.config.js
+webpack4ext.config.js
 images
 etc
+src
+node_modules
