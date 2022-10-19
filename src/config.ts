@@ -22,8 +22,9 @@ class Config {
 		if (_.isEmpty(this.value)) {
 			vscode.workspace.getConfiguration().update(extension, defaultConf, vscode.ConfigurationTarget.Workspace)
 			this._value = defaultConf
-			vscode.workspace.getConfiguration().update('editor.wrappingIndent', 'none', vscode.ConfigurationTarget.Workspace)
-			vscode.workspace.getConfiguration().update('editor.autoIndent', 'none', vscode.ConfigurationTarget.Workspace)
+			const plaintestConf = vscode.workspace.getConfiguration('', { languageId: 'plaintext' })
+			plaintestConf.update('editor.wrappingIndent', 'none', vscode.ConfigurationTarget.Workspace, true)
+			plaintestConf.update('editor.autoIndent', 'none', vscode.ConfigurationTarget.Workspace, true)
 		}
 	}
 }

@@ -5,11 +5,17 @@ import indentionCreate from './Indention'
 import status from './Status'
 import { ViewLoader } from './ViewLoader'
 
+// @todo 插件打包太大（16M)，优化一下
+
+const isPlaintext = (editor: vscode.TextEditor) => {
+	return editor.document.languageId === 'plaintext'
+}
+
 // this method is called when vs code is activated
 export const activate = (context: vscode.ExtensionContext) => {
 	const activeEditor = vscode.window.activeTextEditor
 
-	if (activeEditor) {
+	if (activeEditor&&isPlaintext(activeEditor)) {
 		decoration.triggerUpdateDecorations(activeEditor)
 	}
 
@@ -17,6 +23,9 @@ export const activate = (context: vscode.ExtensionContext) => {
 		vscode.commands.registerCommand('noveler.preview', async () => {
 			const editor = vscode.window.activeTextEditor
 			if (!editor) {
+				return
+			}
+			if(!isPlaintext(editor)) {
 				return
 			}
 			ViewLoader.showWebview(context)
@@ -37,6 +46,9 @@ export const activate = (context: vscode.ExtensionContext) => {
 			if (!editor) {
 				return
 			}
+			if(!isPlaintext(editor)) {
+				return
+			}
 			// 获取滚动条位置
 			const scroll = event.visibleRanges[0].start.line
 			// 发送消息
@@ -53,6 +65,9 @@ export const activate = (context: vscode.ExtensionContext) => {
 			if (!editor) {
 				return
 			}
+			if(!isPlaintext(editor)) {
+				return
+			}
 			decoration.triggerUpdateDecorations(editor)
 			ViewLoader.postMessageToWebview({
 				text: editor.document.getText(),
@@ -64,6 +79,9 @@ export const activate = (context: vscode.ExtensionContext) => {
 		vscode.workspace.onDidChangeTextDocument(async (event) => {
 			const editor = vscode.window.activeTextEditor
 			if (!editor) {
+				return
+			}
+			if(!isPlaintext(editor)) {
 				return
 			}
 			if (event.document === editor.document) {
