@@ -1,3 +1,4 @@
+import { IConfig } from './types/types'
 export default {
 	roles: [
 		{
