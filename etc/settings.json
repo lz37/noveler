@@ -1,25 +1,32 @@
 {
-	"noveler": {
-		"roles": [
-			{
-				"name": "汪言",
-				"color": {
-					"light": "#ffff00",
-					"dark": "#ffff00"
-				},
-				"description": "**主角**，性别为男爱好为女"
-			}
-		],
-		"autoInsert": {
-			"enabled": true,
-			"indentionLength": 4,
-			"spaceLines": 1
-		},
-		"statusBar": {
-			"enabled": true,
-			"timeUnit": 10
-		}
-	},
-	"editor.wrappingIndent": "none",
-	"editor.autoIndent": "none"
+  "[plaintext]": {
+    "editor.wrappingIndent": "none",
+    "editor.autoIndent": "none"
+  },
+  "noveler": {
+    "roles": [
+      {
+        "name": "汪言",
+        "color": {
+          "light": "#ffff00",
+          "dark": "#ffff00"
+        },
+        "description": "**主角**，性别为男爱好为女"
+      }
+    ],
+    "autoInsert": {
+      "enabled": true,
+      "indentionLength": 4,
+      "spaceLines": 1
+    },
+    "statusBar": {
+      "enabled": true,
+      "timeUnit": 10
+    },
+    "preview": {
+      "fontSize": 18,
+      "indentionLength": 8,
+      "spaceLines": 1
+    }
+  }
 }

@@ -1,7 +1,7 @@
 {
 	"name": "noveler",
 	"description": "一个在 vscode 上辅助码中文小说的插件",
-	"version": "0.4.2",
+	"version": "0.4.3",
 	"publisher": "zerozawa",
 	"license": "GPL-3.0",
 	"engines": {
@@ -173,6 +173,7 @@
 	},
 	"devDependencies": {
 		"@types/node": "^16.11.7",
+		"@types/prettier": "^2.7.1",
 		"@types/react": "^18.0.21",
 		"@types/react-dom": "^18.0.6",
 		"@types/vscode": "^1.32.0",
@@ -181,6 +182,7 @@
 		"css-loader": "^6.7.1",
 		"eslint": "^8.13.0",
 		"npm-run-all": "^4.1.5",
+		"prettier": "^2.7.1",
 		"style-loader": "^3.3.1",
 		"ts-loader": "^9.4.1",
 		"typescript": "^4.8.4",

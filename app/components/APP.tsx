@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import DefaultConf from '../../src/DefaultConf'
-import { WebViewConfHandlerEnum } from '../../src/Dto'
+import { WebViewConfHandlerEnum } from '../../src/types/Dto'
 import Layout from './Layout'
 
 export default () => {

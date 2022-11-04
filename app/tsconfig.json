@@ -7,9 +7,12 @@
 		"jsx": "react",
 		"sourceMap": true,
 		"experimentalDecorators": true,
-		"lib": ["dom", "ES2015"],
+		"lib": ["dom", "es2020"],
 		"strict": true,
-		"skipLibCheck":true
+		"typeRoots": [
+			"node_modules/@types",
+			"./types"
+		]
 	},
 	"exclude": ["node_modules"]
 }

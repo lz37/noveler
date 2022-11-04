@@ -5,8 +5,6 @@ import indentionCreate from './Indention'
 import status from './Status'
 import { ViewLoader } from './ViewLoader'
 
-// @todo 插件打包太大（16M)，优化一下
-
 const isPlaintext = (editor: vscode.TextEditor) => {
 	return editor.document.languageId === 'plaintext'
 }
@@ -93,9 +91,10 @@ export const activate = (context: vscode.ExtensionContext) => {
 			}
 			// 如果有输入内容
 			status.update(event)
+			const scroll = editor.visibleRanges[0].start.line
 			ViewLoader.postMessageToWebview({
 				text: editor.document.getText(),
-				scrollPos: 0,
+				scrollPos: scroll,
 				maxLine: editor.document.lineCount,
 				style: ViewLoader.style,
 			})

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Affix } from 'antd'
-import { WebViewConfHandlerEnum } from '../../src/Dto'
+import { WebViewConfHandlerEnum } from '../../src/types/Dto'
 
 export default () => {
 	const options = [-1, 1]

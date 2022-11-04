@@ -1,7 +1,7 @@
 import * as vscode from 'vscode'
 import * as path from 'path'
 import conf from './Config'
-import { WebViewConfHandler, WebViewConfHandlerEnum } from './Dto'
+import { WebViewConfHandler, WebViewConfHandlerEnum } from './types/Dto'
 import DefaultConf from './DefaultConf'
 
 export class ViewLoader {
