@@ -44,30 +44,41 @@ export const updateAndGetProvider = (conf: IConfig) => {
 		},
 	})
 }
+
 let suggestPos: vscode.Position | undefined
-let isSuggesting = false
+
+const beforeTrigger = async (editor: vscode.TextEditor) => {
+	// 记录光标位置
+	suggestPos = editor.selection.active
+	editor.edit((editBuilder) => {
+		// 插入一个空格，否则suggest为空
+		editBuilder.insert(suggestPos!, ' ')
+	})
+	// 触发suggest
+	await vscode.commands.executeCommand('editor.action.triggerSuggest')
+	vscode.commands.executeCommand('toggleSuggestionDetails')
+}
+
+const afterTrigger = (editor: vscode.TextEditor, isSnippetString: boolean) => {
+	// 删除suggestPos后的空格
+	editor.edit((editBuilder) => {
+		editBuilder.delete(new vscode.Range(suggestPos!, suggestPos!.translate(0, 1)))
+	})
+	if (isSnippetString) {
+		// 触发suggest
+		vscode.commands.executeCommand('editor.action.triggerSuggest')
+	}
+}
+
 export const triggerSuggest = {
 	before: vscode.commands.registerCommand('noveler.triggerSuggest.before', () => {
-		// 记录光标位置
 		const editor = vscode.window.activeTextEditor
 		if (!editor) {
 			return
 		}
 		// 只对languageId为plaintext的文档生效
-		if (editor.document.languageId !== 'plaintext') {
-			return
-		}
-		if (!isSuggesting) {
-			isSuggesting = true
-			suggestPos = editor.selection.active
-			// 插入一个空格，否则suggest为空
-			editor.edit((editBuilder) => {
-				editBuilder.insert(suggestPos!, ' ')
-			})
-			// 触发suggest
-			vscode.commands.executeCommand('editor.action.triggerSuggest')
-		} else {
-			vscode.commands.executeCommand('toggleSuggestionDetails')
+		if (editor.document.languageId === 'plaintext') {
+			beforeTrigger(editor)
 		}
 	}),
 	after: vscode.commands.registerCommand('noveler.triggerSuggest.after', (isSnippetString = false) => {
@@ -75,23 +86,12 @@ export const triggerSuggest = {
 		if (!editor) {
 			return
 		}
-		// 只对languageId为plaintext的文档生效
-		if (editor.document.languageId !== 'plaintext') {
-			return
-		}
 		if (!suggestPos) {
 			return
 		}
-		if (isSuggesting) {
-			// 删除suggestPos后的空格
-			editor.edit((editBuilder) => {
-				editBuilder.delete(new vscode.Range(suggestPos!, suggestPos!.translate(0, 1)))
-			})
-			isSuggesting = false
-		}
-		if (isSnippetString) {
-			// 触发suggest
-			vscode.commands.executeCommand('editor.action.triggerSuggest')
+		// 只对languageId为plaintext的文档生效
+		if (editor.document.languageId === 'plaintext') {
+			afterTrigger(editor, isSnippetString)
 		}
 	}),
 }
