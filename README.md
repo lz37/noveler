@@ -115,6 +115,28 @@
 
 ![预览图片](https://raw.githubusercontent.com/lz37/noveler/master/images/preview-sample.gif)
 
+### 7. 自定义补全
+
+提供人物名补全和作者自定义补全，由于vscode相关api的缺失，该功能的实现只能先空一格，再把空格删去，稍稍影响了观感，如果你有好的解决方式，可以分享给我
+
+设置如下：
+
+```json
+{
+  "noveler": {
+    "completions": [
+      {
+        "title": "chapter",
+        "context": "第${1}章", // 试试看第${1|一,二,三|}章吧
+        "kind": "Class"
+      }
+    ]
+  },
+}
+```
+
+![补全图片](https://raw.githubusercontent.com/lz37/noveler/master/images/completion-sample.gif)
+
 祝您写作愉快 :)
 
 更多功能正在开发中……

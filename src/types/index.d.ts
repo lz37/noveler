@@ -8,6 +8,8 @@ type IStatus=import("./types").IStatus
 
 type IPreview=import('./dto').IPreview
 
+type ICompletion=import("./types").ICompletion
+
 interface IDecorationHandler {
 	decorationType: import('vscode').TextEditorDecorationType
 	regEx: RegExp

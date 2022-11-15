@@ -4,6 +4,7 @@ import config from './Config'
 import indentionCreate from './Indention'
 import status from './Status'
 import { ViewLoader } from './ViewLoader'
+import { updateAndGetProvider, triggerSuggest } from './Completion'
 
 const isPlaintext = (editor: vscode.TextEditor) => {
 	return editor.document.languageId === 'plaintext'
@@ -12,18 +13,33 @@ const isPlaintext = (editor: vscode.TextEditor) => {
 // this method is called when vs code is activated
 export const activate = (context: vscode.ExtensionContext) => {
 	const activeEditor = vscode.window.activeTextEditor
+	const disposables: vscode.Disposable[] = []
+	disposables.push(
+		vscode.commands.registerCommand('extension.helloWorld', () => {
+			// The code you place here will be executed every time your command is executed
 
-	if (activeEditor&&isPlaintext(activeEditor)) {
+			// Display a message box to the user
+			vscode.window.showInformationMessage('Hello World!')
+		}),
+	)
+
+	context.subscriptions.push(...disposables)
+
+	if (activeEditor && isPlaintext(activeEditor)) {
 		decoration.triggerUpdateDecorations(activeEditor)
 	}
+	let provider = updateAndGetProvider(config.value)
 
 	context.subscriptions.push(
+		provider,
+		triggerSuggest.before,
+		triggerSuggest.after,
 		vscode.commands.registerCommand('noveler.preview', async () => {
 			const editor = vscode.window.activeTextEditor
 			if (!editor) {
 				return
 			}
-			if(!isPlaintext(editor)) {
+			if (!isPlaintext(editor)) {
 				return
 			}
 			ViewLoader.showWebview(context)
@@ -44,7 +60,7 @@ export const activate = (context: vscode.ExtensionContext) => {
 			if (!editor) {
 				return
 			}
-			if(!isPlaintext(editor)) {
+			if (!isPlaintext(editor)) {
 				return
 			}
 			// 获取滚动条位置
@@ -63,7 +79,7 @@ export const activate = (context: vscode.ExtensionContext) => {
 			if (!editor) {
 				return
 			}
-			if(!isPlaintext(editor)) {
+			if (!isPlaintext(editor)) {
 				return
 			}
 			decoration.triggerUpdateDecorations(editor)
@@ -79,7 +95,7 @@ export const activate = (context: vscode.ExtensionContext) => {
 			if (!editor) {
 				return
 			}
-			if(!isPlaintext(editor)) {
+			if (!isPlaintext(editor)) {
 				return
 			}
 			if (event.document === editor.document) {
@@ -118,6 +134,10 @@ export const activate = (context: vscode.ExtensionContext) => {
 				maxLine: editor ? editor.document.lineCount : 0,
 				style: ViewLoader.style,
 			})
+			// 更新updateAndGetProvider(config.value)
+			provider.dispose()
+			provider = updateAndGetProvider(config.value)
+			context.subscriptions.push(provider)
 		}),
 	)
 }

@@ -24,4 +24,11 @@ export default {
 		indentionLength: 4,
 		spaceLines: 1,
 	},
+	completions:[
+		{
+			title: "chapter",
+			context: "第${1}章",
+			kind: 'Class'
+		}
+	]
 } as IConfig

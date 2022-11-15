@@ -1,7 +1,7 @@
 {
 	"name": "noveler",
 	"description": "一个在 vscode 上辅助码中文小说的插件",
-	"version": "0.4.3",
+	"version": "0.5.0",
 	"publisher": "zerozawa",
 	"license": "GPL-3.0",
 	"engines": {
@@ -30,6 +30,11 @@
 				"command": "noveler.preview",
 				"key": "alt+\\",
 				"mac": "alt+\\"
+			},
+			{
+				"command": "noveler.triggerSuggest.before",
+				"key": "ctrl+space",
+				"mac": "ctrl+space"
 			}
 		],
 		"configuration": {
@@ -117,6 +122,27 @@
 								"spaceLines": {
 									"type": "number",
 									"description": "预览段落间空行行数"
+								}
+							}
+						},
+						"completions": {
+							"type": "array",
+							"description": "自定义补全短语",
+							"items": {
+								"type": "object",
+								"properties": {
+									"title": {
+										"type": "string",
+										"description": "短语标题"
+									},
+									"context": {
+										"type": "string",
+										"description": "短语内容"
+									},
+									"kind": {
+										"type": "string",
+										"description": "短语类型，此选项作用于短语前的图标，可选值参考 <https://vshaxe.github.io/vscode-extern/vscode/CompletionItemKind.html>"
+									}
 								}
 							}
 						}
