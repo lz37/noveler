@@ -1,7 +1,8 @@
 {
   "[plaintext]": {
     "editor.wrappingIndent": "none",
-    "editor.autoIndent": "none"
+    "editor.autoIndent": "none",
+    "editor.wordSeparators": "`~!@#$%^&*()-=+[{]}\\|;:'\",.<>/?，。‘’“”：；·《》？！…—￥{}【】（）"
   },
   "noveler": {
     "roles": [
@@ -31,9 +32,14 @@
     "completions": [
       {
         "title": "chapter",
-        "context": "第${1}章",
+        "context": "第${1|一,二,三|}章",
         "kind": "Class"
+      },
+      {
+        "title": "三十年河东",
+        "context": "三十年河东，三十年河西，莫欺少年穷",
+        "kind": "Event"
       }
     ]
-  }
+  },
 }

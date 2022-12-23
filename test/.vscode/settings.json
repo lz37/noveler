@@ -1,7 +1,8 @@
 {
   "[plaintext]": {
     "editor.wrappingIndent": "none",
-    "editor.autoIndent": "none"
+    "editor.autoIndent": "none",
+    "editor.wordSeparators": "`~!@#$%^&*()-=+[{]}\\|;:'\",.<>/?，。‘’“”：；·《》？！…—￥{}【】（）"
   },
   "noveler": {
     "roles": [

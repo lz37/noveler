@@ -1,18 +1,15 @@
 {
-	"compilerOptions": {
-		"module": "commonjs",
-		"target": "es2020",
-		"lib": ["es2020"],
-		"moduleResolution": "node",
-		"outDir": "out",
-		"sourceMap": true,
-		"strict": true,
-		"rootDir": "src",
-		"skipLibCheck": true,
-		"typeRoots": [
-			"node_modules/@types",
-			"src/types"
-		]
-	},
-	"exclude": ["node_modules", ".vscode-test", "app"]
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es2020",
+    "lib": ["es2020"],
+    "moduleResolution": "node",
+    "outDir": "out",
+    "sourceMap": true,
+    "strict": true,
+    "rootDir": "src",
+    "skipLibCheck": true,
+    "typeRoots": ["node_modules/@types"]
+  },
+  "exclude": ["node_modules", ".vscode-test", "app"]
 }

@@ -1,18 +1,15 @@
 {
-	"compilerOptions": {
-		"module": "ESNext",
-		"allowSyntheticDefaultImports": true,
-		"moduleResolution": "node",
-		"target": "ES5",
-		"jsx": "react",
-		"sourceMap": true,
-		"experimentalDecorators": true,
-		"lib": ["dom", "es2020"],
-		"strict": true,
-		"typeRoots": [
-			"node_modules/@types",
-			"./types"
-		]
-	},
-	"exclude": ["node_modules"]
+  "compilerOptions": {
+    "module": "ESNext",
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
+    "target": "ES5",
+    "jsx": "react",
+    "sourceMap": true,
+    "experimentalDecorators": true,
+    "lib": ["dom", "es2020"],
+    "strict": true,
+    "typeRoots": ["node_modules/@types"]
+  },
+  "exclude": ["node_modules"]
 }

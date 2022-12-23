@@ -1,225 +1,226 @@
 {
-	"name": "noveler",
-	"description": "一个在 vscode 上辅助码中文小说的插件",
-	"version": "0.5.1",
-	"publisher": "zerozawa",
-	"license": "GPL-3.0",
-	"engines": {
-		"vscode": "^1.71.2"
-	},
-	"repository": {
-		"url": "https://github.com/lz37/noveler"
-	},
-	"categories": [
-		"Other"
-	],
-	"activationEvents": [
-		"onLanguage:plaintext"
-	],
-	"main": "./out/extension.js",
-	"contributes": {
-		"commands": [
-			{
-				"command": "noveler.preview",
-				"title": "preview",
-				"category": "noveler"
-			}
-		],
-		"keybindings": [
-			{
-				"command": "noveler.preview",
-				"key": "alt+\\",
-				"mac": "alt+\\",
-				"when": "editorTextFocus && editorLangId == 'plaintext'"
-			},
-			{
-				"command": "noveler.triggerSuggest.before",
-				"key": "ctrl+space",
-				"mac": "ctrl+space",
-				"when": "editorTextFocus && editorLangId == 'plaintext'"
-			}
-		],
-		"configuration": {
-			"title": "Noveler",
-			"properties": {
-				"noveler": {
-					"type": "object",
-					"description": "Noveler的配置",
-					"properties": {
-						"roles": {
-							"type": "array",
-							"description": "角色列表",
-							"items": {
-								"type": "object",
-								"properties": {
-									"name": {
-										"type": "string",
-										"description": "角色名称"
-									},
-									"color": {
-										"type": "object",
-										"description": "角色姓名高亮颜色",
-										"properties": {
-											"light": {
-												"type": "string",
-												"description": "在浅色主题下的颜色"
-											},
-											"dark": {
-												"type": "string",
-												"description": "在深色主题下的颜色"
-											}
-										}
-									},
-									"description": {
-										"type": "string",
-										"description": "角色描述, 用于鼠标悬停时显示"
-									}
-								}
-							}
-						},
-						"autoInsert": {
-							"type": "object",
-							"description": "自动补全 缩进/空行 配置，注意，此功能与vscode原生功能 editor.wrappingIndent 和 editor.autoIndent 冲突，请注意取舍。建议只在工作区的 settings.json 中配置，避免污染全局",
-							"properties": {
-								"enabled": {
-									"type": "boolean",
-									"description": "是否启用自动补全缩进"
-								},
-								"indentionLength": {
-									"type": "number",
-									"description": "自动补全缩进长度"
-								},
-								"spaceLines": {
-									"type": "number",
-									"description": "自动补全空行行数"
-								}
-							}
-						},
-						"statusBar": {
-							"type": "object",
-							"description": "状态栏配置",
-							"properties": {
-								"enabled": {
-									"type": "boolean",
-									"description": "是否启用状态栏"
-								},
-								"timeUnit": {
-									"type": "number",
-									"description": "判定为休息时间的时间单位，单位为秒钟"
-								}
-							}
-						},
-						"preview": {
-							"type": "object",
-							"description": "预览配置",
-							"properties": {
-								"fontSize": {
-									"type": "number",
-									"description": "预览字体大小"
-								},
-								"indentionLength": {
-									"type": "number",
-									"description": "预览缩进长度"
-								},
-								"spaceLines": {
-									"type": "number",
-									"description": "预览段落间空行行数"
-								}
-							}
-						},
-						"completions": {
-							"type": "array",
-							"description": "自定义补全短语",
-							"items": {
-								"type": "object",
-								"properties": {
-									"title": {
-										"type": "string",
-										"description": "短语标题"
-									},
-									"context": {
-										"type": "string",
-										"description": "短语内容"
-									},
-									"kind": {
-										"type": "string",
-										"description": "短语类型，此选项作用于短语前的图标，可选值参考 <https://vshaxe.github.io/vscode-extern/vscode/CompletionItemKind.html>"
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		"colors": [
-			{
-				"id": "number",
-				"description": "数字的颜色",
-				"defaults": {
-					"dark": "#6cd8e6",
-					"light": "#00008b"
-				}
-			},
-			{
-				"id": "bookTitleMark",
-				"description": "书名号的颜色",
-				"defaults": {
-					"dark": "#d3090a",
-					"light": "#a83f3f"
-				}
-			},
-			{
-				"id": "quote",
-				"description": "引号的颜色",
-				"defaults": {
-					"dark": "#90ee90",
-					"light": "#006400"
-				}
-			},
-			{
-				"id": "squareBracket",
-				"description": "方括号的颜色",
-				"defaults": {
-					"dark": "#edbefa",
-					"light": "#8b008b"
-				}
-			}
-		]
-	},
-	"scripts": {
-		"vscode:prepublish": "rm -r out && yarn compile && webpack --mode production",
-		"compile": "npm-run-all compile:*",
-		"compile:extension": "webpack --mode development --config webpack4ext.config.js",
-		"compile:view": "webpack --mode development",
-		"watch": "npm-run-all -p watch:*",
-		"watch:extension": "webpack --watch --mode development --config webpack4ext.config.js",
-		"watch:view": "webpack --watch --mode development",
-		"pretest": "npm run compile && npm run lint",
-		"lint": "eslint src --ext ts",
-		"test": "node ./out/test/runTest.js"
-	},
-	"devDependencies": {
-		"@types/node": "^16.11.7",
-		"@types/prettier": "^2.7.1",
-		"@types/react": "^18.0.21",
-		"@types/react-dom": "^18.0.6",
-		"@types/vscode": "^1.32.0",
-		"@typescript-eslint/eslint-plugin": "^5.30.0",
-		"@typescript-eslint/parser": "^5.30.0",
-		"css-loader": "^6.7.1",
-		"eslint": "^8.13.0",
-		"npm-run-all": "^4.1.5",
-		"prettier": "^2.7.1",
-		"style-loader": "^3.3.1",
-		"ts-loader": "^9.4.1",
-		"typescript": "^4.8.4",
-		"webpack": "^5.74.0",
-		"webpack-cli": "^4.10.0"
-	},
-	"dependencies": {
-		"antd": "^4.23.5",
-		"react": "^18.2.0",
-		"react-dom": "^18.2.0"
-	}
+  "name": "noveler",
+  "description": "一个在 vscode 上辅助码中文小说的插件",
+  "version": "0.6.0",
+  "publisher": "zerozawa",
+  "license": "GPL-3.0",
+  "engines": {
+    "vscode": "^1.71.2"
+  },
+  "repository": {
+    "url": "https://github.com/lz37/noveler"
+  },
+  "categories": [
+    "Other",
+    "Formatters"
+  ],
+  "activationEvents": [
+    "onLanguage:plaintext"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "noveler.preview",
+        "title": "preview",
+        "category": "noveler"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "noveler.preview",
+        "key": "alt+\\",
+        "mac": "alt+\\",
+        "when": "editorTextFocus && editorLangId == 'plaintext'"
+      },
+      {
+        "command": "noveler.triggerSuggest.before",
+        "key": "ctrl+space",
+        "mac": "ctrl+space",
+        "when": "editorTextFocus && editorLangId == 'plaintext'"
+      }
+    ],
+    "configuration": {
+      "title": "Noveler",
+      "properties": {
+        "noveler": {
+          "type": "object",
+          "description": "Noveler的配置",
+          "properties": {
+            "roles": {
+              "type": "array",
+              "description": "角色列表",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "角色名称"
+                  },
+                  "color": {
+                    "type": "object",
+                    "description": "角色姓名高亮颜色",
+                    "properties": {
+                      "light": {
+                        "type": "string",
+                        "description": "在浅色主题下的颜色"
+                      },
+                      "dark": {
+                        "type": "string",
+                        "description": "在深色主题下的颜色"
+                      }
+                    }
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "角色描述, 用于鼠标悬停时显示"
+                  }
+                }
+              }
+            },
+            "autoInsert": {
+              "type": "object",
+              "description": "自动补全 缩进/空行 配置，注意，此功能与vscode原生功能 editor.wrappingIndent 和 editor.autoIndent 冲突，请注意取舍。建议只在工作区的 settings.json 中配置，避免污染全局",
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "description": "是否启用自动补全缩进"
+                },
+                "indentionLength": {
+                  "type": "number",
+                  "description": "自动补全缩进长度"
+                },
+                "spaceLines": {
+                  "type": "number",
+                  "description": "自动补全空行行数"
+                }
+              }
+            },
+            "statusBar": {
+              "type": "object",
+              "description": "状态栏配置",
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "description": "是否启用状态栏"
+                },
+                "timeUnit": {
+                  "type": "number",
+                  "description": "判定为休息时间的时间单位，单位为秒钟"
+                }
+              }
+            },
+            "preview": {
+              "type": "object",
+              "description": "预览配置",
+              "properties": {
+                "fontSize": {
+                  "type": "number",
+                  "description": "预览字体大小"
+                },
+                "indentionLength": {
+                  "type": "number",
+                  "description": "预览缩进长度"
+                },
+                "spaceLines": {
+                  "type": "number",
+                  "description": "预览段落间空行行数"
+                }
+              }
+            },
+            "completions": {
+              "type": "array",
+              "description": "自定义补全短语",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "description": "短语标题"
+                  },
+                  "context": {
+                    "type": "string",
+                    "description": "短语内容"
+                  },
+                  "kind": {
+                    "type": "string",
+                    "description": "短语类型，此选项作用于短语前的图标，可选值参考 <https://vshaxe.github.io/vscode-extern/vscode/CompletionItemKind.html>"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "colors": [
+      {
+        "id": "number",
+        "description": "数字的颜色",
+        "defaults": {
+          "dark": "#6cd8e6",
+          "light": "#00008b"
+        }
+      },
+      {
+        "id": "bookTitleMark",
+        "description": "书名号的颜色",
+        "defaults": {
+          "dark": "#d3090a",
+          "light": "#a83f3f"
+        }
+      },
+      {
+        "id": "quote",
+        "description": "引号的颜色",
+        "defaults": {
+          "dark": "#90ee90",
+          "light": "#006400"
+        }
+      },
+      {
+        "id": "squareBracket",
+        "description": "方括号的颜色",
+        "defaults": {
+          "dark": "#edbefa",
+          "light": "#8b008b"
+        }
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "rm -r out && yarn compile && webpack --mode production",
+    "compile": "npm-run-all compile:*",
+    "compile:extension": "webpack --mode development --config webpack4ext.config.js",
+    "compile:view": "webpack --mode development",
+    "watch": "npm-run-all -p watch:*",
+    "watch:extension": "webpack --watch --mode development --config webpack4ext.config.js",
+    "watch:view": "webpack --watch --mode development",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/node": "^16.11.7",
+    "@types/prettier": "^2.7.1",
+    "@types/react": "^18.0.21",
+    "@types/react-dom": "^18.0.6",
+    "@types/vscode": "^1.32.0",
+    "@typescript-eslint/eslint-plugin": "^5.30.0",
+    "@typescript-eslint/parser": "^5.30.0",
+    "css-loader": "^6.7.1",
+    "eslint": "^8.13.0",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.7.1",
+    "style-loader": "^3.3.1",
+    "ts-loader": "^9.4.1",
+    "typescript": "^4.8.4",
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0"
+  },
+  "dependencies": {
+    "antd": "^4.23.5",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
 }
