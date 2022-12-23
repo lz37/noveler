@@ -28,29 +28,31 @@ export const init = () => {
   }
 }
 
-const wordSeparators = '`~!@#$%^&*()-=+[{]}\\|;:\'",.<>/?，。‘’“”：；·《》？！…—￥{}【】（）'.split('')
-
 const judgeConfigIsCommand = (config: vscode.WorkspaceConfiguration) => {
   let isCommand = true
   isCommand = isCommand && config.get('editor.wrappingIndent') === 'none'
   isCommand = isCommand && config.get('editor.autoIndent') === 'none'
-  const wordSeparatorsSetting = config.get('editor.wordSeparators') as string
-  isCommand = isCommand && wordSeparatorsSetting.split('').every((item) => wordSeparators.includes(item))
   return isCommand
 }
 
 export const askForplaintextConf = async () => {
   const plaintextConf = vscode.workspace.getConfiguration('', { languageId: 'plaintext' })
-  if (judgeConfigIsCommand(plaintextConf)) {
+  if (!vscode.workspace.getConfiguration().get<boolean>('noveler.showApplyRecommendPlaintextConf')) return
+  if (!judgeConfigIsCommand(plaintextConf)) {
     const res = await vscode.window.showErrorMessage(
       '您当前的编辑器配置不适合小说写作，是否应用noveler推荐的配置？',
       '是',
       '否',
+      '不再提示',
     )
     if (res === '是') {
       plaintextConf.update('editor.wrappingIndent', 'none', vscode.ConfigurationTarget.Workspace, true)
       plaintextConf.update('editor.autoIndent', 'none', vscode.ConfigurationTarget.Workspace, true)
-      plaintextConf.update('editor.wordSeparators', wordSeparators.join(''), vscode.ConfigurationTarget.Workspace, true)
+    }
+    if (res === '不再提示') {
+      vscode.workspace
+        .getConfiguration()
+        .update('noveler.showApplyRecommendPlaintextConf', false, vscode.ConfigurationTarget.Workspace)
     }
   }
 }

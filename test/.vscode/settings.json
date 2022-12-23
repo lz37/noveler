@@ -1,7 +1,7 @@
 {
   "[plaintext]": {
-    "editor.wrappingIndent": "none",
-    "editor.autoIndent": "none",
+    // "editor.wrappingIndent": "none",
+    // "editor.autoIndent": "none",
     "editor.wordSeparators": "`~!@#$%^&*()-=+[{]}\\|;:'\",.<>/?，。‘’“”：；·《》？！…—￥{}【】（）"
   },
   "noveler": {
@@ -42,4 +42,5 @@
       }
     ]
   },
+  "noveler.showApplyRecommendPlaintextConf": false,
 }

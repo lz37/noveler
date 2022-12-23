@@ -1,7 +1,7 @@
 {
   "name": "noveler",
   "description": "一个在 vscode 上辅助码中文小说的插件",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "publisher": "zerozawa",
   "license": "GPL-3.0",
   "engines": {
@@ -43,6 +43,15 @@
     "configuration": {
       "title": "Noveler",
       "properties": {
+        "noveler.showApplyRecommendPlaintextConf": {
+          "type": "boolean",
+          "default": true,
+          "items": {
+            "type": "boolean"
+          },
+          "markdownDescription": "是否显示 *应用推荐的 `plaintext` 配置* 的提示",
+          "scope": "resource"
+        },
         "noveler": {
           "type": "object",
           "description": "Noveler的配置",
