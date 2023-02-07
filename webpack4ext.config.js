@@ -1,4 +1,5 @@
 const path = require('path')
+const resolve = (dir) => path.resolve(__dirname, dir)
 
 const tsConfigPath = path.join(__dirname, 'tsconfig.json')
 
@@ -16,6 +17,10 @@ const config = {
   },
   resolve: {
     extensions: ['.ts', '.js'],
+    // 设置别名
+    alias: {
+      '@': resolve('src'),
+    },
   },
   module: {
     rules: [

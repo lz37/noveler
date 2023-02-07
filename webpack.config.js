@@ -1,9 +1,14 @@
 const path = require('path')
+const resolve = (dir) => path.resolve(__dirname, dir)
 
 module.exports = {
   entry: path.join(__dirname, 'app', 'index.tsx'),
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.jsx', '.css'],
+    alias: {
+      '@': resolve('src'),
+      '@app': resolve('app'),
+    },
   },
   devtool: 'inline-source-map',
   module: {

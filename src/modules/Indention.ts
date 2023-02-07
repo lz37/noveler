@@ -1,7 +1,8 @@
 import * as vscode from 'vscode'
-import * as config from './Config'
-import { state } from './state'
-import { isPlaintext } from './utils'
+import * as confHandler from '@/modules/ConfigHandler'
+import { state } from '@/state'
+
+const targetFiles = ['plaintext']
 
 // @note 此功能与vscode editor.wrappingIndent 与 editor.autoIndent 配置冲突
 
@@ -40,10 +41,10 @@ export const indentionCreate = (event: vscode.TextDocumentChangeEvent, indention
   })
 }
 
-export const autoInsert = vscode.workspace.onDidChangeTextDocument(async (event) => {
+export const indentionProvider = vscode.workspace.onDidChangeTextDocument(async (event) => {
   const editor = vscode.window.activeTextEditor
   if (!editor) return
-  if (!isPlaintext(editor)) return
+  if (!targetFiles.includes(event.document.languageId)) return
   if (state.isFormatting) {
     // 触发命令editor.action.formatDocument
     await vscode.commands.executeCommand('editor.action.formatDocument')
@@ -51,9 +52,10 @@ export const autoInsert = vscode.workspace.onDidChangeTextDocument(async (event)
     return
   }
   if (event.document === editor.document) {
-    const autoInsertHandler = config.getConf().autoInsert
-    if (autoInsertHandler && autoInsertHandler.enabled && autoInsertHandler.indentionLength > 0) {
-      indentionCreate(event, autoInsertHandler.indentionLength, autoInsertHandler.spaceLines)
+    const { autoIndentLines, autoIndentSpaces } = confHandler.get()
+    if (autoIndentLines == 0 && autoIndentSpaces) return
+    if (autoIndentLines >= 0 && autoIndentSpaces > 0) {
+      indentionCreate(event, autoIndentSpaces, autoIndentLines)
     }
   }
 })

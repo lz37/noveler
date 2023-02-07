@@ -149,6 +149,6 @@
 
 更多功能正在开发中……
 
-大家使用期间有疑问、建议的，或者是想要参与开发的，除了在 github 上提出，也欢迎加入此 qq 群
+大家使用期间有疑问、建议的，或者是想要参与开发的，除了在 github 上提出，也欢迎加入 qq 群
 
-![qq群](https://raw.githubusercontent.com/lz37/noveler/master/images/qq-group.jpg)
+qq群：725834648

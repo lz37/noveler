@@ -1,6 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { Affix } from 'antd'
-import { WebViewConfHandlerEnum, WebViewConfHandler } from '../types'
+import { WebViewConfHandler } from '@/types/webvDto'
+import { IConfig } from '@/types/config'
+
+const itemMap: {
+  name: string
+  handler: keyof IConfig
+}[] = [
+  { name: '字体', handler: 'previewFontSize' },
+  { name: '缩进', handler: 'previewIndentionLength' },
+  { name: '段落间距', handler: 'previewSpaceLines' },
+]
 
 export default () => {
   const options = [-1, 1]
@@ -18,13 +28,13 @@ export default () => {
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-        {Object.values(WebViewConfHandlerEnum).map((item, index1) => (
+        {itemMap.map((item, index1) => (
           <div
             key={`${index1}`}
             style={{
               display: 'inline-block',
             }}>
-            {item}
+            {item.name}
             {options.map((option, index2) => (
               <button
                 key={`${index1}-${index2}`}
@@ -32,7 +42,7 @@ export default () => {
                   display: 'inline-block',
                 }}
                 onClick={() => {
-                  handleReloadWebview({ target: item, option })
+                  handleReloadWebview({ target: item.handler, option })
                 }}>
                 {option > 0 ? '+' : '-'}
               </button>
