@@ -11,11 +11,21 @@ export const splitStr = (sChars: string, toSplit = false) => {
   let str = ''
   for (let i = 0; i < sChars.length; i++) {
     const schar = sChars.charAt(i)
-    if (typeof schar == 'undefined' || typeof sChars.charAt(i + 1) == 'undefined') break
+    if (
+      typeof schar == 'undefined' ||
+      typeof sChars.charAt(i + 1) == 'undefined'
+    )
+      break
     str += schar
     if (getStrLength(schar) != getStrLength(sChars.charAt(i + 1))) {
       str += ' '
     }
   }
   return str.substring(0, str.length - 1)
+}
+
+export const isAbsolutePath = (path: string) => {
+  return (
+    path.startsWith('/') || path.startsWith('\\') || /^[a-zA-Z]:/.test(path)
+  )
 }

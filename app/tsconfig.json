@@ -9,12 +9,12 @@
     "experimentalDecorators": true,
     "lib": ["dom", "es2020"],
     "strict": true,
-    "typeRoots": ["node_modules/@types"],
     "baseUrl": "..",
     "paths": {
       "@/*": ["src/*"],
       "@app/*": ["app/*"]
-    }
+    },
+    "typeRoots": ["../node_modules/@types","@types"]
   },
   "exclude": ["node_modules"]
 }

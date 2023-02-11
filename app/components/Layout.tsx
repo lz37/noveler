@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { Affix } from 'antd'
-import { WebViewConfHandler } from '@/types/webvDto'
-import { IConfig } from '@/types/config'
 
 const itemMap: {
   name: string

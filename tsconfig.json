@@ -6,14 +6,15 @@
     "moduleResolution": "node",
     "outDir": "out",
     "sourceMap": true,
+    "jsx": "react",
     "strict": true,
     "rootDir": "src",
     "skipLibCheck": true,
-    "typeRoots": ["node_modules/@types"],
+    "typeRoots": ["node_modules/@types", "app/@types"],
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
     }
   },
-  "exclude": ["node_modules", ".vscode-test", "app"]
+  "exclude": ["node_modules", ".vscode-test","app/**/*.tsx"]
 }

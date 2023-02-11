@@ -3,7 +3,10 @@ import * as confHandler from '@/modules/ConfigHandler'
 
 const targetFiles = ['plaintext', 'markdown']
 
-const statusItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 11.4514)
+const statusItem = vscode.window.createStatusBarItem(
+  vscode.StatusBarAlignment.Left,
+  11.4514,
+)
 let inputLength = 0
 let isShow = false
 let accumulateTime = 0
@@ -12,10 +15,18 @@ let maxTime = 0
 
 const updateItem = (sum: number, dateTime: number, isPause: boolean) => {
   const speed = Math.floor((sum / (dateTime == 0 ? 1 : dateTime)) * 3600)
-  statusItem.text = `$(symbol-event) ${speed} $(clock) ${new Date(dateTime * 1000).toISOString().substr(11, 8)}`
+  statusItem.text = `$(symbol-event) ${speed} $(clock) ${new Date(
+    dateTime * 1000,
+  )
+    .toISOString()
+    .substr(11, 8)}`
   statusItem.tooltip = `一共输入了 ${sum} 个字符`
   if (isPause) {
-    statusItem.text = `$(symbol-event) ${speed} $(debug-pause) ${new Date(dateTime * 1000).toISOString().substr(11, 8)}`
+    statusItem.text = `$(symbol-event) ${speed} $(debug-pause) ${new Date(
+      dateTime * 1000,
+    )
+      .toISOString()
+      .substr(11, 8)}`
   }
 }
 const updateConf = () => {
@@ -69,13 +80,17 @@ const update = (event: vscode.TextDocumentChangeEvent) => {
   updateItem(inputLength, accumulateTime, false)
 }
 
-export const change = vscode.workspace.onDidChangeTextDocument(async (event) => {
-  const editor = vscode.window.activeTextEditor
-  if (!editor) return
-  if (!targetFiles.includes(event.document.languageId)) return
-  update(event)
-})
+export const change = vscode.workspace.onDidChangeTextDocument(
+  async (event) => {
+    const editor = vscode.window.activeTextEditor
+    if (!editor) return
+    if (!targetFiles.includes(event.document.languageId)) return
+    update(event)
+  },
+)
 
-export const changeConf = vscode.workspace.onDidChangeConfiguration(async (event) => {
-  updateConf()
-})
+export const changeConf = vscode.workspace.onDidChangeConfiguration(
+  async (event) => {
+    updateConf()
+  },
+)

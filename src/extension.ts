@@ -5,6 +5,7 @@ import { formatProvider } from '@/modules/Formatter'
 import { indentionProvider } from '@/modules/Indention'
 import { provider } from '@/modules/ViewLoader'
 import * as decoration from '@/modules/Decoration'
+import * as decorationExt from '@/modules/DecorationExt'
 
 // this method is called when vs code is activated
 export const activate = async (context: vscode.ExtensionContext) => {
@@ -13,12 +14,8 @@ export const activate = async (context: vscode.ExtensionContext) => {
   // const status = new Status(config.getConf().statusBar)
   // const decoration = new Decoration(config.getConf())
 
-  const activeEditor = vscode.window.activeTextEditor
   decoration.updateHighlightConf()
-
-  if (activeEditor) {
-    decoration.triggerUpdateDecorations(activeEditor)
-  }
+  await vscode.commands.executeCommand('noveler.reloadCSV')
 
   // let provider = updateAndGetProvider(config.getConf())
 
@@ -36,6 +33,7 @@ export const activate = async (context: vscode.ExtensionContext) => {
     decoration.onChangeConf,
     decoration.onChangeDocument,
     decoration.onChangeConf,
+    decorationExt.reloadConfExt
   )
 
   // context.subscriptions.push(

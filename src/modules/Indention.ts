@@ -11,7 +11,11 @@ const isEnter = (str: string) => {
   return str == '\r\n' || str == '\r' || str == '\n'
 }
 
-export const indentionCreate = (event: vscode.TextDocumentChangeEvent, indentionNumber: number, spaceLines: number) => {
+export const indentionCreate = (
+  event: vscode.TextDocumentChangeEvent,
+  indentionNumber: number,
+  spaceLines: number,
+) => {
   // 检测输入是否是回车，是的话在输入回车后添加两个空格
   if (!isEnter(event.contentChanges[0]?.text)) {
     return
@@ -41,21 +45,23 @@ export const indentionCreate = (event: vscode.TextDocumentChangeEvent, indention
   })
 }
 
-export const indentionProvider = vscode.workspace.onDidChangeTextDocument(async (event) => {
-  const editor = vscode.window.activeTextEditor
-  if (!editor) return
-  if (!targetFiles.includes(event.document.languageId)) return
-  if (state.isFormatting) {
-    // 触发命令editor.action.formatDocument
-    await vscode.commands.executeCommand('editor.action.formatDocument')
-    state.isFormatting = false
-    return
-  }
-  if (event.document === editor.document) {
-    const { autoIndentLines, autoIndentSpaces } = confHandler.get()
-    if (autoIndentLines == 0 && autoIndentSpaces) return
-    if (autoIndentLines >= 0 && autoIndentSpaces > 0) {
-      indentionCreate(event, autoIndentSpaces, autoIndentLines)
+export const indentionProvider = vscode.workspace.onDidChangeTextDocument(
+  async (event) => {
+    const editor = vscode.window.activeTextEditor
+    if (!editor) return
+    if (!targetFiles.includes(event.document.languageId)) return
+    if (state.isFormatting) {
+      // 触发命令editor.action.formatDocument
+      await vscode.commands.executeCommand('editor.action.formatDocument')
+      state.isFormatting = false
+      return
     }
-  }
-})
+    if (event.document === editor.document) {
+      const { autoIndentLines, autoIndentSpaces } = confHandler.get()
+      if (autoIndentLines == 0 && autoIndentSpaces == 0) return
+      if (autoIndentLines >= 0 && autoIndentSpaces > 0) {
+        indentionCreate(event, autoIndentSpaces, autoIndentLines)
+      }
+    }
+  },
+)

@@ -1,0 +1,48 @@
+{
+	"folders": [
+		{
+			"path": "folder1"
+		},
+		{
+			"path": "folder2"
+		}
+	],
+	"settings": {
+		"[plaintext]": {
+			"editor.wrappingIndent": "none",
+			"editor.autoIndent": "none",
+			"editor.wordWrap": "bounded"
+		},
+		"noveler.customHighlight": {
+			"\\d+(\\.\\d+)?": { "color": "#23e40a" },
+			"《.*?》": { "color": "#8482e4" }
+		},
+		"noveler.confCSVFiles": [
+			{
+				"path": ".vscode/test.csv",
+				"key": "名称",
+				"hoverKey": "信息",
+				"decorationRenderOptions": {
+					"color": "#9e952f"
+				}
+			},
+			{
+				"path": "/home/zerozawa/Sources/mine/noveler/test/folder2",
+				"key": "key",
+				"hoverKey": "hoverKey",
+				"decorationRenderOptions": {
+					"color": "#9e952f"
+				}
+			}
+		],
+		"noveler.showApplyRecommendPlaintextConf": true,
+		"noveler.autoIndentLines": 1,
+		"noveler.autoIndentSpaces": 4,
+		"noveler.previewFontSize": 35,
+		"noveler.previewIndentionLength": 4,
+		"noveler.previewSpaceLines": 1,
+		"noveler.statusShow": true,
+		"noveler.statusTimeUnit": 10,
+		"noveler.usePangu": true,
+	}
+}

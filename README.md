@@ -1,154 +1,47 @@
 # Noveler —— 一个在 vscode 上辅助码中文小说的插件
 
-## 默认配置
+![License](https://img.shields.io/github/license/lz37/noveler)
+![MarketplaceVersion](https://img.shields.io/visual-studio-marketplace/v/zerozawa.noveler)
+![MarketplaceLastUpdated](https://img.shields.io/visual-studio-marketplace/last-updated/zerozawa.noveler)
+![MarketplaceLastUpdated](https://img.shields.io/visual-studio-marketplace/i/zerozawa.noveler)
 
-<https://raw.githubusercontent.com/lz37/noveler/master/etc/settings.json>
+## 功能特点
 
-## 提供的功能
+- [x] 支持工作区
+- [x] 输入回车后自动插入自定义数量的空行和缩进
+- [x] 预览界面，读写分离
+- [x] 格式化内容，可中英文分离 ([pangu.js](https://github.com/vinta/pangu.js))
+- [x] 输入测速
+- [x] 结构高亮（类似语句、书名号），可自定义
+- [x] 元数据（定义的角色、势力、道具名等）高亮与悬挂
+- [ ] 触发建议
+- [ ] 随机取名
+- [ ] 大纲管理
+- [ ] 导出为单体 txt、epub 等格式
+- [ ] 一键提交 git
+- [ ] 一键发布到对应网站
 
-### 1. 提供常见语法高亮
+## 安装
 
-![高亮图片](https://raw.githubusercontent.com/lz37/noveler/master/images/highlight-sample.png)
-提供人物名称高亮
+vscode `ctrl + p` 输入指令
 
-### 2. 自定义人物名称高亮
+    ext install zerozawa.noveler
 
-在 settings.json 设置，以下是例子
+## 使用
 
-```json
-{
-  "noveler": {
-    "roles": [
-      {
-        "name": "汪言",
-        "color": {
-          "light": "#ffff00",
-          "dark": "#ffff00"
-        }
-      },
-      {
-        "name": "王永磊",
-        "color": {
-          "dark": "#00ff00",
-          "light": "#00ff00"
-        }
-      }
-    ]
-  }
-}
-```
+请移步 [wiki](https://github.com/lz37/noveler/wiki)
 
-![人物姓名高亮图片](https://raw.githubusercontent.com/lz37/noveler/master/images/roles-highlight-sample.png)
+## 问题反馈
 
-### 3. 自定义人物名悬停信息
+可以前往 [issue 区](https://github.com/lz37/noveler/issues) 反馈，也可以加入 qq 群交流： 725834648
 
-支持`markdown`语法
+## 参与贡献
 
-在 settings.json 设置，以下是例子
+此项目目前没开通捐款渠道，如果你觉得这个项目对你有帮助，可以考虑给个 star
 
-```json
-{
-  "noveler": {
-    "roles": [
-      {
-        "name": "汪言",
-        "color": {
-          "light": "#ffff00",
-          "dark": "#ffff00"
-        },
-        "description": "**男主**，性别为男爱好为女"
-      }
-    ]
-  }
-}
-```
+如果你想要帮助改进这个项目，欢迎通过以下方式参与进来：
 
-![人物信息悬停图片](https://raw.githubusercontent.com/lz37/noveler/master/images/roles-hover-message-sample.png)
-
-### 4. 增强 vscode 的缩进补全功能
-
-配置如下
-
-```json
-{
-  "noveler": {
-    "roles": [],
-    "autoInsert": {
-      "enabled": true, // 是否启用
-      "indentionLength": 4, // 自动补全缩进的长度
-      "spaceLines": 1 // 自动在段落之间补全的空行数
-    }
-  },
-  "editor.wrappingIndent": "none", // 非本插件功能，设置为none后，多行的段落不会共享第一行的缩进
-  "editor.autoIndent": "none" // 非本插件的功能，为vscode自带的缩进补全功能，和本插件功能有所冲突，请在两者间进行适当的取舍
-}
-```
-
-![自动补全缩进图片](https://raw.githubusercontent.com/lz37/noveler/master/images/auto-insert-sample.gif)
-
-### 5. 计速器
-
-显示工作时间和每小时平均输入字数，鼠标移动到上面会显示已经输入的总字数
-
-配置：
-
-```json
-{
-  "noveler": {
-    "statusBar": {
-      "enabled": true, // 是否启用
-      "timeUnit": 10 // 计速器的时间单位，单位为秒(一段timeUnit的时间不码字，计速器会停止计时)
-    }
-  }
-}
-```
-
-![计速器图片](https://raw.githubusercontent.com/lz37/noveler/master/images/status-bar-sample.gif)
-
-### 6. 小说预览
-
-也许这个设计多此一举，但说不准就有人需要它呢
-
-在 vscode 中，有许多种方法可以实现比此功能更加强大的预览功能，不过在达到目标之前，你可能会耗费很大一番功夫，如果你不想花费时间在上面，可以尝试使用此功能
-
-`ctrl + shift + p`输入`noveler: preview`，或者是使用快捷键`alt + \`（注意快捷键冲突），即可打开预览窗口，你可以将窗口缩放成移动端样式或者是网页端样式，实时预览你的小说（来检查一个段落的字数是否过多，或者连续的长段落过多，连续的短段落过多之类的）
-
-![预览图片](https://raw.githubusercontent.com/lz37/noveler/master/images/preview-sample.gif)
-
-### 7. 自定义补全
-
-提供人物名补全和作者自定义补全，由于 vscode 相关 api 的缺失，该功能的实现只能先空一格，再把空格删去，稍稍影响了观感，如果你有好的解决方式，可以分享给我
-
-默认快捷键为`ctrl + space`，注意和输入法之间的冲突，你可以在 vscode 中搜索“noveler.triggerSuggest.before”来修改快捷键
-
-设置如下：
-
-```json
-{
-  "noveler": {
-    "completions": [
-      {
-        "title": "chapter",
-        "context": "第${1}章", // 试试看设置为"第${1|一,二,三|}章"吧
-        "kind": "Class"
-      }
-    ]
-  }
-}
-```
-
-![补全图片](https://raw.githubusercontent.com/lz37/noveler/master/images/completion-sample.gif)
-
-### 8. 格式化文章
-
-可以使用 vscode 快捷键进行格式化，根据用户设置进行快速排版
-
-![格式化](https://raw.githubusercontent.com/lz37/noveler/master/images/format-sample.gif)
-
-祝您写作愉快 :)
-
-更多功能正在开发中……
-
-大家使用期间有疑问、建议的，或者是想要参与开发的，除了在 github 上提出，也欢迎加入 qq 群
-
-qq群：725834648
+- 帮助撰写和改进 Wiki
+- 帮助测试
+- Bugfix / 新功能？欢迎发 Pull Request
+- 要不考虑点个 Star ?（我会很开心的）

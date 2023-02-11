@@ -1,8 +1,6 @@
 import * as vscode from 'vscode'
 import * as path from 'path'
 import * as confHandler from '@/modules/ConfigHandler'
-import { WebViewConfHandler, Dto } from '@/types/webvDto'
-import { IConfig } from '@/types/config'
 
 const targetFiles = ['plaintext']
 
@@ -23,11 +21,18 @@ const pushSignal = (s: WebViewConfHandler) => {
 const init = (cnt: vscode.ExtensionContext) => {
   context = cnt
   disposables = []
-  const panel = vscode.window.createWebviewPanel('NovelerPreview', 'Noveler Preview', vscode.ViewColumn.Two, {
-    enableScripts: true,
-    retainContextWhenHidden: true,
-    localResourceRoots: [vscode.Uri.file(path.join(context.extensionPath, 'out', 'app'))],
-  })
+  const panel = vscode.window.createWebviewPanel(
+    'NovelerPreview',
+    'Noveler Preview',
+    vscode.ViewColumn.Two,
+    {
+      enableScripts: true,
+      retainContextWhenHidden: true,
+      localResourceRoots: [
+        vscode.Uri.file(path.join(context.extensionPath, 'out', 'app')),
+      ],
+    },
+  )
   renderWebview(panel, context)
   panel.webview.onDidReceiveMessage(
     (message: WebViewConfHandler) => {
@@ -35,7 +40,11 @@ const init = (cnt: vscode.ExtensionContext) => {
         const config = confHandler.get()
         const { target, option } = message
         const ratio = target === 'previewSpaceLines' ? 0.1 : 1
-        const newVal = parseFloat(Math.max((config as any)[target] + message.option * ratio, 0).toFixed(1))
+        const newVal = parseFloat(
+          Math.max((config as any)[target] + message.option * ratio, 0).toFixed(
+            1,
+          ),
+        )
         const newKVPair = { [target]: newVal } as unknown
         confHandler.set(newKVPair as IConfig)
       }
@@ -60,13 +69,18 @@ const init = (cnt: vscode.ExtensionContext) => {
   return panel
 }
 
-const renderWebview = (panel: vscode.WebviewPanel, context: vscode.ExtensionContext) => {
+const renderWebview = (
+  panel: vscode.WebviewPanel,
+  context: vscode.ExtensionContext,
+) => {
   const html = render(panel, context)
   panel.webview.html = html
 }
 
 const showWebview = (context: vscode.ExtensionContext) => {
-  const column = vscode.window.activeTextEditor ? vscode.window.activeTextEditor.viewColumn : undefined
+  const column = vscode.window.activeTextEditor
+    ? vscode.window.activeTextEditor.viewColumn
+    : undefined
   if (currentPanel) {
     currentPanel.reveal(column)
   } else {
@@ -78,9 +92,14 @@ const postMessageToWebview = (msg: Dto) => {
   currentPanel?.webview.postMessage(msg)
 }
 
-const render = (panel: vscode.WebviewPanel, context: vscode.ExtensionContext) => {
+const render = (
+  panel: vscode.WebviewPanel,
+  context: vscode.ExtensionContext,
+) => {
   const bundleScriptPath = panel.webview.asWebviewUri(
-    vscode.Uri.file(path.join(context.extensionPath, 'out', 'app', 'bundle.js')),
+    vscode.Uri.file(
+      path.join(context.extensionPath, 'out', 'app', 'bundle.js'),
+    ),
   )
   return `
   <!DOCTYPE html>
@@ -161,13 +180,10 @@ export const provider = (context: vscode.ExtensionContext) => {
       if (!event.affectsConfiguration('noveler')) {
         return
       }
-      const editor = vscode.window.activeTextEditor
-      if (!editor) return
-      if (!targetFiles.includes(editor.document.languageId)) return
       postMessageToWebview({
-        text: editor ? editor.document.getText() : '',
-        scrollPos: 0,
-        maxLine: editor ? editor.document.lineCount : 0,
+        text: undefined,
+        scrollPos: -1,
+        maxLine: -1,
         conf: confHandler.get(),
       })
     }),

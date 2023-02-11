@@ -1,11 +1,13 @@
 {
   "name": "noveler",
   "description": "一个在 vscode 上辅助码中文小说的插件",
-  "version": "0.6.1",
+  "version": "1.0.0",
   "publisher": "zerozawa",
   "license": "GPL-3.0",
   "scripts": {
-    "vscode:prepublish": "rm -r out && yarn compile && webpack --mode production",
+    "vscode:prepublish": "rm -r out && npm run compile && webpack --mode production",
+    "package": "vsce package --no-dependencies",
+    "publish": "vsce publish --no-dependencies",
     "compile": "npm-run-all compile:*",
     "compile:extension": "webpack --mode development --config webpack4ext.config.js",
     "compile:view": "webpack --mode development",
@@ -24,6 +26,7 @@
     "@types/vscode": "^1.32.0",
     "@typescript-eslint/eslint-plugin": "^5.30.0",
     "@typescript-eslint/parser": "^5.30.0",
+    "@vscode/vsce": "^2.17.0",
     "css-loader": "^6.7.1",
     "eslint": "^8.13.0",
     "npm-run-all": "^4.1.5",
@@ -36,6 +39,8 @@
   },
   "dependencies": {
     "antd": "^4.23.5",
+    "csv": "^6.2.6",
+    "pangu": "^4.0.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
@@ -59,6 +64,12 @@
         "command": "noveler.preview",
         "title": "preview",
         "category": "noveler"
+      },
+      {
+        "command": "noveler.reloadCSV",
+        "title": "reload CSV",
+        "category": "noveler",
+        "shortTitle": "刷新 CSV 配置文件"
       }
     ],
     "keybindings": [
@@ -69,10 +80,9 @@
         "when": "editorTextFocus && editorLangId == 'plaintext'"
       },
       {
-        "command": "noveler.triggerSuggest.before",
-        "key": "ctrl+space",
-        "mac": "ctrl+space",
-        "when": "editorTextFocus && editorLangId == 'plaintext'"
+        "command": "noveler.reloadCSV",
+        "key": "alt+f",
+        "mac": "alt+f"
       }
     ],
     "colors": [
@@ -133,10 +143,10 @@
           "markdownDescription": "回车后自动插入的空格数",
           "scope": "resource"
         },
-        "noveler.spaceBetweenChEn": {
+        "noveler.usePangu": {
           "type": "boolean",
           "default": true,
-          "markdownDescription": "格式化时是否中英文分隔",
+          "markdownDescription": "格式化时是否使用盘古样式（中英文添加空格）",
           "scope": "resource"
         },
         "noveler.previewFontSize": {
@@ -154,7 +164,7 @@
         "noveler.previewSpaceLines": {
           "type": "number",
           "default": 1,
-          "markdownDescription": "预览窗口的行高",
+          "markdownDescription": "预览窗口的段落间距",
           "scope": "resource"
         },
         "noveler.statusShow": {
@@ -181,14 +191,14 @@
             "properties": {
               "path": {
                 "type": "string",
-                "markdownDescription": "配置文件的路径，可以是绝对路径，也可以是相对于当前工作区的路径"
+                "markdownDescription": "配置文件的路径，可以是绝对路径，也可以是相对于根目录的路径（暂不支持工作区），支持文件路径与文件夹路径（若为文件夹，则将配置应用于其下所有.csv文件）"
               },
               "key": {
                 "type": "string",
                 "markdownDescription": "指定配置文件中的主键名",
                 "default": "name"
               },
-              "hoverKey":{
+              "hoverKey": {
                 "type": "string",
                 "markdownDescription": "指定配置文件中的键名，用于鼠标悬停时显示的内容"
               },
