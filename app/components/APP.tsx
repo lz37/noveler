@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Layout from '@app/components/Layout'
-import  defaultConfig  from '@/state/defaultConfig'
+import defaultConfig from '@/state/defaultConfig'
 
 export default () => {
   const [dto, setDto] = useState<Dto>({
@@ -66,7 +66,8 @@ export default () => {
                   key={'paragraph' + index}
                   style={{
                     fontSize: dto.conf.previewFontSize,
-                  }}>
+                  }}
+                >
                   {`${'\u00A0'.repeat(
                     dto.conf.previewIndentionLength,
                   )}${message}`}

@@ -4,7 +4,7 @@ import * as confHandler from '@/modules/ConfigHandler'
 const targetFiles = ['plaintext', 'markdown']
 
 export const onChangeEditor = vscode.window.onDidChangeActiveTextEditor(
-  async (editor) => {
+  (editor) => {
     if (!editor) return
     if (!targetFiles.includes(editor.document.languageId)) return
     triggerUpdateDecorations(editor)
@@ -12,55 +12,61 @@ export const onChangeEditor = vscode.window.onDidChangeActiveTextEditor(
 )
 
 export const onChangeDocument = vscode.workspace.onDidChangeTextDocument(
-  async (event) => {
+  (event) => {
     const editor = vscode.window.activeTextEditor
     if (!editor) return
     if (!targetFiles.includes(editor.document.languageId)) return
     if (event.document === editor.document) {
-      destroyDecorations()
       triggerUpdateDecorations(editor)
     }
   },
 )
 
 export const reloadConf = (extConf?: ICustomHighlightConf) => {
-  updateHighlightConf()
+  updateHighlightConf(extConf)
   const editor = vscode.window.activeTextEditor
-  destroyDecorations()
   if (editor) {
-    triggerUpdateDecorations(editor, extConf)
+    destroyDecorations(editor)
+    triggerUpdateDecorations(editor)
   }
 }
 
 export const onChangeConf = vscode.workspace.onDidChangeConfiguration(
-  async (event) => {
+  (event) => {
     if (!event.affectsConfiguration('noveler')) return
     reloadConf()
   },
 )
 
-const decorationTypes = new Set<vscode.TextEditorDecorationType>()
-let highlightConf: ICustomHighlightConf = {}
-const defaultHighlightConf: ICustomHighlightConf = {
+let highlightConf: IDealedCustomHighlightConf = {}
+const defaultHighlightConf: IDealedCustomHighlightConf = {
   '\\d+(\\.\\d+)?': {
-    renderOptions: { color: { id: 'number' } },
+    renderOptions: vscode.window.createTextEditorDecorationType({
+      color: { id: 'number' },
+    }),
     hoverMsg: undefined,
   },
   '《.*?》': {
-    renderOptions: { color: { id: 'bookTitleMark' } },
+    renderOptions: vscode.window.createTextEditorDecorationType({
+      color: { id: 'bookTitleMark' },
+    }),
     hoverMsg: undefined,
   },
   '“.*?”': {
-    renderOptions: { color: { id: 'quote' } },
+    renderOptions: vscode.window.createTextEditorDecorationType({
+      color: { id: 'quote' },
+    }),
     hoverMsg: undefined,
   },
   '【.*?】': {
-    renderOptions: { color: { id: 'squareBracket' } },
+    renderOptions: vscode.window.createTextEditorDecorationType({
+      color: { id: 'squareBracket' },
+    }),
     hoverMsg: undefined,
   },
 }
 
-export const updateHighlightConf = () => {
+export const updateHighlightConf = (extConf?: ICustomHighlightConf) => {
   // deep clone
   highlightConf = JSON.parse(JSON.stringify(defaultHighlightConf))
   const conf = confHandler.get().customHighlight
@@ -68,31 +74,29 @@ export const updateHighlightConf = () => {
     Object.entries(conf).forEach((entry) => {
       const [key, value] = entry
       highlightConf[key] = {
-        renderOptions: value,
+        renderOptions: vscode.window.createTextEditorDecorationType(value),
+      }
+    })
+  }
+  if (extConf) {
+    Object.entries(extConf).forEach((entry) => {
+      const [key, value] = entry
+      highlightConf[key] = {
+        hoverMsg: value.hoverMsg,
+        renderOptions: vscode.window.createTextEditorDecorationType(
+          value.renderOptions,
+        ),
       }
     })
   }
 }
 
-const updateDecorations = (
-  activeEditor: vscode.TextEditor,
-  extConf?: ICustomHighlightConf,
-) => {
-  // key value split
-  if (extConf)
-    Object.entries(extConf).forEach((ect) => {
-      const [key, value] = ect
-      highlightConf[key] = value
-    })
-  const highlightConfArray = Object.entries(highlightConf)
+const updateDecorations = (activeEditor: vscode.TextEditor) => {
   try {
-    highlightConfArray.forEach((highlightConf) => {
+    Object.entries(highlightConf).forEach((highlightConf) => {
       const [key, value] = highlightConf
       const reg = new RegExp(key, 'g')
-      const decorationType = vscode.window.createTextEditorDecorationType(
-        value.renderOptions,
-      )
-      decorationTypes.add(decorationType)
+      const decorationType = value.renderOptions
       updateDecoration(reg, decorationType, activeEditor, value.hoverMsg)
     })
   } catch (error) {
@@ -124,17 +128,13 @@ const updateDecoration = (
   activeEditor.setDecorations(decorationType, options)
 }
 
-const destroyDecorations = () => {
-  decorationTypes.forEach((decorationType) => {
-    decorationType.dispose()
+const destroyDecorations = (activeEditor: vscode.TextEditor) => {
+  Object.values(highlightConf).forEach((value) => {
+    activeEditor.setDecorations(value.renderOptions, [])
   })
-  decorationTypes.clear()
 }
 
-export const triggerUpdateDecorations = (
-  activeEditor: vscode.TextEditor,
-  extConf?: ICustomHighlightConf,
-) => {
+export const triggerUpdateDecorations = (activeEditor: vscode.TextEditor) => {
   if (!targetFiles.includes(activeEditor.document.languageId)) return
-  updateDecorations(activeEditor, extConf)
+  updateDecorations(activeEditor)
 }

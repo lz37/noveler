@@ -74,10 +74,12 @@ const handleCSV = (
   let firstRow = true
   let keyIndex = -1
   let hoverKeyIndex = -1
+  let rowNum = 0
   const stream = createReadStream(path)
   stream
     .pipe(csv.parse({ delimiter: ',', from_line: 1 }))
     .on('data', (row: string[]) => {
+      console.log(rowNum++)
       if (firstRow) {
         firstRow = false
         for (let i = 0; i < row.length; i++) {

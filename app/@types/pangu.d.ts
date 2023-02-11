@@ -1,3 +1,3 @@
 declare module 'pangu' {
-	export function spacing(text: string): string
+  export function spacing(text: string): string
 }

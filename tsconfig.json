@@ -16,5 +16,5 @@
       "@/*": ["src/*"]
     }
   },
-  "exclude": ["node_modules", ".vscode-test","app/**/*.tsx"]
+  "exclude": ["node_modules", ".vscode-test", "app/**/*.tsx"]
 }

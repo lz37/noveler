@@ -5,6 +5,13 @@ interface ICustomHighlightConf {
   }
 }
 
+interface IDealedCustomHighlightConf {
+  [key: string]: {
+    renderOptions: import('vscode').TextEditorDecorationType
+    hoverMsg?: import('vscode').MarkdownString
+  }
+}
+
 interface DecorationExtConf {
   [path: string]: {
     key: string

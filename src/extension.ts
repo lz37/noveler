@@ -33,7 +33,7 @@ export const activate = async (context: vscode.ExtensionContext) => {
     decoration.onChangeConf,
     decoration.onChangeDocument,
     decoration.onChangeConf,
-    decorationExt.reloadConfExt
+    decorationExt.reloadConfExt,
   )
 
   // context.subscriptions.push(
