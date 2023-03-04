@@ -31,8 +31,9 @@ const formatFoo = (document: vscode.TextDocument) => {
   return lineArr
 }
 
-export const formatProvider =
-  vscode.languages.registerDocumentFormattingEditProvider('plaintext', {
+export const provider = vscode.languages.registerDocumentFormattingEditProvider(
+  'plaintext',
+  {
     provideDocumentFormattingEdits: (
       document: vscode.TextDocument,
     ): vscode.TextEdit[] => {
@@ -58,4 +59,5 @@ export const formatProvider =
         ),
       ]
     },
-  })
+  },
+)

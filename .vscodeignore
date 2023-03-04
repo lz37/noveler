@@ -13,5 +13,13 @@ images
 etc
 src
 node_modules
-accesstoken.txt
+.lintstagedrc
+.nvmrc
+commitlint.config.js
+pnpm-lock.yaml
+package.json
+test
+.husky
 app
+accesstoken.txt
+.prettierignore

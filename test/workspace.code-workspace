@@ -27,12 +27,24 @@
 				}
 			},
 			{
-				"path": "/home/zerozawa/Sources/mine/noveler/test/folder2",
+				"path": "/home/zerozawa/Sources/mine/noveler/test/folder2/test1.csv",
 				"key": "key",
 				"hoverKey": "hoverKey",
 				"decorationRenderOptions": {
 					"color": "#9e952f"
-				}
+				},
+				"suggestPrefix": "zj",
+				"suggestKind": "Method"
+			},
+			{
+				"path": "/home/zerozawa/Sources/mine/noveler/test/folder2/test2.csv",
+				"key": "key",
+				"hoverKey": "hoverKey",
+				"decorationRenderOptions": {
+					"color": "#887ec5"
+				},
+				"suggestPrefix": "pj",
+				"suggestKind": "Method"
 			}
 		],
 		"noveler.showApplyRecommendPlaintextConf": true,
@@ -44,5 +56,6 @@
 		"noveler.statusShow": true,
 		"noveler.statusTimeUnit": 10,
 		"noveler.usePangu": true,
+		"noveler.autoIndent": true,
 	}
 }

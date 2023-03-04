@@ -1,21 +1,15 @@
-interface ICustomHighlightConf {
+interface ICustomHighlightConfMap {
   [key: string]: {
     renderOptions: import('vscode').DecorationRenderOptions
     hoverMsg?: import('vscode').MarkdownString
   }
 }
 
-interface IDealedCustomHighlightConf {
+interface IDealedCustomHighlightConfMap {
   [key: string]: {
     renderOptions: import('vscode').TextEditorDecorationType
     hoverMsg?: import('vscode').MarkdownString
   }
 }
 
-interface DecorationExtConf {
-  [path: string]: {
-    key: string
-    hoverKey?: string
-    decorationRenderOptions?: import('vscode').DecorationRenderOptions
-  }
-}
+type CompletionItemKindKeys = keyof typeof import('vscode').CompletionItemKind

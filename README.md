@@ -14,7 +14,8 @@
 - [x] 输入测速
 - [x] 结构高亮（类似语句、书名号），可自定义
 - [x] 元数据（定义的角色、势力、道具名等）高亮与悬挂
-- [ ] 触发建议 (todo)
+- [x] 触发建议
+- [ ] 和谐词提示 (todo)
 - [ ] 随机取名 (todo)
 - [ ] 大纲管理 (todo)
 - [ ] 导出为单体 txt、epub 等格式 (todo)
@@ -27,9 +28,13 @@ vscode `ctrl + p` 输入指令
 
     ext install zerozawa.noveler
 
-## 使用
+## 功能预览
 
-请移步 [wiki](https://github.com/lz37/noveler/wiki)
+[wiki: 功能预览](https://github.com/lz37/noveler/wiki/%E5%8A%9F%E8%83%BD%E9%A2%84%E8%A7%88)
+
+## 配置
+
+[wiki: 使用方式](https://github.com/lz37/noveler/wiki/%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F)
 
 ## 问题反馈
 

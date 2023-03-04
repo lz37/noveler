@@ -3,10 +3,11 @@ import * as vscode from 'vscode'
 import { promises as fs, createReadStream } from 'fs'
 import { isAbsolutePath } from '@/utils'
 import * as csv from 'csv'
-import { reloadConf } from './Decoration'
+import * as decoration from '@/modules/Decoration'
+import * as completion from '@/modules/Completion'
 
-let conf: DecorationExtConf | undefined = undefined
-let highlightConf: ICustomHighlightConf | undefined = undefined
+let conf: CSVOptionMap | undefined = undefined
+let highlightConf: ICustomHighlightConfMap | undefined = undefined
 const workSpaceRoots = vscode.workspace.workspaceFolders
 
 const updateConf = () => {
@@ -17,7 +18,7 @@ const updateConf = () => {
         throw new Error('confCSVFiles 配置格式出现错误: path 不能为空')
       }
     }
-    const newConf: DecorationExtConf = {}
+    const newConf: CSVOptionMap = {}
     tmpConfs.forEach((tmpConf) => {
       if (!tmpConf.hoverKey && !tmpConf.decorationRenderOptions) return
       if (!workSpaceRoots && !isAbsolutePath(tmpConf.path!)) return
@@ -27,10 +28,24 @@ const updateConf = () => {
         !isAbsolutePath(tmpConf.path!)
       )
         return
-      const { key, decorationRenderOptions, hoverKey, path } = tmpConf
-      newConf[path!] = { key, decorationRenderOptions, hoverKey }
+      const {
+        key,
+        decorationRenderOptions,
+        hoverKey,
+        path,
+        suggestKind,
+        suggestPrefix,
+      } = tmpConf
+      newConf[path!] = {
+        key,
+        decorationRenderOptions,
+        hoverKey,
+        suggestKind,
+        suggestPrefix,
+      }
     })
-    conf = newConf
+    if (Object.keys(newConf).length > 0) conf = newConf
+    else conf = undefined
   }
 }
 
@@ -62,71 +77,76 @@ const handlePath = async (path: string) => {
   return paths
 }
 /**
- *
  * @param path 绝对路径
  */
-const handleCSV = (
-  path: string,
-  csvKey: string,
-  csvHoverKey?: string,
-  decorationRenderOptions: vscode.DecorationInstanceRenderOptions = {},
-) => {
+const handleCSV = (csvOpt: CSVOptions) => {
   let firstRow = true
   let keyIndex = -1
   let hoverKeyIndex = -1
-  let rowNum = 0
-  const stream = createReadStream(path)
+  if (!csvOpt.path) return
+  const stream = createReadStream(csvOpt.path)
   stream
     .pipe(csv.parse({ delimiter: ',', from_line: 1 }))
     .on('data', (row: string[]) => {
-      console.log(rowNum++)
       if (firstRow) {
         firstRow = false
         for (let i = 0; i < row.length; i++) {
           const element = row[i]
-          if (element.trim() === csvKey) {
+          if (element.trim() === csvOpt.key) {
             keyIndex = i
           }
-          if (element.trim() === csvHoverKey) {
+          if (element.trim() === csvOpt.hoverKey) {
             hoverKeyIndex = i
           }
         }
         if (keyIndex === -1) {
           stream.emit(
             'error',
-            new Error(`配置文件 ${path} 中没有找到 key: ${csvKey}`),
+            new Error(`配置文件 ${csvOpt.path} 中没有找到 key: ${csvOpt.key}`),
           )
         }
+        completion.reset()
         return
       }
       const key = row[keyIndex].trim()
       let hoverKey: string | undefined = undefined
-      if (hoverKeyIndex != -1) {
+      if (hoverKeyIndex !== -1) {
         hoverKey = row[hoverKeyIndex].trim()
       }
+      completion.setKeys(
+        key,
+        csvOpt.suggestPrefix,
+        hoverKey,
+        csvOpt.suggestKind,
+      )
       const editor = vscode.window.activeTextEditor
       if (!editor) return
       const markdownStr = hoverKey
         ? new vscode.MarkdownString(hoverKey)
         : undefined
       highlightConf![key] = {
-        renderOptions: decorationRenderOptions,
+        renderOptions: csvOpt.decorationRenderOptions ?? {},
         hoverMsg: markdownStr,
       }
     })
     .on('end', () => {
-      reloadConf(highlightConf)
+      decoration.reloadConf(highlightConf)
+      completion.updateProvider()
     })
     .on('error', (error) => {
       vscode.window.showErrorMessage(
-        `读取配置文件 ${path} 出现错误:\n ${error.message}`,
+        `读取配置文件 ${csvOpt.path} 出现错误:\n ${error.message}`,
       )
     })
 }
 
 const loadFile = async () => {
-  updateConf()
-  if (!conf) throw new Error('confCSVFiles 配置出现错误: 获取配置失败')
+  try {
+    updateConf()
+  } catch (error) {
+    vscode.window.showErrorMessage((<Error>error).message)
+  }
+  if (!conf) return
   const confEntries = Object.entries(conf)
   highlightConf = {}
   for (let i = 0; i < confEntries.length; i++) {
@@ -134,19 +154,18 @@ const loadFile = async () => {
     const paths = await handlePath(key)
     if (!paths || paths.length == 0) return
     for (let j = 0; j < paths.length; j++) {
-      handleCSV(
-        paths[j],
-        value.key,
-        value.hoverKey,
-        value.decorationRenderOptions,
-      )
+      handleCSV({ ...{ path: paths[j] }, ...value })
     }
   }
 }
 
-export const reloadConfExt = vscode.commands.registerCommand(
+export const reload = vscode.commands.registerCommand(
   'noveler.reloadCSV',
-  async () => {
-    await loadFile()
+  () => {
+    loadFile()
   },
 )
+
+export const onChangeConf = vscode.workspace.onDidChangeConfiguration(() => {
+  vscode.commands.executeCommand('noveler.reloadCSV')
+})

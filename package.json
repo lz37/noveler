@@ -1,7 +1,7 @@
 {
   "name": "noveler",
   "description": "一个在 vscode 上辅助码中文小说的插件",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "publisher": "zerozawa",
   "license": "GPL-3.0",
   "scripts": {
@@ -63,7 +63,8 @@
     "Formatters"
   ],
   "activationEvents": [
-    "onLanguage:plaintext"
+    "onLanguage:plaintext",
+    "onLanguage:markdown"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -90,7 +91,8 @@
       {
         "command": "noveler.reloadCSV",
         "key": "alt+f",
-        "mac": "alt+f"
+        "mac": "alt+f",
+        "when": "editorTextFocus"
       }
     ],
     "colors": [
@@ -139,16 +141,22 @@
           "markdownDescription": "是否显示 *应用推荐的 `plaintext` 配置* 的提示",
           "scope": "resource"
         },
+        "noveler.autoIndent": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "是否在回车后自动插入缩进、空行",
+          "scope": "resource"
+        },
         "noveler.autoIndentLines": {
           "type": "number",
           "default": 0,
-          "markdownDescription": "回车后自动插入的行数",
+          "markdownDescription": "回车后自动插入的行数， `noveler.autoIndent` 关闭时，此功能也会作为格式化属性读取",
           "scope": "resource"
         },
         "noveler.autoIndentSpaces": {
           "type": "number",
           "default": 4,
-          "markdownDescription": "回车后自动插入的空格数",
+          "markdownDescription": "回车后自动插入的空格数， `noveler.autoIndent` 关闭时，此功能也会作为格式化属性读取",
           "scope": "resource"
         },
         "noveler.usePangu": {
@@ -191,6 +199,11 @@
           "type": "object",
           "markdownDescription": "自定义高亮，键为正则表达式，值为渲染选项，值的结构参照 [DecorationRenderOptions](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions)"
         },
+        "noveler.completionChar": {
+          "type": "string",
+          "default": "@",
+          "markdownDescription": "补全时的触发字符, *注*：请尽量使用英文标点作为触发字符, 默认为@"
+        },
         "noveler.confCSVFiles": {
           "type": "array",
           "markdownDescription": "高亮与补全的文件配置",
@@ -213,6 +226,15 @@
               "decorationRenderOptions": {
                 "type": "object",
                 "markdownDescription": "高亮配置，根据配置高亮对应的主键名属性，结构参照 [DecorationRenderOptions](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions)"
+              },
+              "suggestPrefix": {
+                "type": "string",
+                "markdownDescription": "补全的前缀，若不为空，则补全时会在补全项前添加此前缀",
+                "default": ""
+              },
+              "suggestKind": {
+                "type": "string",
+                "markdownDescription": "补全的类型，参照 [CompletionItemKind](https://vshaxe.github.io/vscode-extern/vscode/CompletionItemKind.html)，不同类型会有不同的图标"
               }
             }
           }

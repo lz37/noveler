@@ -45,11 +45,13 @@ export const indentionCreate = (
   })
 }
 
-export const indentionProvider = vscode.workspace.onDidChangeTextDocument(
+export const provider = vscode.workspace.onDidChangeTextDocument(
   async (event) => {
     const editor = vscode.window.activeTextEditor
     if (!editor) return
     if (!targetFiles.includes(event.document.languageId)) return
+    const { autoIndentLines, autoIndentSpaces, autoIndent } = confHandler.get()
+    if (!autoIndent) return
     if (state.isFormatting) {
       // 触发命令editor.action.formatDocument
       await vscode.commands.executeCommand('editor.action.formatDocument')
@@ -57,7 +59,6 @@ export const indentionProvider = vscode.workspace.onDidChangeTextDocument(
       return
     }
     if (event.document === editor.document) {
-      const { autoIndentLines, autoIndentSpaces } = confHandler.get()
       if (autoIndentLines == 0 && autoIndentSpaces == 0) return
       if (autoIndentLines >= 0 && autoIndentSpaces > 0) {
         indentionCreate(event, autoIndentSpaces, autoIndentLines)

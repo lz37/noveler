@@ -22,12 +22,15 @@ export const onChangeDocument = vscode.workspace.onDidChangeTextDocument(
   },
 )
 
-export const reloadConf = (extConf?: ICustomHighlightConf) => {
-  updateHighlightConf(extConf)
+export const reloadConf = (extConf?: ICustomHighlightConfMap) => {
   const editor = vscode.window.activeTextEditor
+  destroyHovers()
   if (editor) {
     destroyDecorations(editor)
+    updateHighlightConf(extConf)
     triggerUpdateDecorations(editor)
+  } else {
+    updateHighlightConf(extConf)
   }
 }
 
@@ -38,35 +41,31 @@ export const onChangeConf = vscode.workspace.onDidChangeConfiguration(
   },
 )
 
-let highlightConf: IDealedCustomHighlightConf = {}
-const defaultHighlightConf: IDealedCustomHighlightConf = {
+let highlightConf: IDealedCustomHighlightConfMap = {}
+const defaultHighlightConf: IDealedCustomHighlightConfMap = {
   '\\d+(\\.\\d+)?': {
     renderOptions: vscode.window.createTextEditorDecorationType({
       color: { id: 'number' },
     }),
-    hoverMsg: undefined,
   },
   '《.*?》': {
     renderOptions: vscode.window.createTextEditorDecorationType({
       color: { id: 'bookTitleMark' },
     }),
-    hoverMsg: undefined,
   },
   '“.*?”': {
     renderOptions: vscode.window.createTextEditorDecorationType({
       color: { id: 'quote' },
     }),
-    hoverMsg: undefined,
   },
   '【.*?】': {
     renderOptions: vscode.window.createTextEditorDecorationType({
       color: { id: 'squareBracket' },
     }),
-    hoverMsg: undefined,
   },
 }
 
-export const updateHighlightConf = (extConf?: ICustomHighlightConf) => {
+export const updateHighlightConf = (extConf?: ICustomHighlightConfMap) => {
   // deep clone
   highlightConf = JSON.parse(JSON.stringify(defaultHighlightConf))
   const conf = confHandler.get().customHighlight
@@ -130,7 +129,16 @@ const updateDecoration = (
 
 const destroyDecorations = (activeEditor: vscode.TextEditor) => {
   Object.values(highlightConf).forEach((value) => {
+    // delete hoverMessage
+    value.hoverMsg = undefined
     activeEditor.setDecorations(value.renderOptions, [])
+  })
+}
+
+const destroyHovers = () => {
+  Object.values(highlightConf).forEach((value) => {
+    // delete hoverMessage
+    value.hoverMsg = undefined
   })
 }
 

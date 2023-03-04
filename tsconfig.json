@@ -11,6 +11,7 @@
     "rootDir": "src",
     "skipLibCheck": true,
     "typeRoots": ["node_modules/@types", "app/@types"],
+    "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
