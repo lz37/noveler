@@ -1,14 +1,14 @@
 {
   "name": "noveler",
   "description": "一个在 vscode 上辅助码中文小说的插件",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "publisher": "zerozawa",
   "license": "GPL-3.0",
   "scripts": {
     "vscode:prepublish": "./scripts/rmout && npm run compile && webpack --mode production",
     "prepare": "husky install",
     "package": "vsce package --no-dependencies",
-    "publish": "vsce publish --no-dependencies",
+    "publish": "vsce publish --no-dependencies -p",
     "compile": "npm-run-all compile:*",
     "compile:extension": "webpack --mode development --config webpack4ext.config.js",
     "compile:view": "webpack --mode development",
