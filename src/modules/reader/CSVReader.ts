@@ -1,10 +1,11 @@
 import * as confHandler from '@/modules/ConfigHandler'
 import * as vscode from 'vscode'
-import { promises as fs, createReadStream } from 'fs'
-import { isAbsolutePath } from '@/utils'
+import { createReadStream } from 'fs'
+import { isAbsolutePath, handlePath } from '@/utils'
 import * as csv from 'csv'
 import * as decoration from '@/modules/Decoration'
 import * as completion from '@/modules/Completion'
+import Commands from '@/state/Commands'
 
 let conf: CSVOptionMap | undefined = undefined
 let highlightConf: ICustomHighlightConfMap | undefined = undefined
@@ -12,73 +13,42 @@ const workSpaceRoots = vscode.workspace.workspaceFolders
 
 const updateConf = () => {
   const tmpConfs = confHandler.get().confCSVFiles
-  if (tmpConfs) {
-    for (let i = 0; i < tmpConfs.length; i++) {
-      if (!tmpConfs[i].path) {
-        throw new Error('confCSVFiles 配置格式出现错误: path 不能为空')
-      }
+  if (!tmpConfs) return
+  for (let i = 0; i < tmpConfs.length; i++) {
+    if (!tmpConfs[i].path) {
+      throw new Error('confCSVFiles 配置格式出现错误: path 不能为空')
     }
-    const newConf: CSVOptionMap = {}
-    tmpConfs.forEach((tmpConf) => {
-      if (!tmpConf.hoverKey && !tmpConf.decorationRenderOptions) return
-      if (!workSpaceRoots && !isAbsolutePath(tmpConf.path!)) return
-      if (
-        workSpaceRoots &&
-        workSpaceRoots.length > 1 &&
-        !isAbsolutePath(tmpConf.path!)
-      )
-        return
-      const {
-        key,
-        decorationRenderOptions,
-        hoverKey,
-        path,
-        suggestKind,
-        suggestPrefix,
-      } = tmpConf
-      newConf[path!] = {
-        key,
-        decorationRenderOptions,
-        hoverKey,
-        suggestKind,
-        suggestPrefix,
-      }
-    })
-    if (Object.keys(newConf).length > 0) conf = newConf
-    else conf = undefined
   }
+  const newConf: CSVOptionMap = {}
+  tmpConfs.forEach((tmpConf) => {
+    if (!tmpConf.hoverKey && !tmpConf.decorationRenderOptions) return
+    if (!workSpaceRoots && !isAbsolutePath(tmpConf.path!)) return
+    if (
+      workSpaceRoots &&
+      workSpaceRoots.length > 1 &&
+      !isAbsolutePath(tmpConf.path!)
+    )
+      return
+    const {
+      key,
+      decorationRenderOptions,
+      hoverKey,
+      path,
+      suggestKind,
+      suggestPrefix,
+    } = tmpConf
+    newConf[path!] = {
+      key,
+      decorationRenderOptions,
+      hoverKey,
+      suggestKind,
+      suggestPrefix,
+    }
+  })
+  if (Object.keys(newConf).length > 0) conf = newConf
+  else conf = undefined
 }
 
-/**
- * 返回一个数组，数组中的每一项都是一个绝对路径
- * @param path
- * @returns
- */
-const handlePath = async (path: string) => {
-  const paths: string[] = []
-  if (!isAbsolutePath(path)) {
-    paths.push(`${workSpaceRoots?.[0].uri.fsPath}/${path}`)
-  } else {
-    paths.push(path)
-  }
-  const stat = await fs.stat(paths[0])
-  if (stat.isDirectory()) {
-    // read all .csv in this dir
-    const p = paths.pop()
-    if (!p) return
-    const files = await fs.readdir(p)
-    for (let i = 0; i < files.length; i++) {
-      const f = `${p}/${files[i]}`
-      if (files[i].endsWith('.csv') && (await fs.stat(f)).isFile()) {
-        paths.push(f)
-      }
-    }
-  }
-  return paths
-}
-/**
- * @param path 绝对路径
- */
 const handleCSV = (csvOpt: CSVOptions) => {
   let firstRow = true
   let keyIndex = -1
@@ -151,21 +121,21 @@ const loadFile = async () => {
   highlightConf = {}
   for (let i = 0; i < confEntries.length; i++) {
     const [key, value] = confEntries[i]
-    const paths = await handlePath(key)
-    if (!paths || paths.length == 0) return
+    const paths = await handlePath(key, '.csv')
+    if (!paths || paths.length == 0) continue
     for (let j = 0; j < paths.length; j++) {
       handleCSV({ ...{ path: paths[j] }, ...value })
     }
   }
 }
 
-export const reload = vscode.commands.registerCommand(
-  'noveler.reloadCSV',
+export const reloadCommand = vscode.commands.registerCommand(
+  Commands.ReloadCSV,
   () => {
     loadFile()
   },
 )
 
 export const onChangeConf = vscode.workspace.onDidChangeConfiguration(() => {
-  vscode.commands.executeCommand('noveler.reloadCSV')
+  vscode.commands.executeCommand(Commands.ReloadCSV)
 })

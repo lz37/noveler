@@ -1,11 +1,11 @@
 {
   "name": "noveler",
   "description": "一个在 vscode 上辅助码中文小说的插件",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "publisher": "zerozawa",
   "license": "GPL-3.0",
   "scripts": {
-    "vscode:prepublish": "rm -r out && npm run compile && webpack --mode production",
+    "vscode:prepublish": "./scripts/rmout && npm run compile && webpack --mode production",
     "prepare": "husky install",
     "package": "vsce package --no-dependencies",
     "publish": "vsce publish --no-dependencies",
@@ -32,7 +32,7 @@
     "@types/vscode": "^1.32.0",
     "@typescript-eslint/eslint-plugin": "^5.30.0",
     "@typescript-eslint/parser": "^5.30.0",
-    "@vscode/vsce": "^2.17.0",
+    "@vscode/vsce": "^2.18.0",
     "css-loader": "^6.7.1",
     "eslint": "^8.13.0",
     "husky": "^8.0.3",
@@ -48,7 +48,6 @@
   "dependencies": {
     "antd": "^4.23.5",
     "csv": "^6.2.6",
-    "pangu": "^4.0.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
@@ -162,7 +161,7 @@
         "noveler.usePangu": {
           "type": "boolean",
           "default": true,
-          "markdownDescription": "格式化时是否使用盘古样式（中英文添加空格）",
+          "markdownDescription": "格式化时是否中在英文之间添加空格（不再使用第三方盘古包，改为插件内置实现）",
           "scope": "resource"
         },
         "noveler.previewFontSize": {
@@ -233,8 +232,64 @@
                 "default": ""
               },
               "suggestKind": {
+                "enum": [
+                  "Text",
+                  "Method",
+                  "Function",
+                  "Constructor",
+                  "Field",
+                  "Variable",
+                  "Class",
+                  "Interface",
+                  "Module",
+                  "Property",
+                  "Unit",
+                  "Value",
+                  "Enum",
+                  "Keyword",
+                  "Snippet",
+                  "Color",
+                  "Reference",
+                  "File",
+                  "Folder",
+                  "EnumMember",
+                  "Constant",
+                  "Struct",
+                  "Event",
+                  "Operator",
+                  "TypeParameter",
+                  "User",
+                  "Issue"
+                ],
+                "markdownDescription": "补全的类型，，不同类型会有不同的图标"
+              }
+            }
+          }
+        },
+        "noveler.confTXTFiles": {
+          "type": "array",
+          "markdownDescription": "敏感词配置文件",
+          "items": {
+            "type": "object",
+            "properties": {
+              "path": {
                 "type": "string",
-                "markdownDescription": "补全的类型，参照 [CompletionItemKind](https://vshaxe.github.io/vscode-extern/vscode/CompletionItemKind.html)，不同类型会有不同的图标"
+                "markdownDescription": "配置文件的路径，可以是绝对路径，也可以是相对于根目录的路径（暂不支持工作区），支持文件路径与文件夹路径（若为文件夹，则将配置应用于其下所有.txt文件）"
+              },
+              "message": {
+                "type": "string",
+                "markdownDescription": "敏感词提示信息",
+                "default": "敏感词"
+              },
+              "diagnosticSeverity": {
+                "enum": [
+                  "Error",
+                  "Hint",
+                  "Information",
+                  "Warning"
+                ],
+                "markdownDescription": "敏感词提示信息的等级",
+                "default": "Error"
               }
             }
           }

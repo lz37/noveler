@@ -8,4 +8,16 @@ export default {
   previewSpaceLines: 1,
   statusShow: true,
   statusTimeUnit: 10,
+  autoIndent: true,
+  completionChar: '@',
 } as IConfig
+
+export const CSVOpt: CSVOptions = {
+  key: 'name',
+  suggestPrefix: '',
+}
+
+export const TXTOpt: TXTOptions = {
+  message: '敏感词',
+  diagnosticSeverity: 'Error',
+}

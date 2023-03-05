@@ -23,3 +23,6 @@ test
 app
 accesstoken.txt
 .prettierignore
+.github
+scripts
+out/app/bundle.js.LICENSE.txt

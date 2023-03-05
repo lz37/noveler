@@ -1,3 +1,12 @@
 {
-  "editor.insertSpaces": true
+  "editor.insertSpaces": true,
+  "cSpell.words": [
+    "antd",
+    "commitlint",
+    "Confs",
+    "Dealed",
+    "Pangu",
+    "schar",
+    "Setted"
+  ]
 }
