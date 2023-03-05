@@ -1,5 +1,6 @@
 import * as vscode from 'vscode'
 import * as confHandler from '@/modules/ConfigHandler'
+import Commands from '@/state/Commands'
 
 const targetFiles = ['plaintext', 'markdown']
 
@@ -49,7 +50,7 @@ export const updateProvider = () => {
           return undefined
         }
         const command = {
-          command: 'noveler.deletePrefix',
+          command: Commands.DeletePrefix,
           title: 'Delete Prefix',
           arguments: [position, conf.completionChar.length],
         }
@@ -72,8 +73,8 @@ export const updateProvider = () => {
   context.subscriptions.push(provider)
 }
 
-export const deletePrefix = vscode.commands.registerCommand(
-  'noveler.deletePrefix',
+export const deletePrefixCommand = vscode.commands.registerCommand(
+  Commands.DeletePrefix,
   (position: vscode.Position, num: number) => {
     const editor = vscode.window.activeTextEditor
     // 删除

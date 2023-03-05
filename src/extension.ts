@@ -5,13 +5,19 @@ import * as formatter from '@/modules/Formatter'
 import * as indention from '@/modules/Indention'
 import * as viewLoader from '@/modules/ViewLoader'
 import * as decoration from '@/modules/Decoration'
-import * as CSVHandler from '@/modules/CSVReader'
 import * as completion from '@/modules/Completion'
+import * as CSVReader from '@/modules/reader/CSVReader'
+import * as TXTReader from '@/modules/reader/TXTReader'
+import * as diagnostic from '@/modules/Diagnostic'
+import Commands from '@/state/Commands'
 
 // this method is called when vs code is activated
 export const activate = async (context: vscode.ExtensionContext) => {
-  confHandler.askForPlaintextConf()
+  await confHandler.askForPlaintextConf()
+  // ------------------ setcontext ------------------
   const viewLoaderProvider = viewLoader.provider(context)
+  completion.setContext(context)
+  // ------------------ register ------------------
   context.subscriptions.push(
     formatter.provider,
     indention.provider,
@@ -25,11 +31,16 @@ export const activate = async (context: vscode.ExtensionContext) => {
     viewLoaderProvider.onScroll,
     decoration.onChangeConf,
     decoration.onChangeDocument,
-    decoration.onChangeConf,
-    CSVHandler.reload,
-    CSVHandler.onChangeConf,
-    completion.deletePrefix,
+    CSVReader.reloadCommand,
+    CSVReader.onChangeConf,
+    TXTReader.reloadCommand,
+    completion.deletePrefixCommand,
+    diagnostic.onChangeEditor,
+    diagnostic.onChangeDocument,
+    diagnostic.onChangConf,
+    diagnostic.onChangeConfDocument,
   )
-  await vscode.commands.executeCommand('noveler.reloadCSV')
-  completion.setContext(context)
+  // ------------------ init ------------------
+  await vscode.commands.executeCommand(Commands.ReloadCSV)
+  await vscode.commands.executeCommand(Commands.ReloadTXT)
 }

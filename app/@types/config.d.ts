@@ -17,6 +17,19 @@ interface CSVOptionMap {
   }
 }
 
+interface TXTOptions {
+  path?: string
+  message: string
+  diagnosticSeverity: DiagnosticSeverityKeys
+}
+
+interface TXTOptionMap {
+  [path: string]: {
+    message: string
+    diagnosticSeverity: DiagnosticSeverityKeys
+  }
+}
+
 interface IConfig {
   showApplyRecommendPlaintextConf: boolean
   autoIndent: boolean
@@ -31,4 +44,5 @@ interface IConfig {
   customHighlight?: { [key: string]: import('vscode').DecorationRenderOptions }
   completionChar: string
   confCSVFiles?: CSVOptions[]
+  confTXTFiles?: TXTOptions[]
 }

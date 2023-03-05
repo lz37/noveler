@@ -1,7 +1,7 @@
 import * as vscode from 'vscode'
 import * as confHandler from '@/modules/ConfigHandler'
 import { state } from '@/state'
-import { spacing } from 'pangu'
+import { splitStr } from '@/utils'
 
 const formatFoo = (document: vscode.TextDocument) => {
   const conf = confHandler.get()
@@ -21,7 +21,11 @@ const formatFoo = (document: vscode.TextDocument) => {
     const oldText = document.lineAt(i).text
     let lineText = oldText.trim()
     if (conf.usePangu) {
-      lineText = spacing(lineText.replace(/\s/g, ''))
+      try {
+        lineText = splitStr(lineText.replace(/\s/g, ''))
+      } catch (error) {
+        console.error(error)
+      }
     }
     if (lineText.length === 0) continue
     const lineContext = `${indention}${lineText}`
@@ -51,7 +55,6 @@ export const provider = vscode.languages.registerDocumentFormattingEditProvider(
         }
       }
       if (!shouldFormat) state.isFormatting = false
-      // use lineArr to replace the document
       return [
         vscode.TextEdit.replace(
           new vscode.Range(0, 0, document.lineCount, 0),

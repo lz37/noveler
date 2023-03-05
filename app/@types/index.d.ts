@@ -13,3 +13,4 @@ interface IDealedCustomHighlightConfMap {
 }
 
 type CompletionItemKindKeys = keyof typeof import('vscode').CompletionItemKind
+type DiagnosticSeverityKeys = keyof typeof import('vscode').DiagnosticSeverity

@@ -1,6 +1,7 @@
 import * as vscode from 'vscode'
 import * as path from 'path'
 import * as confHandler from '@/modules/ConfigHandler'
+import Commands from '@/state/Commands'
 
 const targetFiles = ['plaintext']
 
@@ -123,7 +124,7 @@ const render = (
 
 export const provider = (context: vscode.ExtensionContext) => {
   return {
-    command: vscode.commands.registerCommand('noveler.preview', async () => {
+    command: vscode.commands.registerCommand(Commands.Preview, async () => {
       const editor = vscode.window.activeTextEditor
       if (!editor) return
       if (!targetFiles.includes(editor.document.languageId)) return

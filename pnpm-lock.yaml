@@ -11,7 +11,7 @@ specifiers:
   '@types/vscode': ^1.32.0
   '@typescript-eslint/eslint-plugin': ^5.30.0
   '@typescript-eslint/parser': ^5.30.0
-  '@vscode/vsce': ^2.17.0
+  '@vscode/vsce': ^2.18.0
   antd: ^4.23.5
   css-loader: ^6.7.1
   csv: ^6.2.6
@@ -19,7 +19,6 @@ specifiers:
   husky: ^8.0.3
   lint-staged: ^13.1.1
   npm-run-all: ^4.1.5
-  pangu: ^4.0.7
   prettier: ^2.7.1
   react: ^18.2.0
   react-dom: ^18.2.0
@@ -32,7 +31,6 @@ specifiers:
 dependencies:
   antd: 4.23.5_biqbaboplfbrettd7655fr4n2y
   csv: 6.2.6
-  pangu: 4.0.7
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
 
@@ -47,7 +45,7 @@ devDependencies:
   '@types/vscode': 1.72.0
   '@typescript-eslint/eslint-plugin': 5.40.0_25sstg4uu2sk4pm7xcyzuov7xq
   '@typescript-eslint/parser': 5.40.0_z4bbprzjrhnsfa24uvmcbu7f5q
-  '@vscode/vsce': 2.17.0
+  '@vscode/vsce': 2.18.0
   css-loader: 6.7.1_webpack@5.74.0
   eslint: 8.25.0
   husky: 8.0.3
@@ -636,8 +634,8 @@ packages:
       eslint-visitor-keys: 3.3.0
     dev: true
 
-  /@vscode/vsce/2.17.0:
-    resolution: {integrity: sha512-W4HN5MtTVj/mroQU1d82bUEeWM3dUykMFnMYZPtZ6jrMiHN1PUoN3RGcS896N0r2rIq8KpWDtufcQHgK8VfgpA==}
+  /@vscode/vsce/2.18.0:
+    resolution: {integrity: sha512-tUA3XoKx5xjoi3EDcngk0VUYMhvfXLhS4s7CntpLPh1qtLYtgSCexTIMUHkCy6MqyozRW98bdW3a2yHPEADRnQ==}
     engines: {node: '>= 14'}
     hasBin: true
     dependencies:
@@ -647,6 +645,7 @@ packages:
       commander: 6.2.1
       glob: 7.2.3
       hosted-git-info: 4.1.0
+      jsonc-parser: 3.2.0
       leven: 3.1.0
       markdown-it: 12.3.2
       mime: 1.6.0
@@ -2392,6 +2391,10 @@ packages:
       string-convert: 0.2.1
     dev: false
 
+  /jsonc-parser/3.2.0:
+    resolution: {integrity: sha512-gfFQZrcTc8CnKXp6Y4/CBT3fTc0OVuDofpre4aEeEpSBPV5X5v4+Vmx+8snU7RLPrNHPKSgLxGo9YuQzz20o+w==}
+    dev: true
+
   /jsonfile/6.1.0:
     resolution: {integrity: sha512-5dgndWOriYSm5cnYaJNhalLNDKOqFwyDB/rr1E9ZsGciGvKPs8R2xYGCacuf3z6K1YKDz182fd+fY3cn3pMqXQ==}
     dependencies:
@@ -2922,11 +2925,6 @@ packages:
     resolution: {integrity: sha512-R4nPAVTAU0B9D35/Gk3uJf/7XYbQcyohSKdvAxIRSNghFl4e71hVoGnBNQz9cWaXxO2I10KTC+3jMdvvoKw6dQ==}
     engines: {node: '>=6'}
     dev: true
-
-  /pangu/4.0.7:
-    resolution: {integrity: sha512-weZKJIwwy5gjt4STGVUH9bix3BGk7wZ2ahtIypwe3e/mllsrIZIvtfLx1dPX56GcpZFOCFKmeqI1qVuB9enRzA==}
-    hasBin: true
-    dev: false
 
   /parent-module/1.0.1:
     resolution: {integrity: sha512-GQ2EWRpQV8/o+Aw8YqtfZZPfNRWZYkbidE9k5rpl/hC3vtHHBfGm2Ifi6qWV+coDGkrUKZAxE3Lot5kcsRlh+g==}

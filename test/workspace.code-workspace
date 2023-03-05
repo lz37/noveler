@@ -17,6 +17,12 @@
 			"\\d+(\\.\\d+)?": { "color": "#23e40a" },
 			"《.*?》": { "color": "#8482e4" }
 		},
+		"noveler.confTXTFiles": [
+			{
+				"path": "/home/zerozawa/Sources/mine/noveler/test/folder2/test",
+				"message": "敏感词"
+			}
+		],
 		"noveler.confCSVFiles": [
 			{
 				"path": ".vscode/test.csv",

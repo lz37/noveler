@@ -1,5 +1,5 @@
 import * as vscode from 'vscode'
-import defaultConfig from '@/state/defaultConfig'
+import defaultConfig, { CSVOpt, TXTOpt } from '@/state/DefaultConfig'
 const extPrefix = 'noveler'
 const editorPrefix = 'editor'
 
@@ -8,10 +8,25 @@ export const get = () => {
   const userConf = vscode.workspace
     .getConfiguration(undefined)
     .get(extPrefix) as IConfig
-  return { ...defaultConfig, ...userConf } as IConfig
+  const res = { ...defaultConfig, ...userConf } as IConfig
+  res.confCSVFiles = res.confCSVFiles?.map((file) => {
+    file.suggestPrefix = file.suggestPrefix ?? CSVOpt.suggestPrefix
+    file.key = file.key ?? CSVOpt.key
+    return file
+  })
+  res.confTXTFiles = res.confTXTFiles?.map((file) => {
+    file.message = file.message ?? TXTOpt.message
+    file.diagnosticSeverity =
+      file.diagnosticSeverity ?? TXTOpt.diagnosticSeverity
+    return file
+  })
+  return res
 }
 
-export const set = (config: IConfig, target?: vscode.ConfigurationTarget) => {
+export const set = (
+  config: IConfig,
+  target = vscode.ConfigurationTarget.Workspace,
+) => {
   // 获取config中的所有key
   const keys = Object.keys(config)
   // 遍历key
@@ -19,11 +34,7 @@ export const set = (config: IConfig, target?: vscode.ConfigurationTarget) => {
     // 更新配置
     vscode.workspace
       .getConfiguration()
-      .update(
-        `${extPrefix}.${key}`,
-        (config as any)[key],
-        target ?? vscode.ConfigurationTarget.Workspace,
-      )
+      .update(`${extPrefix}.${key}`, (config as any)[key], target)
   })
 }
 
