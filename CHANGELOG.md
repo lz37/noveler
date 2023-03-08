@@ -22,4 +22,3 @@
 * update status bar ([afd292c](https://github.com/lz37/noveler/commit/afd292cddaf097e9dbb45acfbc6cba8e14a20e84))
 
 
-
