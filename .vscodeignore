@@ -26,3 +26,4 @@ accesstoken.txt
 .github
 scripts
 out/app/bundle.js.LICENSE.txt
+CHANGELOG.md
