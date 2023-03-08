@@ -16,7 +16,7 @@ changelog_list = read_changelog()
 def get_first_level_title():
     first_level_title = []
     for line in changelog_list:
-        if line.startswith("# "):
+        if line.startswith("## "):
             first_level_title.append(line)
     return first_level_title
 
@@ -28,7 +28,7 @@ first_level_title = get_first_level_title()
 def get_version():
     version = []
     for line in first_level_title:
-        line = line.replace("# ", "")
+        line = line.replace("## ", "")
         # 删除末尾括号内的内容
         line = line.split(" (")[0]
         version.append(line)
@@ -60,8 +60,8 @@ latest_version = get_latest_version()
 # 打印changelog_list中最新版本号的所有内容，第一行不打印
 def print_latest_version():
     for line in changelog_list:
-        if line.startswith("# "):
-            line = line.replace("# ", "")
+        if line.startswith("## "):
+            line = line.replace("## ", "")
             line = line.split(" (")[0]
             if line == latest_version:
                 continue
