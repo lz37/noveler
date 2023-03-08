@@ -21,10 +21,12 @@ jobs:
           cache: "pnpm"
       - name: Install dependencies
         run: pnpm install
-      - name: publish
-        env:
-          VSCE_TOKEN: ${{ secrets.VSCE_TOKEN }}
-        run: pnpm run publish $VSCE_TOKEN
+      # - name: publish
+      #   env:
+      #     VSCE_TOKEN: ${{ secrets.VSCE_TOKEN }}
+      #   run: pnpm run publish $VSCE_TOKEN
+      - name: package
+        run: pnpm run package
       - name: get version
         id: version
         uses: ashley-taylor/read-json-property-action@v1.0
@@ -37,7 +39,7 @@ jobs:
           python-version: "3.10"
       - name: get body
         id: body
-        run: python scripts/read-changelog ${{steps.version.outputs.value}} >> $GITHUB_OUTPUT
+        run: python scripts/read-changelog ${{steps.version.outputs.value}}
       - name: release
         uses: softprops/action-gh-release@v1
         with:
