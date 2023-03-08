@@ -1,3 +1,12 @@
+## [1.3.3](https://github.com/lz37/noveler/compare/v1.3.2...v1.3.3) (2023-03-08)
+
+
+### Bug Fixes
+
+* **changelog:** change log ([72c69c0](https://github.com/lz37/noveler/commit/72c69c0f4f481c8ba98eafe0b74e5c0dab58953a))
+
+
+
 ## 1.3.2 (2023-03-08)
 
 
