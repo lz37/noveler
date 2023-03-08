@@ -1,3 +1,12 @@
+## [1.3.7](https://github.com/lz37/noveler/compare/v1.3.6...v1.3.7) (2023-03-08)
+
+
+### Bug Fixes
+
+* **ci:** edit ci cd ([0b9f85c](https://github.com/lz37/noveler/commit/0b9f85c392b642326e133ff18214b946aa1df028))
+
+
+
 ## [1.3.6](https://github.com/lz37/noveler/compare/v1.3.5...v1.3.6) (2023-03-08)
 
 
