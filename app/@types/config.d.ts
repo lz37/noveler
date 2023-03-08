@@ -30,6 +30,8 @@ interface TXTOptionMap {
   }
 }
 
+type StatusItem = 'Speed' | 'Time' | 'InputWordCount' | 'TextWordCount'
+
 interface IConfig {
   showApplyRecommendPlaintextConf: boolean
   autoIndent: boolean
@@ -38,6 +40,8 @@ interface IConfig {
   usePangu: boolean
   statusShow: boolean
   statusTimeUnit: number
+  statusIncludingSpace: boolean
+  statusItems: StatusItem[]
   previewFontSize: number
   previewIndentionLength: number
   previewSpaceLines: number

@@ -7,6 +7,8 @@ export default {
   previewIndentionLength: 4,
   previewSpaceLines: 1,
   statusShow: true,
+  statusIncludingSpace: false,
+  statusItems: ['Time', 'Speed'],
   statusTimeUnit: 10,
   autoIndent: true,
   completionChar: '@',

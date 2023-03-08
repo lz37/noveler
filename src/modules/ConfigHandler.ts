@@ -20,6 +20,9 @@ export const get = () => {
       file.diagnosticSeverity ?? TXTOpt.diagnosticSeverity
     return file
   })
+  if (res.statusItems.length === 0) {
+    res.statusShow = false
+  }
   return res
 }
 

@@ -61,6 +61,7 @@ const loadFile = async () => {
     if (!paths || paths.length == 0) continue
     const words: string[] = []
     for (let j = 0; j < paths.length; j++) {
+      // eslint-disable-next-line @typescript-eslint/no-extra-semi
       ;(await handleTxt(paths[j])).forEach((word) => words.push(word))
     }
     diagnostic.addWords(words, value.message, value.diagnosticSeverity)
