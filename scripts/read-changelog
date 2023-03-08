@@ -1,0 +1,72 @@
+#!/bin/python3
+
+
+# 读取changelog文件
+def read_changelog():
+    changelog = open("CHANGELOG.md", "r")
+    changelog_list = changelog.readlines()
+    changelog.close()
+    return changelog_list
+
+
+changelog_list = read_changelog()
+
+
+# 获取第一级标题
+def get_first_level_title():
+    first_level_title = []
+    for line in changelog_list:
+        if line.startswith("# "):
+            first_level_title.append(line)
+    return first_level_title
+
+
+first_level_title = get_first_level_title()
+
+
+# 获取版本号 格式为xxx.xxx.xxx
+def get_version():
+    version = []
+    for line in first_level_title:
+        line = line.replace("# ", "")
+        # 删除末尾括号内的内容
+        line = line.split(" (")[0]
+        version.append(line)
+    return version
+
+
+version = get_version()
+
+
+# 判断xxx.xxx.xxx格式最新版本号
+def get_latest_version():
+    latest_version = version[0].split(".")
+    for v in version:
+        v = v.split(".")
+        if int(v[0]) > int(latest_version[0]):
+            latest_version = v
+        elif int(v[0]) == int(latest_version[0]):
+            if int(v[1]) > int(latest_version[1]):
+                latest_version = v
+            elif int(v[1]) == int(latest_version[1]):
+                if int(v[2]) > int(latest_version[2]):
+                    latest_version = v
+    return ".".join(latest_version)
+
+
+latest_version = get_latest_version()
+
+
+# 打印changelog_list中最新版本号的所有内容，第一行不打印
+def print_latest_version():
+    for line in changelog_list:
+        if line.startswith("# "):
+            line = line.replace("# ", "")
+            line = line.split(" (")[0]
+            if line == latest_version:
+                continue
+        else:
+            print(line, end="")
+
+
+print_latest_version()

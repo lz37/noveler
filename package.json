@@ -5,7 +5,7 @@
   "publisher": "zerozawa",
   "license": "GPL-3.0",
   "scripts": {
-    "vscode:prepublish": "./scripts/rmout && npm run compile && webpack --mode production",
+    "vscode:prepublish": "./scripts/rm-out && npm run compile && webpack --mode production",
     "prepare": "husky install",
     "package": "vsce package --no-dependencies",
     "publish": "vsce publish --no-dependencies -p",
