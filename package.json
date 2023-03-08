@@ -19,7 +19,13 @@
     "test": "node ./out/test/runTest.js",
     "lint": "eslint src --ext ts",
     "prettier": "prettier --write \"**/*.{ts,tsx,js,jsx,json,css,scss}\"",
-    "lint-staged": "lint-staged"
+    "lint-staged": "lint-staged",
+    "commit": "cz"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   },
   "devDependencies": {
     "@commitlint/cli": "^17.4.2",
@@ -33,7 +39,9 @@
     "@typescript-eslint/eslint-plugin": "^5.30.0",
     "@typescript-eslint/parser": "^5.30.0",
     "@vscode/vsce": "^2.18.0",
+    "commitizen": "^4.3.0",
     "css-loader": "^6.7.1",
+    "cz-conventional-changelog": "^3.3.0",
     "eslint": "^8.13.0",
     "husky": "^8.0.3",
     "lint-staged": "^13.1.1",
