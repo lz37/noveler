@@ -8,6 +8,7 @@
 * alittle ([6ac297b](https://github.com/lz37/noveler/commit/6ac297ba4687aad8eebd2c5d1944809a7086ae12))
 * delete data gened in test csv ([094e9fb](https://github.com/lz37/noveler/commit/094e9fb5465208f3d30c4389d4d62a15f6d68cf1))
 * fix Indention ([7f01769](https://github.com/lz37/noveler/commit/7f017693e9952566f482fb873d4444e8ec9ecb6f))
+* **package.json:** edit change parameters ([0b5e8b3](https://github.com/lz37/noveler/commit/0b5e8b3663eb2636adc7b506a3051d71c949e41c))
 * prettierrc ([d05d1a0](https://github.com/lz37/noveler/commit/d05d1a0717f363dcfef325925b970523028d84a0))
 * readme ([ba1530d](https://github.com/lz37/noveler/commit/ba1530d355891d6fe09338ac7628fba6c4b514b1))
 

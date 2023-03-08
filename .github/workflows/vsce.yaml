@@ -37,7 +37,7 @@ jobs:
           python-version: "3.10"
       - name: get body
         id: body
-        run: python ./script/read-changelog
+        run: python script/read-changelog
       - name: release
         uses: actions/create-release@latest
         env:
