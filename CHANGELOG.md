@@ -1,3 +1,16 @@
+## [1.3.6](https://github.com/lz37/noveler/compare/v1.3.5...v1.3.6) (2023-03-08)
+
+
+
+## [1.3.5](https://github.com/lz37/noveler/compare/v1.3.4...v1.3.5) (2023-03-08)
+
+
+### Bug Fixes
+
+* **ci & changelog:** change ci & changelog ([439dc2b](https://github.com/lz37/noveler/commit/439dc2b9a37d255df18dc42a05f14037db4fee3a))
+
+
+
 ## [1.3.4](https://github.com/lz37/noveler/compare/v1.3.3...v1.3.4) (2023-03-08)
 
 
