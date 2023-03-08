@@ -63,5 +63,12 @@
 		"noveler.statusTimeUnit": 10,
 		"noveler.usePangu": true,
 		"noveler.autoIndent": true,
+		"noveler.statusIncludingSpace": false,
+		"noveler.statusItems": [
+			"Speed",
+			"Time",
+			"InputWordCount",
+			"TextWordCount"
+		]
 	}
 }

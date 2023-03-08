@@ -24,6 +24,7 @@ export const activate = async (context: vscode.ExtensionContext) => {
     statusBar.init(),
     statusBar.change,
     statusBar.changeConf,
+    statusBar.changeEditor,
     viewLoaderProvider.command,
     viewLoaderProvider.onChangeConf,
     viewLoaderProvider.onChangeDocument,

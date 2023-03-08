@@ -1,7 +1,7 @@
 {
   "name": "noveler",
   "description": "一个在 vscode 上辅助码中文小说的插件",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "publisher": "zerozawa",
   "license": "GPL-3.0",
   "scripts": {
@@ -188,11 +188,36 @@
           "markdownDescription": "是否显示状态栏",
           "scope": "resource"
         },
+        "noveler.statusIncludingSpace": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "状态栏计数器是否包含空格",
+          "scope": "resource"
+        },
         "noveler.statusTimeUnit": {
           "type": "number",
           "default": 10,
           "markdownDescription": "状态栏计数器的时间单位",
           "scope": "resource"
+        },
+        "noveler.statusItems": {
+          "type": "array",
+          "markdownDescription": "状态栏显示的项目",
+          "items": {
+            "type": "string",
+            "enum": [
+              "Speed",
+              "Time",
+              "InputWordCount",
+              "TextWordCount"
+            ],
+            "minItems": 1,
+            "uniqueItems": true
+          },
+          "default": [
+            "Speed",
+            "Time"
+          ]
         },
         "noveler.customHighlight": {
           "type": "object",
@@ -232,6 +257,7 @@
                 "default": ""
               },
               "suggestKind": {
+                "type": "string",
                 "enum": [
                   "Text",
                   "Method",
@@ -282,6 +308,7 @@
                 "default": "敏感词"
               },
               "diagnosticSeverity": {
+                "type": "string",
                 "enum": [
                   "Error",
                   "Hint",
