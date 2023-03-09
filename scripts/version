@@ -9,5 +9,5 @@ import sys
 args=sys.argv
 
 os.system("cd ./app && npm version " + " ".join(args[1:]))
-os.system('git add .')
+os.system('git add ./app/package.json')
 os.system("npm version " + " ".join(args[1:]))
