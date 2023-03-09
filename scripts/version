@@ -8,4 +8,6 @@ import sys
 
 args=sys.argv
 
+os.system("cd ./app")
+
 os.system("npm version" + " ".join(args[1:-1]))
