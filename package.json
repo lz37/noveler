@@ -9,10 +9,10 @@
     "prepare": "husky install",
     "package": "vsce package --no-dependencies",
     "publish": "vsce publish --no-dependencies -p",
-    "compile": "npm-run-all compile:*",
+    "compile": "concurrently npm:compile:*",
     "compile:extension": "webpack --mode development --config webpack4ext.config.js",
     "compile:view": "webpack --mode development",
-    "watch": "npm-run-all -p watch:*",
+    "watch": "concurrently npm:watch:*",
     "watch:extension": "webpack --watch --mode development --config webpack4ext.config.js",
     "watch:view": "webpack --watch --mode development",
     "pretest": "npm run compile && npm run lint",
@@ -41,13 +41,13 @@
     "@typescript-eslint/parser": "^5.30.0",
     "@vscode/vsce": "^2.18.0",
     "commitizen": "^4.3.0",
+    "concurrently": "^7.6.0",
     "conventional-changelog-cli": "^2.2.2",
     "css-loader": "^6.7.1",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^8.13.0",
     "husky": "^8.0.3",
     "lint-staged": "^13.1.1",
-    "npm-run-all": "^4.1.5",
     "prettier": "^2.7.1",
     "style-loader": "^3.3.1",
     "ts-loader": "^9.4.1",
@@ -68,8 +68,7 @@
     "url": "https://github.com/lz37/noveler"
   },
   "categories": [
-    "Other",
-    "Formatters"
+    "Other"
   ],
   "activationEvents": [
     "onLanguage:plaintext",
@@ -78,6 +77,57 @@
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
+      {
+        "command": "noveler.comment.createNote",
+        "title": "Create Note",
+        "enablement": "!commentIsEmpty"
+      },
+      {
+        "command": "noveler.comment.replyNote",
+        "title": "Reply",
+        "enablement": "!commentIsEmpty"
+      },
+      {
+        "command": "noveler.comment.editNote",
+        "title": "Edit",
+        "icon": {
+          "dark": "resources/edit_inverse.svg",
+          "light": "resources/edit.svg"
+        }
+      },
+      {
+        "command": "noveler.comment.deleteNote",
+        "title": "Delete",
+        "icon": {
+          "dark": "resources/close_inverse.svg",
+          "light": "resources/close.svg"
+        }
+      },
+      {
+        "command": "noveler.comment.deleteNoteComment",
+        "title": "Delete",
+        "icon": {
+          "dark": "resources/close_inverse.svg",
+          "light": "resources/close.svg"
+        }
+      },
+      {
+        "command": "noveler.comment.saveNote",
+        "title": "Save"
+      },
+      {
+        "command": "noveler.comment.cancelSaveNote",
+        "title": "Cancel"
+      },
+      {
+        "command": "noveler.comment.startDraft",
+        "title": "Start Draft",
+        "enablement": "!commentIsEmpty"
+      },
+      {
+        "command": "noveler.comment.finishDraft",
+        "title": "Finish Draft"
+      },
       {
         "command": "noveler.preview",
         "title": "preview",
@@ -90,6 +140,79 @@
         "shortTitle": "刷新 CSV 配置文件"
       }
     ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "noveler.comment.createNote",
+          "when": "false"
+        },
+        {
+          "command": "noveler.comment.replyNote",
+          "when": "false"
+        },
+        {
+          "command": "noveler.comment.deleteNote",
+          "when": "false"
+        },
+        {
+          "command": "noveler.comment.deleteNoteComment",
+          "when": "false"
+        }
+      ],
+      "comments/commentThread/title": [
+        {
+          "command": "noveler.comment.deleteNote",
+          "group": "navigation",
+          "when": "commentController == zerozawa.noveler.comment && !commentThreadIsEmpty"
+        }
+      ],
+      "comments/commentThread/context": [
+        {
+          "command": "noveler.comment.createNote",
+          "group": "inline",
+          "when": "commentController == zerozawa.noveler.comment && commentThreadIsEmpty"
+        },
+        {
+          "command": "noveler.comment.replyNote",
+          "group": "inline",
+          "when": "commentController == zerozawa.noveler.comment && !commentThreadIsEmpty"
+        },
+        {
+          "command": "noveler.comment.startDraft",
+          "group": "inline",
+          "when": "commentController == zerozawa.noveler.comment && commentThreadIsEmpty"
+        },
+        {
+          "command": "noveler.comment.finishDraft",
+          "group": "inline",
+          "when": "commentController == zerozawa.noveler.comment && commentThread == draft"
+        }
+      ],
+      "comments/comment/title": [
+        {
+          "command": "noveler.comment.editNote",
+          "group": "group@1",
+          "when": "commentController == zerozawa.noveler.comment"
+        },
+        {
+          "command": "noveler.comment.deleteNoteComment",
+          "group": "group@2",
+          "when": "commentController == zerozawa.noveler.comment && comment == canDelete"
+        }
+      ],
+      "comments/comment/context": [
+        {
+          "command": "noveler.comment.cancelSaveNote",
+          "group": "inline@1",
+          "when": "commentController == zerozawa.noveler.comment"
+        },
+        {
+          "command": "noveler.comment.saveNote",
+          "group": "inline@2",
+          "when": "commentController == zerozawa.noveler.comment"
+        }
+      ]
+    },
     "keybindings": [
       {
         "command": "noveler.preview",

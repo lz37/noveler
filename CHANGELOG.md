@@ -1,4 +1,4 @@
-# [1.4.0](https://github.com/lz37/noveler/compare/v1.3.9...v1.4.0) (2023-03-09)
+## [1.4.0](https://github.com/lz37/noveler/compare/v1.3.9...v1.4.0) (2023-03-09)
 
 
 

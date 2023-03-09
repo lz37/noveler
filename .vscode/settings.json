@@ -11,5 +11,8 @@
     "Setted",
     "softprops",
     "vsix"
-  ]
+  ],
+  "markdownlint.ignore": ["CHANGELOG.md"],
+  // 排除changelog
+  "cSpell.files": ["**/*", "!CHANGELOG.md"]
 }

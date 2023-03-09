@@ -9,6 +9,7 @@ import * as completion from '@/modules/Completion'
 import * as CSVReader from '@/modules/reader/CSVReader'
 import * as TXTReader from '@/modules/reader/TXTReader'
 import * as diagnostic from '@/modules/Diagnostic'
+import * as comment from '@/modules/Comment'
 import Commands from '@/state/Commands'
 
 // this method is called when vs code is activated
@@ -40,8 +41,10 @@ export const activate = async (context: vscode.ExtensionContext) => {
     diagnostic.onChangeDocument,
     diagnostic.onChangConf,
     diagnostic.onChangeConfDocument,
+    comment.commentController,
+    ...Object.values(comment.commands),
   )
-  // ------------------ init ------------------
+  // ------------------ extension-init ------------------
   await vscode.commands.executeCommand(Commands.ReloadCSV)
   await vscode.commands.executeCommand(Commands.ReloadTXT)
 }
