@@ -21,12 +21,10 @@ jobs:
           cache: "pnpm"
       - name: Install dependencies
         run: pnpm install
-      # - name: publish
-      #   env:
-      #     VSCE_TOKEN: ${{ secrets.VSCE_TOKEN }}
-      #   run: pnpm run publish $VSCE_TOKEN
-      - name: package
-        run: pnpm run package
+      - name: publish
+        env:
+          VSCE_TOKEN: ${{ secrets.VSCE_TOKEN }}
+        run: pnpm run publish $VSCE_TOKEN
       - name: get version
         id: version
         uses: ashley-taylor/read-json-property-action@v1.0
