@@ -20,7 +20,7 @@ version = str(sys.argv[1])
 # 打印changelog_list中最新版本号的所有内容，第一行不打印
 def print_latest_version():
     for line in changelog_list:
-        if line.startswith("## "):
+        if line.startswith("## ") or line.startswith("# "):
             if version in line:
                 continue
             else:
