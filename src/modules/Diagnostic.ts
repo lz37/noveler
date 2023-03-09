@@ -1,7 +1,8 @@
 import * as vscode from 'vscode'
 import * as confHandler from '@/modules/ConfigHandler'
-import Commands from '@/state/Commands'
-import { handlePath } from '@/utils'
+import Commands from '@/types/Commands'
+import { getAbsolutePaths } from '@/utils'
+import { DiagnosticSeverityKeys } from '@/types'
 
 const targetFiles = ['plaintext', 'markdown']
 
@@ -44,7 +45,7 @@ const getConfFiles = async () => {
   const confFiles: string[] = []
   for (const fileOrDir of confFilesOrDirs ?? []) {
     if (!fileOrDir) continue
-    const path = await handlePath(fileOrDir, '.txt')
+    const path = await getAbsolutePaths(fileOrDir, '.txt')
     if (path) {
       for (const file of path) {
         confFiles.push(file)

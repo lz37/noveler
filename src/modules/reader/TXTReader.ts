@@ -1,9 +1,10 @@
 import * as vscode from 'vscode'
 import * as confHandler from '@/modules/ConfigHandler'
 import * as diagnostic from '@/modules/Diagnostic'
-import { handlePath, isAbsolutePath } from '@/utils'
+import { getAbsolutePaths, isAbsolutePath } from '@/utils'
 import { promises as fs } from 'fs'
-import Commands from '@/state/Commands'
+import Commands from '@/types/Commands'
+import { TXTOptionMap } from '@/types/config'
 
 let conf: TXTOptionMap | undefined = undefined
 const workSpaceRoots = vscode.workspace.workspaceFolders
@@ -57,7 +58,7 @@ const loadFile = async () => {
   const confEntries = Object.entries(conf)
   for (let i = 0; i < confEntries.length; i++) {
     const [key, value] = confEntries[i]
-    const paths = await handlePath(key, '.txt')
+    const paths = await getAbsolutePaths(key, '.txt')
     if (!paths || paths.length == 0) continue
     const words: string[] = []
     for (let j = 0; j < paths.length; j++) {

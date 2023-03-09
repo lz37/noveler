@@ -1,7 +1,9 @@
 import * as vscode from 'vscode'
 import * as path from 'path'
 import * as confHandler from '@/modules/ConfigHandler'
-import Commands from '@/state/Commands'
+import Commands from '@/types/Commands'
+import { Dto, WebViewConfHandler } from '@/types/webvDto'
+import { IConfig } from '@/types/config'
 
 const targetFiles = ['plaintext']
 

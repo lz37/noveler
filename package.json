@@ -2,6 +2,7 @@
   "name": "noveler",
   "description": "一个在 vscode 上辅助码中文小说的插件",
   "version": "1.4.0",
+  "author": "zerozawa",
   "publisher": "zerozawa",
   "license": "GPL-3.0",
   "scripts": {
@@ -10,18 +11,20 @@
     "package": "vsce package --no-dependencies",
     "publish": "vsce publish --no-dependencies -p",
     "compile": "concurrently npm:compile:*",
-    "compile:extension": "webpack --mode development --config webpack4ext.config.js",
-    "compile:view": "webpack --mode development",
+    "compile:extension": "webpack --mode development",
+    "compile:view": "cd ./app && npm run compile:view",
     "watch": "concurrently npm:watch:*",
-    "watch:extension": "webpack --watch --mode development --config webpack4ext.config.js",
-    "watch:view": "webpack --watch --mode development",
+    "watch:extension": "webpack --watch --mode development",
+    "watch:view": "cd ./app && npm run watch:view",
     "pretest": "npm run compile && npm run lint",
     "test": "node ./out/test/runTest.js",
     "lint": "eslint src --ext ts",
     "prettier": "prettier --write \"**/*.{ts,tsx,js,jsx,json,css,scss}\"",
     "lint-staged": "lint-staged",
     "commit": "cz",
-    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s && git add CHANGELOG.md"
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s && git add CHANGELOG.md",
+    "preversion": "npm run changelog && git add CHANGELOG.md",
+    "version": "python ./scripts/version "
   },
   "config": {
     "commitizen": {
@@ -34,8 +37,6 @@
     "@faker-js/faker": "^7.6.0",
     "@types/node": "^16.11.7",
     "@types/prettier": "^2.7.1",
-    "@types/react": "^18.0.21",
-    "@types/react-dom": "^18.0.6",
     "@types/vscode": "^1.32.0",
     "@typescript-eslint/eslint-plugin": "^5.30.0",
     "@typescript-eslint/parser": "^5.30.0",
@@ -56,10 +57,7 @@
     "webpack-cli": "^4.10.0"
   },
   "dependencies": {
-    "antd": "^4.23.5",
-    "csv": "^6.2.6",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "csv": "^6.2.6"
   },
   "engines": {
     "vscode": "^1.71.2"
@@ -78,57 +76,6 @@
   "contributes": {
     "commands": [
       {
-        "command": "noveler.comment.createNote",
-        "title": "Create Note",
-        "enablement": "!commentIsEmpty"
-      },
-      {
-        "command": "noveler.comment.replyNote",
-        "title": "Reply",
-        "enablement": "!commentIsEmpty"
-      },
-      {
-        "command": "noveler.comment.editNote",
-        "title": "Edit",
-        "icon": {
-          "dark": "resources/edit_inverse.svg",
-          "light": "resources/edit.svg"
-        }
-      },
-      {
-        "command": "noveler.comment.deleteNote",
-        "title": "Delete",
-        "icon": {
-          "dark": "resources/close_inverse.svg",
-          "light": "resources/close.svg"
-        }
-      },
-      {
-        "command": "noveler.comment.deleteNoteComment",
-        "title": "Delete",
-        "icon": {
-          "dark": "resources/close_inverse.svg",
-          "light": "resources/close.svg"
-        }
-      },
-      {
-        "command": "noveler.comment.saveNote",
-        "title": "Save"
-      },
-      {
-        "command": "noveler.comment.cancelSaveNote",
-        "title": "Cancel"
-      },
-      {
-        "command": "noveler.comment.startDraft",
-        "title": "Start Draft",
-        "enablement": "!commentIsEmpty"
-      },
-      {
-        "command": "noveler.comment.finishDraft",
-        "title": "Finish Draft"
-      },
-      {
         "command": "noveler.preview",
         "title": "preview",
         "category": "noveler"
@@ -140,79 +87,6 @@
         "shortTitle": "刷新 CSV 配置文件"
       }
     ],
-    "menus": {
-      "commandPalette": [
-        {
-          "command": "noveler.comment.createNote",
-          "when": "false"
-        },
-        {
-          "command": "noveler.comment.replyNote",
-          "when": "false"
-        },
-        {
-          "command": "noveler.comment.deleteNote",
-          "when": "false"
-        },
-        {
-          "command": "noveler.comment.deleteNoteComment",
-          "when": "false"
-        }
-      ],
-      "comments/commentThread/title": [
-        {
-          "command": "noveler.comment.deleteNote",
-          "group": "navigation",
-          "when": "commentController == zerozawa.noveler.comment && !commentThreadIsEmpty"
-        }
-      ],
-      "comments/commentThread/context": [
-        {
-          "command": "noveler.comment.createNote",
-          "group": "inline",
-          "when": "commentController == zerozawa.noveler.comment && commentThreadIsEmpty"
-        },
-        {
-          "command": "noveler.comment.replyNote",
-          "group": "inline",
-          "when": "commentController == zerozawa.noveler.comment && !commentThreadIsEmpty"
-        },
-        {
-          "command": "noveler.comment.startDraft",
-          "group": "inline",
-          "when": "commentController == zerozawa.noveler.comment && commentThreadIsEmpty"
-        },
-        {
-          "command": "noveler.comment.finishDraft",
-          "group": "inline",
-          "when": "commentController == zerozawa.noveler.comment && commentThread == draft"
-        }
-      ],
-      "comments/comment/title": [
-        {
-          "command": "noveler.comment.editNote",
-          "group": "group@1",
-          "when": "commentController == zerozawa.noveler.comment"
-        },
-        {
-          "command": "noveler.comment.deleteNoteComment",
-          "group": "group@2",
-          "when": "commentController == zerozawa.noveler.comment && comment == canDelete"
-        }
-      ],
-      "comments/comment/context": [
-        {
-          "command": "noveler.comment.cancelSaveNote",
-          "group": "inline@1",
-          "when": "commentController == zerozawa.noveler.comment"
-        },
-        {
-          "command": "noveler.comment.saveNote",
-          "group": "inline@2",
-          "when": "commentController == zerozawa.noveler.comment"
-        }
-      ]
-    },
     "keybindings": [
       {
         "command": "noveler.preview",
@@ -360,6 +234,11 @@
           "type": "string",
           "default": "@",
           "markdownDescription": "补全时的触发字符, *注*：请尽量使用英文标点作为触发字符, 默认为@"
+        },
+        "noveler.commentDir": {
+          "type": "string",
+          "default": ".noveler/comments",
+          "markdownDescription": "注释文本保存的路径，不支持绝对路径，请使用相对于文件夹的路径"
         },
         "noveler.confCSVFiles": {
           "type": "array",

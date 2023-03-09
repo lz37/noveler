@@ -1,6 +1,5 @@
 #!/bin/python3
 # -*- coding: UTF-8 -*-
-import sys
 
 # 读取changelog文件
 
@@ -14,19 +13,18 @@ def read_changelog():
 
 changelog_list = read_changelog()
 
-
-version = str(sys.argv[1])
-
 first = True
 
-# 打印changelog_list中最新版本号的所有内容，第一行不打印
+# 打印changelog_list中最新版本号的所有内容
 
 for line in changelog_list:
     if line.startswith("## ") or line.startswith("# "):
-        if (version in line) and first:
+        if first:
+            print(line, end="")
             first = False
             continue
         else:
             break
     else:
-        print(line, end="")
+        if not first:
+            print(line, end="")

@@ -1,31 +1,47 @@
 const path = require('path')
 const resolve = (dir) => path.resolve(__dirname, dir)
 
-module.exports = {
-  entry: path.join(__dirname, 'app', 'index.tsx'),
+const tsConfigPath = path.join(__dirname, 'tsconfig.json')
+
+const config = {
+  target: 'node',
+  entry: './src/extension.ts',
+  output: {
+    path: path.resolve(__dirname, 'out'),
+    filename: 'extension.js',
+    libraryTarget: 'commonjs2',
+    devtoolModuleFilenameTemplate: '../[resource-path]',
+  },
+  externals: {
+    vscode: 'commonjs vscode',
+  },
   resolve: {
-    extensions: ['.ts', '.tsx', '.js', '.jsx', '.css'],
+    extensions: ['.ts', '.js'],
+    // 设置别名
     alias: {
       '@': resolve('src'),
-      '@app': resolve('app'),
     },
   },
-  devtool: 'inline-source-map',
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
-        use: 'ts-loader',
-        exclude: '/node_modules/',
-      },
-      {
-        test: /\.css$/,
-        use: ['style-loader', 'css-loader'],
+        test: /\.ts$/,
+        use: [
+          {
+            loader: 'ts-loader',
+            options: {
+              configFile: tsConfigPath,
+            },
+          },
+        ],
       },
     ],
   },
-  output: {
-    filename: 'bundle.js',
-    path: path.resolve(__dirname, 'out', 'app'),
-  },
+}
+
+module.exports = (_, argv) => {
+  if (argv.mode === 'development') {
+    config.devtool = 'inline-source-map'
+  }
+  return config
 }

@@ -1,5 +1,6 @@
 import * as vscode from 'vscode'
 import * as confHandler from '@/modules/ConfigHandler'
+import { StatusItem } from '@/types/config'
 
 const targetFiles = ['plaintext', 'markdown']
 

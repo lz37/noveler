@@ -35,7 +35,7 @@ export const isAbsolutePath = (path: string) => {
  * @param path
  * @returns
  */
-export const handlePath = async (path: string, suffix: string) => {
+export const getAbsolutePaths = async (path: string, suffix: string) => {
   const paths: string[] = []
   if (!isAbsolutePath(path)) {
     paths.push(`${vscode.workspace.workspaceFolders?.[0].uri.fsPath}/${path}`)
@@ -56,4 +56,17 @@ export const handlePath = async (path: string, suffix: string) => {
     }
   }
   return paths
+}
+
+export const getRelativePathAndRoot = (path: string) => {
+  const roots = vscode.workspace.workspaceFolders?.map(
+    (item) => item.uri.fsPath,
+  )
+  if (!roots) return undefined
+  // 匹配前缀
+  for (let i = 0; i < roots.length; i++) {
+    if (path.startsWith(roots[i])) {
+      return { root: roots[i], path: path.replace(`${roots[i]}/`, '') }
+    }
+  }
 }

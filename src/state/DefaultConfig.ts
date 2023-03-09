@@ -1,3 +1,5 @@
+import { CSVOptions, IConfig, TXTOptions } from '../types/config'
+
 export default {
   showApplyRecommendPlaintextConf: true,
   autoIndentLines: 0,

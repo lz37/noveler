@@ -39,7 +39,7 @@ jobs:
         id: body
         run: |
           echo 'value<<EOF' >> $GITHUB_OUTPUT
-          echo "$(python ./scripts/read-changelog ${{steps.version.outputs.value}})" >> $GITHUB_OUTPUT
+          echo "$(python ./scripts/read-changelog)" >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
       - name: release
         uses: softprops/action-gh-release@v1

@@ -1,4 +1,6 @@
-interface CSVOptions {
+import { CompletionItemKindKeys, DiagnosticSeverityKeys } from '.'
+
+export interface CSVOptions {
   path?: string
   key: string
   hoverKey?: string
@@ -7,7 +9,7 @@ interface CSVOptions {
   suggestKind?: CompletionItemKindKeys
 }
 
-interface CSVOptionMap {
+export interface CSVOptionMap {
   [path: string]: {
     key: string
     hoverKey?: string
@@ -17,22 +19,22 @@ interface CSVOptionMap {
   }
 }
 
-interface TXTOptions {
+export interface TXTOptions {
   path?: string
   message: string
   diagnosticSeverity: DiagnosticSeverityKeys
 }
 
-interface TXTOptionMap {
+export interface TXTOptionMap {
   [path: string]: {
     message: string
     diagnosticSeverity: DiagnosticSeverityKeys
   }
 }
 
-type StatusItem = 'Speed' | 'Time' | 'InputWordCount' | 'TextWordCount'
+export type StatusItem = 'Speed' | 'Time' | 'InputWordCount' | 'TextWordCount'
 
-interface IConfig {
+export interface IConfig {
   showApplyRecommendPlaintextConf: boolean
   autoIndent: boolean
   autoIndentSpaces: number

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Layout from '@app/components/Layout'
-import defaultConfig from '@/state/DefaultConfig'
+import defaultConfig from 'noveler/src/state/DefaultConfig'
+import { Dto, WebViewConfHandler } from 'noveler/src/types/webvDto'
 
 export default () => {
   const [dto, setDto] = useState<Dto>({

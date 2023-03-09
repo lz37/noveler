@@ -7,10 +7,13 @@
     "Dealed",
     "Pangu",
     "pnpm",
+    "postversion",
+    "preversion",
     "schar",
     "Setted",
     "softprops",
-    "vsix"
+    "vsix",
+    "webv"
   ],
   "markdownlint.ignore": ["CHANGELOG.md"],
   // 排除changelog

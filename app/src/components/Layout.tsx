@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Affix } from 'antd'
+import { IConfig } from 'noveler/src/types/config'
+import { WebViewConfHandler } from 'noveler/src/types/webvDto'
 
 const itemMap: {
   name: string
@@ -25,15 +27,13 @@ export default () => {
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-        }}
-      >
+        }}>
         {itemMap.map((item, index1) => (
           <div
             key={`${index1}`}
             style={{
               display: 'inline-block',
-            }}
-          >
+            }}>
             {item.name}
             {options.map((option, index2) => (
               <button
@@ -43,8 +43,7 @@ export default () => {
                 }}
                 onClick={() => {
                   handleReloadWebview({ target: item.handler, option })
-                }}
-              >
+                }}>
                 {option > 0 ? '+' : '-'}
               </button>
             ))}
