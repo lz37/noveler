@@ -8,5 +8,5 @@ import sys
 
 args=sys.argv
 
-os.system("npm version" + " ".join(args[1:]))
-os.system("cd ./app && npm version" + " ".join(args[1:]))
+os.system("npm version " + " ".join(args[1:]))
+os.system("cd ./app && npm version " + " ".join(args[1:]))
