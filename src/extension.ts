@@ -9,6 +9,7 @@ import * as completion from '@/modules/Completion'
 import * as CSVReader from '@/modules/reader/CSVReader'
 import * as TXTReader from '@/modules/reader/TXTReader'
 import * as diagnostic from '@/modules/Diagnostic'
+import * as panel from '@/modules/Panel'
 import Commands from '@/types/Commands'
 
 // this method is called when vs code is activated
@@ -17,6 +18,7 @@ export const activate = async (context: vscode.ExtensionContext) => {
   // ------------------ setcontext ------------------
   const viewLoaderProvider = viewLoader.provider(context)
   completion.setContext(context)
+  const pal = panel.init(context)
   // ------------------ register ------------------
   context.subscriptions.push(
     formatter.provider,
@@ -40,6 +42,7 @@ export const activate = async (context: vscode.ExtensionContext) => {
     diagnostic.onChangeDocument,
     diagnostic.onChangConf,
     diagnostic.onChangeConfDocument,
+    pal.provider,
   )
   // ------------------ extension-init ------------------
   await vscode.commands.executeCommand(Commands.ReloadCSV)

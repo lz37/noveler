@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Affix } from 'antd'
 import { IConfig } from 'noveler/src/types/config'
 import { WebViewConfHandler } from 'noveler/src/types/webvDto'

@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react'
-import Layout from '@app/components/Layout'
+import React, { useEffect, useState } from 'react'
+import Layout from './Layout'
 import defaultConfig from 'noveler/src/state/DefaultConfig'
 import { Dto, WebViewConfHandler } from 'noveler/src/types/webvDto'
 

@@ -73,6 +73,26 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "testview-explorer",
+          "title": "Tazim Rahbar",
+          "icon": "./resources/dep.svg"
+        }
+      ]
+    },
+    "views": {
+      "testview-explorer": [
+        {
+          "type": "webview",
+          "id": "sidebar-view",
+          "name": "Work",
+          "icon": "./resources/dep.svg",
+          "contextualTitle": "Work"
+        }
+      ]
+    },
     "commands": [
       {
         "command": "noveler.preview",
