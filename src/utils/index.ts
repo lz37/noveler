@@ -1,3 +1,4 @@
+import { NovelerRouter } from '@/types/webvDto'
 import { promises as fs } from 'fs'
 import * as vscode from 'vscode'
 
@@ -70,3 +71,25 @@ export const getRelativePathAndRoot = (path: string) => {
     }
   }
 }
+
+export const createWebviewHtml = (
+  router: NovelerRouter,
+  bundleScriptPath: vscode.Uri,
+) => `
+  <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>React App</title>
+    </head>
+    <body>
+      <div id="root"></div>
+      <script>
+        const vscode = acquireVsCodeApi();
+        const home = '${router}'
+      </script>
+      <script src="${bundleScriptPath}"></script>
+    </body>
+  </html>
+`

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Affix } from 'antd'
 import { IConfig } from 'noveler/src/types/config'
-import { WebViewConfHandler } from 'noveler/src/types/webvDto'
+import { ExtRecDto } from 'noveler/src/types/webvDto'
 
 const itemMap: {
   name: string
@@ -14,7 +14,7 @@ const itemMap: {
 
 export default () => {
   const options = [-1, 1]
-  const handleReloadWebview = (signal: WebViewConfHandler) => {
+  const handleReloadWebview = (signal: ExtRecDto) => {
     vscode.postMessage(signal)
   }
 
@@ -42,7 +42,7 @@ export default () => {
                   display: 'inline-block',
                 }}
                 onClick={() => {
-                  handleReloadWebview({ target: item.handler, option })
+                  handleReloadWebview({ conf: item.handler, option })
                 }}>
                 {option > 0 ? '+' : '-'}
               </button>

@@ -74,22 +74,21 @@
   "main": "./out/extension.js",
   "contributes": {
     "viewsContainers": {
-      "activitybar": [
+      "panel": [
         {
-          "id": "testview-explorer",
-          "title": "Tazim Rahbar",
+          "id": "noveler-panel",
+          "title": "Noveler",
           "icon": "./resources/dep.svg"
         }
       ]
     },
     "views": {
-      "testview-explorer": [
+      "noveler-panel": [
         {
           "type": "webview",
-          "id": "sidebar-view",
-          "name": "Work",
-          "icon": "./resources/dep.svg",
-          "contextualTitle": "Work"
+          "id": "noveler-outline",
+          "name": "面板",
+          "icon": "./resources/dep.svg"
         }
       ]
     },

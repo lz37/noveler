@@ -1,14 +1,40 @@
-import { createMemoryRouter, Link } from 'react-router-dom'
+import {
+  createMemoryRouter,
+  IndexRouteObject,
+  NonIndexRouteObject,
+  Navigate,
+} from 'react-router-dom'
+import { NovelerRouter } from 'noveler/src/types/webvDto'
 import Preview from '@app/components/Preview'
+import Panel from '@app/components/Panel'
 import React from 'react'
 
-export const router = createMemoryRouter([
+interface NovelerIndexRouteObject extends IndexRouteObject {
+  path: NovelerRouter
+}
+
+interface NovelerNonIndexRouteObject extends NonIndexRouteObject {
+  path: NovelerRouter
+}
+
+type NovelerRouteObject = NovelerIndexRouteObject | NovelerNonIndexRouteObject
+
+const routes: NovelerRouteObject[] = [
   {
     path: '/',
-    element: <Preview />,
+    element: <Navigate to={home} />,
+    id: 'home',
   },
   {
-    path: '/test',
-    element: <div>test</div>,
+    path: '/preview',
+    element: <Preview />,
+    id: 'preview',
   },
-])
+  {
+    path: '/panel',
+    element: <Panel />,
+    id: 'panel',
+  },
+]
+
+export default createMemoryRouter(routes)
