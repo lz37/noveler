@@ -1,4 +1,4 @@
-import { PanelDto, PanelExtRecDto } from '@/types/webvDto'
+import { PanelDto, PanelDtoStatus, PanelExtRecDto } from '@/types/webvDto'
 import { createWebviewHtml } from '@/utils'
 import * as vscode from 'vscode'
 import * as confHandler from '@/modules/ConfigHandler'
@@ -61,19 +61,25 @@ const sendFirstDto = async (
   editor?: vscode.TextEditor,
 ) => {
   if (!editor) {
-    await sendBlankDto(webview, sendDto)
+    await sendBlankDto(webview, sendDto, PanelDtoStatus.NoEditor)
     return
   }
   const fsPath = editor.document.uri.fsPath
   const relativePathAndRoot = getRelativePathAndRoot(fsPath)
   if (!relativePathAndRoot) {
-    await sendBlankDto(webview, sendDto)
+    await sendBlankDto(webview, sendDto, PanelDtoStatus.NoEditor)
     return
   }
   const { path, root } = relativePathAndRoot
   const { outlinesDir } = confHandler.get()
-  const content = await readContent(path, root, outlinesDir)
+  if (fsPath.startsWith(`${root}/${outlinesDir}`)) {
+    await sendBlankDto(webview, sendDto, PanelDtoStatus.OutlineFile)
+    return
+  }
+  const { content, err } = await readContent(path, root, outlinesDir)
+  const status = err ? PanelDtoStatus.NoFile : PanelDtoStatus.Valid
   sendDto(webview, {
+    status,
     content,
     path,
     workSpaceRoot: root,
@@ -86,29 +92,35 @@ const sendDto = (webview: vscode.Webview, dto: PanelDto) =>
 const sendBlankDto = async (
   webview: vscode.Webview,
   sendDto: (webview: vscode.Webview, dto: PanelDto) => Thenable<boolean>,
+  status: PanelDtoStatus,
 ) =>
   await sendDto(webview, {
-    content: '*未打开活动编辑器*',
+    status,
+    content: '',
     path: '',
     workSpaceRoot: '',
   })
 
 const readContent = async (path: string, root: string, outlinesDir: string) => {
   const dir = `${root}/${outlinesDir}`
-  const content = await fs
-    .readFile(`${dir}/${path}.md`, 'utf-8')
-    .catch(() => '*此文件没有大纲*')
-  return content
+  let err: Error | undefined = undefined
+  const content = await fs.readFile(`${dir}/${path}.md`, 'utf-8').catch(() => {
+    err = new Error('No outline file')
+    return ''
+  })
+  return { content, err }
 }
 
 const saveFile = async (message: PanelExtRecDto) => {
-  const { content, path, workSpaceRoot } = message
+  const { content, path, workSpaceRoot, status } = message
+  if (status === PanelDtoStatus.NoEditor) return
   const { outlinesDir } = confHandler.get()
-  const dir = `${workSpaceRoot}/${outlinesDir}`
+  const oldir = `${workSpaceRoot}/${outlinesDir}`
+  const filePath = `${oldir}/${path}.md`
+  const dir = filePath.substring(0, filePath.lastIndexOf('/'))
   if (!(await fs.stat(dir).catch(() => false))) {
     // 递归创建目录
     await fs.mkdir(dir, { recursive: true })
   }
-  const filePath = `${dir}/${path}.md`
   await fs.writeFile(filePath, content)
 }

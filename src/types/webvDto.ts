@@ -19,7 +19,15 @@ export interface PreviewExtRecDto {
   option: number
 }
 
+export enum PanelDtoStatus {
+  NoEditor,
+  NoFile,
+  Valid,
+  OutlineFile,
+}
+
 export interface PanelDto {
+  status: PanelDtoStatus
   workSpaceRoot: string
   path: string
   content: string
@@ -27,6 +35,7 @@ export interface PanelDto {
 
 // maybe different from PanelDto so use a new type
 export interface PanelExtRecDto {
+  status: PanelDtoStatus
   workSpaceRoot: string
   path: string
   content: string
