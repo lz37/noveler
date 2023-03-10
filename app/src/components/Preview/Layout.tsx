@@ -1,7 +1,7 @@
 import React from 'react'
 import { Affix } from 'antd'
 import { IConfig } from 'noveler/src/types/config'
-import { ExtRecDto } from 'noveler/src/types/webvDto'
+import { PreviewExtRecDto } from 'noveler/src/types/webvDto'
 
 const itemMap: {
   name: string
@@ -14,7 +14,7 @@ const itemMap: {
 
 export default () => {
   const options = [-1, 1]
-  const handleReloadWebview = (signal: ExtRecDto) => {
+  const handleReloadWebview = (signal: PreviewExtRecDto) => {
     vscode.postMessage(signal)
   }
 

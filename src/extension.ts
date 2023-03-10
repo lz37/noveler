@@ -14,11 +14,12 @@ import Commands from '@/types/Commands'
 
 // this method is called when vs code is activated
 export const activate = async (context: vscode.ExtensionContext) => {
+  const editor = vscode.window.activeTextEditor
   await confHandler.askForPlaintextConf()
   // ------------------ setcontext ------------------
   const viewLoaderProvider = viewLoader.provider(context)
   completion.setContext(context)
-  const pal = panel.init(context)
+  panel.init(context, editor)
   // ------------------ register ------------------
   context.subscriptions.push(
     formatter.provider,
@@ -42,7 +43,6 @@ export const activate = async (context: vscode.ExtensionContext) => {
     diagnostic.onChangeDocument,
     diagnostic.onChangConf,
     diagnostic.onChangeConfDocument,
-    pal.provider,
   )
   // ------------------ extension-init ------------------
   await vscode.commands.executeCommand(Commands.ReloadCSV)

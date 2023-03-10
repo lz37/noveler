@@ -14,6 +14,7 @@ export default {
   statusTimeUnit: 10,
   autoIndent: true,
   completionChar: '@',
+  outlinesDir: '.noveler/outlines',
 } as IConfig
 
 export const CSVOpt: CSVOptions = {

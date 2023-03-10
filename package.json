@@ -78,7 +78,7 @@
         {
           "id": "noveler-panel",
           "title": "Noveler",
-          "icon": "./resources/dep.svg"
+          "icon": "$(notebook-edit)"
         }
       ]
     },
@@ -88,7 +88,7 @@
           "type": "webview",
           "id": "noveler-outline",
           "name": "面板",
-          "icon": "./resources/dep.svg"
+          "icon": "$(notebook-edit)"
         }
       ]
     },
@@ -253,10 +253,10 @@
           "default": "@",
           "markdownDescription": "补全时的触发字符, *注*：请尽量使用英文标点作为触发字符, 默认为@"
         },
-        "noveler.commentDir": {
+        "noveler.outlinesDir": {
           "type": "string",
-          "default": ".noveler/comments",
-          "markdownDescription": "注释文本保存的路径，不支持绝对路径，请使用相对于文件夹的路径"
+          "default": ".noveler/outlines",
+          "markdownDescription": "大纲文本保存的路径，不支持绝对路径，请使用相对于文件夹的路径"
         },
         "noveler.confCSVFiles": {
           "type": "array",

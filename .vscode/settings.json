@@ -13,6 +13,7 @@
     "Setted",
     "softprops",
     "vsix",
+    "wbvv",
     "webv"
   ],
   "markdownlint.ignore": ["CHANGELOG.md"],

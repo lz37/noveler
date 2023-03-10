@@ -2,7 +2,7 @@ import * as vscode from 'vscode'
 import * as path from 'path'
 import * as confHandler from '@/modules/ConfigHandler'
 import Commands from '@/types/Commands'
-import { PreviewDto, ExtRecDto } from '@/types/webvDto'
+import { PreviewDto, PreviewExtRecDto } from '@/types/webvDto'
 import { IConfig } from '@/types/config'
 import { createWebviewHtml } from '@/utils'
 
@@ -11,14 +11,14 @@ const targetFiles = ['plaintext']
 let currentPanel: vscode.WebviewPanel | undefined = undefined
 let context: vscode.ExtensionContext | undefined = undefined
 let disposables: vscode.Disposable[] | undefined = undefined
-const signals: Array<ExtRecDto> = []
+const signals: Array<PreviewExtRecDto> = []
 const popSignal = async () => {
   while (signals.length === 0) {
     await new Promise((resolve) => setTimeout(resolve, 100))
   }
   return signals.shift()
 }
-const pushSignal = (s: ExtRecDto) => {
+const pushSignal = (s: PreviewExtRecDto) => {
   signals.push(s)
 }
 
@@ -39,7 +39,7 @@ const init = (cnt: vscode.ExtensionContext) => {
   )
   renderWebview(panel, context)
   panel.webview.onDidReceiveMessage(
-    (message: ExtRecDto) => {
+    (message: PreviewExtRecDto) => {
       if (message.option !== 0) {
         const config = confHandler.get()
         const { conf: target, option } = message

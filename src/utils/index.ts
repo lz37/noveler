@@ -32,9 +32,7 @@ export const isAbsolutePath = (path: string) => {
 }
 
 /**
- * 返回一个数组，数组中的每一项都是一个绝对路径
- * @param path
- * @returns
+ * @returns 一维数组，数组中的每一项都是一个绝对路径
  */
 export const getAbsolutePaths = async (path: string, suffix: string) => {
   const paths: string[] = []

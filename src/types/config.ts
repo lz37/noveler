@@ -49,6 +49,7 @@ export interface IConfig {
   previewSpaceLines: number
   customHighlight?: { [key: string]: import('vscode').DecorationRenderOptions }
   completionChar: string
+  outlinesDir: string
   confCSVFiles?: CSVOptions[]
   confTXTFiles?: TXTOptions[]
 }

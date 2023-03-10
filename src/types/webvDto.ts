@@ -1,5 +1,7 @@
 import { IConfig } from './config'
+import * as vscode from 'vscode'
 
+export type NovelerRouter = '/' | '/preview' | '/panel'
 export interface PreviewDto {
   /**if undefined will not take effect */
   text?: string
@@ -10,11 +12,22 @@ export interface PreviewDto {
   conf: IConfig
 }
 
-export interface ExtRecDto {
+export interface PreviewExtRecDto {
   /**只有 preview开头的才能被处理 */
   conf: keyof IConfig
   /**0表示完成，1，-1表示进一步操作 */
   option: number
 }
 
-export type NovelerRouter = '/' | '/preview' | '/panel'
+export interface PanelDto {
+  workSpaceRoot: string
+  path: string
+  content: string
+}
+
+// maybe different from PanelDto so use a new type
+export interface PanelExtRecDto {
+  workSpaceRoot: string
+  path: string
+  content: string
+}

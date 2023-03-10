@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Layout from './Layout'
 import defaultConfig from 'noveler/src/state/DefaultConfig'
-import { PreviewDto, ExtRecDto } from 'noveler/src/types/webvDto'
+import { PreviewDto, PreviewExtRecDto } from 'noveler/src/types/webvDto'
 
 export default () => {
   const [dto, setDto] = useState<PreviewDto>({
@@ -12,7 +12,7 @@ export default () => {
   })
   let lastDto = dto
 
-  const handleReloadWebview = (signal: ExtRecDto) => {
+  const handleReloadWebview = (signal: PreviewExtRecDto) => {
     vscode.postMessage(signal)
   }
 
