@@ -33,6 +33,10 @@
       "path": "./node_modules/cz-conventional-changelog"
     }
   },
+  "workspaces": [
+    "app",
+    "./"
+  ],
   "devDependencies": {
     "@commitlint/cli": "^17.4.2",
     "@commitlint/config-conventional": "^17.4.2",
