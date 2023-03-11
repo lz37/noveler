@@ -72,8 +72,14 @@ export const getRelativePathAndRoot = (path: string) => {
 
 export const createWebviewHtml = (
   router: NovelerRouter,
-  bundleScriptPath: vscode.Uri,
-) => `
+  webview: vscode.Webview,
+  context: vscode.ExtensionContext,
+  showScrollbar = false,
+) => {
+  const bundleScriptPath = webview.asWebviewUri(
+    vscode.Uri.joinPath(context.extensionUri, 'out', 'app', 'bundle.js'),
+  )
+  return `
   <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -86,8 +92,10 @@ export const createWebviewHtml = (
       <script>
         const vscode = acquireVsCodeApi();
         const home = '${router}'
+        const showScrollbar = ${showScrollbar}
       </script>
       <script src="${bundleScriptPath}"></script>
     </body>
   </html>
 `
+}

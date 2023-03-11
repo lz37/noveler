@@ -262,7 +262,7 @@
         "noveler.outlinesDir": {
           "type": "string",
           "default": ".noveler/outlines",
-          "markdownDescription": "大纲文本保存的路径，不支持绝对路径，请使用相对于文件夹的路径"
+          "markdownDescription": "大纲文本保存的目录，不支持绝对路径，请使用相对于文件夹的路径"
         },
         "noveler.confCSVFiles": {
           "type": "array",

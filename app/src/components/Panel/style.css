@@ -1,0 +1,25 @@
+.markdown-container {
+  padding: 1em 2em 0 2em;
+}
+
+.textarea-container {
+  padding: 0.5em 1em 0 1em;
+  width: 100%;
+}
+
+.textarea {
+  width: 100%;
+}
+
+.panel-affix {
+  width: 100%;
+}
+
+.button-container {
+  padding-top: 0.5em;
+  width: 100%;
+  /* 子组件居中 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

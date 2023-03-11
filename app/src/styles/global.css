@@ -4,6 +4,6 @@ body {
   padding: 0;
 }
 
-/* ::-webkit-scrollbar {
+.hide-scrollbar::-webkit-scrollbar {
   display: none;
-} */
+}

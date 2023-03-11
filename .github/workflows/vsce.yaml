@@ -31,21 +31,16 @@ jobs:
         with:
           path: ./package.json
           property: version
-      - name: Set up Python 3.10
-        uses: actions/setup-python@v3
+      - name: 读取描述文件
+        id: description
+        uses: juliangruber/read-file-action@v1
         with:
-          python-version: "3.10"
-      - name: get body
-        id: body
-        run: |
-          echo 'value<<EOF' >> $GITHUB_OUTPUT
-          echo "$(python ./scripts/read-changelog)" >> $GITHUB_OUTPUT
-          echo 'EOF' >> $GITHUB_OUTPUT
+          path: ./docs/description.md
       - name: release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: v${{steps.version.outputs.value}}
-          body: ${{steps.body.outputs.value}}
+          body: ${{steps.description.outputs.content}}
           token: ${{ secrets.RELEASE_TOKEN }}
           draft: false
           prerelease: false

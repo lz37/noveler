@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { Input, Button, Affix } from 'antd'
+import { Input, Button, Affix, Row, Col } from 'antd'
 import ReactMarkdown from 'react-markdown'
 import {
   PanelDto,
   PanelDtoStatus,
   PanelExtRecDto,
 } from 'noveler/src/types/webvDto'
+import './style.css'
 
 const { TextArea } = Input
 
@@ -17,8 +18,23 @@ export default () => {
     path: '',
     workSpaceRoot: '',
   })
+  const [replace, setReplace] = useState('')
   const listen = (event: MessageEvent<PanelDto>) => {
     setValue(event.data)
+    switch (event.data.status) {
+      case PanelDtoStatus.NoEditor:
+        setReplace('*无活动编辑器*')
+        break
+      case PanelDtoStatus.OutlineFile:
+        setReplace('*此文件为保存的大纲文件*')
+        break
+      case PanelDtoStatus.NoFile:
+        setReplace('*此文件没有保存的大纲*')
+        break
+      default:
+        setReplace('')
+        break
+    }
   }
   useEffect(() => {
     window.addEventListener('message', listen)
@@ -39,10 +55,10 @@ export default () => {
     })
   }
   return (
-    <div>
+    <>
       {!isEdit && (
         <div
-          style={{ padding: '1em 2em 0 2em' }}
+          className='markdown-container'
           onClick={() => {
             if (
               value.status !== PanelDtoStatus.NoEditor &&
@@ -52,42 +68,42 @@ export default () => {
               setIsEdit(true)
             }
           }}>
-          {value.status === PanelDtoStatus.Valid && (
-            <ReactMarkdown>{value.content}</ReactMarkdown>
-          )}
-          {value.status === PanelDtoStatus.NoEditor && (
-            <ReactMarkdown>*无活动编辑器*</ReactMarkdown>
-          )}
-          {value.status === PanelDtoStatus.NoFile && (
-            <ReactMarkdown>*此文件没有保存的大纲*</ReactMarkdown>
-          )}
-          {value.status === PanelDtoStatus.OutlineFile && (
-            <ReactMarkdown>*此文件为保存的大纲文件*</ReactMarkdown>
-          )}
+          <ReactMarkdown>
+            {value.status === PanelDtoStatus.Valid ? value.content : replace}
+          </ReactMarkdown>
         </div>
       )}
       {isEdit && (
-        <div style={{ padding: '0.5em 1em 0 1em', height: '100%' }}>
-          <TextArea
-            value={value.content}
-            bordered={false}
-            onChange={(e) => setValue({ ...value, content: e.target.value })}
-            autoSize={{ minRows: 1 }}
-          />
-          <Affix
-            offsetBottom={10}
-            style={{ position: 'absolute', bottom: '10px', right: '2em' }}>
-            <Button
-              type='text'
-              onClick={() => {
-                setIsEdit(false)
-                save(value)
-              }}>
-              保存
-            </Button>
-          </Affix>
-        </div>
+        <Row>
+          <Col xs={{ order: 2, span: 24 }} sm={{ order: 1, span: 22 }}>
+            <div className='textarea-container'>
+              <TextArea
+                className='textarea'
+                value={value.content}
+                bordered={false}
+                onChange={(e) =>
+                  setValue({ ...value, content: e.target.value })
+                }
+                autoSize={true}
+              />
+            </div>
+          </Col>
+          <Col xs={{ order: 1, span: 24 }} sm={{ order: 2, span: 2 }}>
+            <Affix offsetTop={0} className='panel-affix'>
+              <div className='button-container'>
+                <Button
+                  type='text'
+                  onClick={() => {
+                    setIsEdit(false)
+                    save(value)
+                  }}>
+                  保存
+                </Button>
+              </div>
+            </Affix>
+          </Col>
+        </Row>
       )}
-    </div>
+    </>
   )
 }

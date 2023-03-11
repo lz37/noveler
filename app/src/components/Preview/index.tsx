@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Layout from './Layout'
 import defaultConfig from 'noveler/src/state/DefaultConfig'
 import { PreviewDto, PreviewExtRecDto } from 'noveler/src/types/webvDto'
+import './style.css'
 
 export default () => {
   const [dto, setDto] = useState<PreviewDto>({
@@ -44,11 +45,7 @@ export default () => {
   return (
     <>
       <Layout />
-      <div
-        style={{
-          width: '95%',
-          margin: '0 auto',
-        }}>
+      <div className='text-container'>
         {dto
           .text!.split('\n')
           .join('\r')

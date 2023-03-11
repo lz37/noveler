@@ -47,10 +47,12 @@ const defineWebviewView = (
   webviewView.webview.options = {
     enableScripts: true,
   }
-  const bundleScriptPath = webviewView.webview.asWebviewUri(
-    vscode.Uri.joinPath(context.extensionUri, 'out', 'app', 'bundle.js'),
+  webviewView.webview.html = createWebviewHtml(
+    '/panel',
+    webviewView.webview,
+    context,
+    true,
   )
-  webviewView.webview.html = createWebviewHtml('/panel', bundleScriptPath)
   webviewView.webview.onDidReceiveMessage(saveFile, null, disposables)
   webviewView.onDidDispose(disposeAll, null, disposables)
   return webviewView

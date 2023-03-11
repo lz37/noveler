@@ -95,17 +95,8 @@ const showWebview = async (context: vscode.ExtensionContext) => {
 const postMessageToWebview = (msg: PreviewDto) =>
   currentPanel?.webview.postMessage(msg)
 
-const render = (
-  panel: vscode.WebviewPanel,
-  context: vscode.ExtensionContext,
-) => {
-  const bundleScriptPath = panel.webview.asWebviewUri(
-    vscode.Uri.file(
-      path.join(context.extensionPath, 'out', 'app', 'bundle.js'),
-    ),
-  )
-  return createWebviewHtml('/preview', bundleScriptPath)
-}
+const render = (panel: vscode.WebviewPanel, context: vscode.ExtensionContext) =>
+  createWebviewHtml('/preview', panel.webview, context)
 
 export const provider = (context: vscode.ExtensionContext) => {
   return {
