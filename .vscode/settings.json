@@ -2,6 +2,7 @@
   "editor.insertSpaces": true,
   "cSpell.words": [
     "antd",
+    "cicd",
     "commitlint",
     "Confs",
     "Dealed",
@@ -14,6 +15,7 @@
     "schar",
     "Setted",
     "softprops",
+    "uglifyjs",
     "vsix",
     "wbvv",
     "webv"
