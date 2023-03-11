@@ -11,6 +11,7 @@ import * as TXTReader from '@/modules/reader/TXTReader'
 import * as diagnostic from '@/modules/Diagnostic'
 import * as panel from '@/modules/Panel'
 import Commands from '@/types/Commands'
+import * as os from 'os'
 
 // this method is called when vs code is activated
 export const activate = async (context: vscode.ExtensionContext) => {
@@ -19,7 +20,7 @@ export const activate = async (context: vscode.ExtensionContext) => {
   // ------------------ setcontext ------------------
   const viewLoaderProvider = viewLoader.provider(context)
   completion.setContext(context)
-  panel.init(context, editor)
+  panel.init(context, os.platform(), editor)
   // ------------------ register ------------------
   context.subscriptions.push(
     formatter.provider,

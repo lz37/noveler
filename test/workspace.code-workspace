@@ -18,12 +18,12 @@
 			"\\d+(\\.\\d+)?": { "color": "#23e40a" },
 			"《.*?》": { "color": "#8482e4" }
 		},
-		"noveler.confTXTFiles": [
-			{
-				"path": "/home/zerozawa/Sources/mine/noveler/test/folder2/test",
-				"message": "敏感词"
-			}
-		],
+		// "noveler.confTXTFiles": [
+		// 	{
+		// 		"path": "/home/zerozawa/Sources/mine/noveler/test/folder2/test",
+		// 		"message": "敏感词"
+		// 	}
+		// ],
 		"noveler.confCSVFiles": [
 			{
 				"path": ".vscode/test.csv",
@@ -33,26 +33,26 @@
 					"color": "#9e952f"
 				}
 			},
-			{
-				"path": "/home/zerozawa/Sources/mine/noveler/test/folder2/test1.csv",
-				"key": "key",
-				"hoverKey": "hoverKey",
-				"decorationRenderOptions": {
-					"color": "#9e952f"
-				},
-				"suggestPrefix": "zj",
-				"suggestKind": "Method"
-			},
-			{
-				"path": "/home/zerozawa/Sources/mine/noveler/test/folder2/test2.csv",
-				"key": "key",
-				"hoverKey": "hoverKey",
-				"decorationRenderOptions": {
-					"color": "#887ec5"
-				},
-				"suggestPrefix": "pj",
-				"suggestKind": "Method"
-			}
+			// {
+			// 	"path": "/home/zerozawa/Sources/mine/noveler/test/folder2/test1.csv",
+			// 	"key": "key",
+			// 	"hoverKey": "hoverKey",
+			// 	"decorationRenderOptions": {
+			// 		"color": "#9e952f"
+			// 	},
+			// 	"suggestPrefix": "zj",
+			// 	"suggestKind": "Method"
+			// },
+			// {
+			// 	"path": "/home/zerozawa/Sources/mine/noveler/test/folder2/test2.csv",
+			// 	"key": "key",
+			// 	"hoverKey": "hoverKey",
+			// 	"decorationRenderOptions": {
+			// 		"color": "#887ec5"
+			// 	},
+			// 	"suggestPrefix": "pj",
+			// 	"suggestKind": "Method"
+			// }
 		],
 		"noveler.showApplyRecommendPlaintextConf": true,
 		"noveler.autoIndentLines": 1,

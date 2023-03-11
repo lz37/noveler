@@ -57,7 +57,10 @@ export const getAbsolutePaths = async (path: string, suffix: string) => {
   return paths
 }
 
-export const getRelativePathAndRoot = (path: string) => {
+export const getRelativePathAndRoot = (
+  path: string,
+  platForm: NodeJS.Platform,
+) => {
   const roots = vscode.workspace.workspaceFolders?.map(
     (item) => item.uri.fsPath,
   )
@@ -65,7 +68,11 @@ export const getRelativePathAndRoot = (path: string) => {
   // 匹配前缀
   for (let i = 0; i < roots.length; i++) {
     if (path.startsWith(roots[i])) {
-      return { root: roots[i], path: path.replace(`${roots[i]}/`, '') }
+      const splitChar = platForm === 'win32' ? '\\' : '/'
+      return {
+        root: roots[i],
+        path: path.replace(`${roots[i]}${splitChar}`, ''),
+      }
     }
   }
 }

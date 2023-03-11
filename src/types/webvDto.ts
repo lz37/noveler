@@ -37,6 +37,7 @@ export interface PanelDto {
 }
 
 export interface PanelExtRecDto {
+  needLoad?: boolean
   status: PanelDtoStatus
   workSpaceRoot: string
   path: string

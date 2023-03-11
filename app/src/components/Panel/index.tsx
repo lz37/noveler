@@ -10,6 +10,9 @@ import {
 import './style.css'
 
 const { TextArea } = Input
+const handlePostMsg = (signal: PanelExtRecDto) => {
+  vscode.postMessage(signal)
+}
 
 export default () => {
   const [isEdit, setIsEdit] = useState(false)
@@ -48,12 +51,19 @@ export default () => {
       window.removeEventListener('message', listen)
     }
   }, [])
-  const handlePostMsg = (signal: PanelExtRecDto) => {
-    vscode.postMessage(signal)
-  }
+  useEffect(() => {
+    handlePostMsg({
+      needLoad: true,
+      status: value.status,
+      content: value.content,
+      path: value.path,
+      workSpaceRoot: value.workSpaceRoot,
+    })
+  }, [])
   const save = (dto: PanelDto) => {
     const { content, path, workSpaceRoot, status } = dto
     handlePostMsg({
+      needLoad: false,
       status,
       content,
       path,

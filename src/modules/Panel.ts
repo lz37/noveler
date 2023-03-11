@@ -20,25 +20,19 @@ const disposeAll = () => {
 
 export const init = (
   context: vscode.ExtensionContext,
-  editor: vscode.TextEditor | undefined,
-) => contextPush(context, editor)
-
-const contextPush = (
-  context: vscode.ExtensionContext,
-  editor: vscode.TextEditor | undefined,
+  platForm: NodeJS.Platform,
+  editor?: vscode.TextEditor,
 ) => {
   const provider = vscode.window.registerWebviewViewProvider(
     'noveler-outline',
     {
-      async resolveWebviewView(wbvv) {
-        wbvv = defineWebviewView(wbvv, context)
-        // 获取当前vscode主题类型
-        const kind = vscode.window.activeColorTheme.kind
-        const theme = colorThemeKind2Theme(kind)
-        await sendFirstDto(wbvv.webview, editor, theme)
-        context.subscriptions.push(createOnDidChangeActiveTextEditor(wbvv))
+      resolveWebviewView(wbvv) {
+        wbvv = defineWebviewView(wbvv, context, platForm, editor)
         context.subscriptions.push(
-          createOnDidChangeActiveColorTheme(wbvv, editor),
+          createOnDidChangeActiveTextEditor(wbvv, platForm),
+        )
+        context.subscriptions.push(
+          createOnDidChangeActiveColorTheme(wbvv, platForm, editor),
         )
       },
     },
@@ -48,12 +42,11 @@ const contextPush = (
 
 const createOnDidChangeActiveColorTheme = (
   wbvv: vscode.WebviewView,
+  platForm: NodeJS.Platform,
   editor?: vscode.TextEditor,
 ) =>
-  vscode.window.onDidChangeActiveColorTheme((e) => {
-    const kind = e.kind
-    const theme = colorThemeKind2Theme(kind)
-    sendFirstDto(wbvv.webview, editor, theme)
+  vscode.window.onDidChangeActiveColorTheme(() => {
+    sendFirstDto(wbvv.webview, platForm, editor)
   })
 
 const colorThemeKind2Theme = (kind: vscode.ColorThemeKind) => {
@@ -70,14 +63,19 @@ const colorThemeKind2Theme = (kind: vscode.ColorThemeKind) => {
   return theme
 }
 
-const createOnDidChangeActiveTextEditor = (wbvv: vscode.WebviewView) =>
+const createOnDidChangeActiveTextEditor = (
+  wbvv: vscode.WebviewView,
+  platForm: NodeJS.Platform,
+) =>
   vscode.window.onDidChangeActiveTextEditor(async (e) => {
-    await sendFirstDto(wbvv.webview, e)
+    await sendFirstDto(wbvv.webview, platForm, e)
   })
 
 const defineWebviewView = (
   webviewView: vscode.WebviewView,
   context: vscode.ExtensionContext,
+  platForm: NodeJS.Platform,
+  editor?: vscode.TextEditor,
 ) => {
   webviewView.webview.options = {
     enableScripts: true,
@@ -88,29 +86,37 @@ const defineWebviewView = (
     context,
     true,
   )
-  webviewView.webview.onDidReceiveMessage(saveFile, null, disposables)
+  webviewView.webview.onDidReceiveMessage(
+    receiveMsg(webviewView.webview, platForm, editor),
+    null,
+    disposables,
+  )
   webviewView.onDidDispose(disposeAll, null, disposables)
   return webviewView
 }
 
 const sendFirstDto = async (
   webview: vscode.Webview,
+  platForm: NodeJS.Platform,
   editor?: vscode.TextEditor,
-  themeKind?: Theme,
 ) => {
   if (!editor) {
-    await sendBlankDto(webview, sendDto, PanelDtoStatus.NoEditor, themeKind)
+    await sendBlankDto(webview, sendDto, PanelDtoStatus.NoEditor)
     return
   }
+  const themeKind = colorThemeKind2Theme(vscode.window.activeColorTheme.kind)
   const fsPath = editor.document.uri.fsPath
-  const relativePathAndRoot = getRelativePathAndRoot(fsPath)
+  const relativePathAndRoot = getRelativePathAndRoot(fsPath, platForm)
   if (!relativePathAndRoot) {
     await sendBlankDto(webview, sendDto, PanelDtoStatus.NoEditor, themeKind)
     return
   }
   const { path, root } = relativePathAndRoot
   const { outlinesDir } = confHandler.get()
-  if (fsPath.startsWith(`${root}/${outlinesDir}`)) {
+  if (
+    fsPath.startsWith(`${root}/${outlinesDir}`) ||
+    fsPath.startsWith(`${root}\\${outlinesDir}`)
+  ) {
     await sendBlankDto(webview, sendDto, PanelDtoStatus.OutlineFile, themeKind)
     return
   }
@@ -125,8 +131,9 @@ const sendFirstDto = async (
   })
 }
 
-const sendDto = (webview: vscode.Webview, dto: PanelDto) =>
-  webview.postMessage(dto)
+const sendDto = (webview: vscode.Webview, dto: PanelDto) => {
+  return webview.postMessage(dto)
+}
 
 const sendBlankDto = async (
   webview: vscode.Webview,
@@ -152,13 +159,28 @@ const readContent = async (path: string, root: string, outlinesDir: string) => {
   return { content, err }
 }
 
-const saveFile = async (message: PanelExtRecDto) => {
+const receiveMsg = (
+  webview: vscode.Webview,
+  platForm: NodeJS.Platform,
+  editor?: vscode.TextEditor,
+) => {
+  return async (message: PanelExtRecDto) => {
+    if (message.needLoad) {
+      await sendFirstDto(webview, platForm, editor)
+    } else {
+      await saveFile(message, platForm)
+    }
+  }
+}
+
+const saveFile = async (message: PanelExtRecDto, platForm: NodeJS.Platform) => {
+  const split = platForm === 'win32' ? '\\' : '/'
   const { content, path, workSpaceRoot, status } = message
   if (status === PanelDtoStatus.NoEditor) return
   const { outlinesDir } = confHandler.get()
-  const oldir = `${workSpaceRoot}/${outlinesDir}`
-  const filePath = `${oldir}/${path}.md`
-  const dir = filePath.substring(0, filePath.lastIndexOf('/'))
+  const oldir = `${workSpaceRoot}${split}${outlinesDir}`
+  const filePath = `${oldir}${split}${path}.md`
+  const dir = filePath.substring(0, filePath.lastIndexOf(split))
   if (!(await fs.stat(dir).catch(() => false))) {
     // 递归创建目录
     await fs.mkdir(dir, { recursive: true })
