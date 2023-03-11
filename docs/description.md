@@ -5,3 +5,5 @@
 ## 优化打包
 
 打包体积压缩至 `200k` 以下
+
+(**test cicd , function is same** )
