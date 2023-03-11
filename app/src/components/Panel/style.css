@@ -23,3 +23,19 @@
   justify-content: center;
   align-items: center;
 }
+
+.panel-save-light {
+  color: #000;
+}
+
+.panel-save-dark {
+  color: #fff;
+}
+
+.panel-edit-light {
+  color: #000;
+}
+
+.panel-edit-dark {
+  color: #fff;
+}
