@@ -31,11 +31,13 @@ jobs:
         with:
           path: ./package.json
           property: version
-      - name: 读取描述文件
+      - name: get description
         id: description
         uses: juliangruber/read-file-action@v1
         with:
           path: ./docs/description.md
+      - name: package
+        run: pnpm run package
       - name: release
         uses: softprops/action-gh-release@v1
         with:
