@@ -1,0 +1,20 @@
+.text-container {
+  width: 95%;
+  margin: 0 auto;
+}
+
+.preview-affix {
+  background-color: grey;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.inline-block {
+  display: inline-block;
+}
+
+.preview-container {
+  overflow-y: scroll;
+  overflow-x: hidden;
+}

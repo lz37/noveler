@@ -9,14 +9,17 @@ import * as completion from '@/modules/Completion'
 import * as CSVReader from '@/modules/reader/CSVReader'
 import * as TXTReader from '@/modules/reader/TXTReader'
 import * as diagnostic from '@/modules/Diagnostic'
-import Commands from '@/state/Commands'
+import * as panel from '@/modules/Panel'
+import Commands from '@/types/Commands'
 
 // this method is called when vs code is activated
 export const activate = async (context: vscode.ExtensionContext) => {
+  const editor = vscode.window.activeTextEditor
   await confHandler.askForPlaintextConf()
   // ------------------ setcontext ------------------
   const viewLoaderProvider = viewLoader.provider(context)
   completion.setContext(context)
+  panel.init(context, editor)
   // ------------------ register ------------------
   context.subscriptions.push(
     formatter.provider,
@@ -41,7 +44,7 @@ export const activate = async (context: vscode.ExtensionContext) => {
     diagnostic.onChangConf,
     diagnostic.onChangeConfDocument,
   )
-  // ------------------ init ------------------
+  // ------------------ extension-init ------------------
   await vscode.commands.executeCommand(Commands.ReloadCSV)
   await vscode.commands.executeCommand(Commands.ReloadTXT)
 }

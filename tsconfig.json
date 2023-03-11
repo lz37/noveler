@@ -10,7 +10,7 @@
     "strict": true,
     "rootDir": "src",
     "skipLibCheck": true,
-    "typeRoots": ["node_modules/@types", "app/@types"],
+    "typeRoots": ["node_modules/@types"],
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {

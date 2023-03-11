@@ -1,11 +1,13 @@
 import * as confHandler from '@/modules/ConfigHandler'
 import * as vscode from 'vscode'
 import { createReadStream } from 'fs'
-import { isAbsolutePath, handlePath } from '@/utils'
+import { isAbsolutePath, getAbsolutePaths } from '@/utils'
 import * as csv from 'csv'
 import * as decoration from '@/modules/Decoration'
 import * as completion from '@/modules/Completion'
-import Commands from '@/state/Commands'
+import Commands from '@/types/Commands'
+import { CSVOptionMap, CSVOptions } from '@/types/config'
+import { ICustomHighlightConfMap } from '@/types'
 
 let conf: CSVOptionMap | undefined = undefined
 let highlightConf: ICustomHighlightConfMap | undefined = undefined
@@ -121,7 +123,7 @@ const loadFile = async () => {
   highlightConf = {}
   for (let i = 0; i < confEntries.length; i++) {
     const [key, value] = confEntries[i]
-    const paths = await handlePath(key, '.csv')
+    const paths = await getAbsolutePaths(key, '.csv')
     if (!paths || paths.length == 0) continue
     for (let j = 0; j < paths.length; j++) {
       handleCSV({ ...{ path: paths[j] }, ...value })

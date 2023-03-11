@@ -1,6 +1,7 @@
 import * as vscode from 'vscode'
 import * as confHandler from '@/modules/ConfigHandler'
-import Commands from '@/state/Commands'
+import Commands from '@/types/Commands'
+import { CompletionItemKindKeys } from '@/types'
 
 const targetFiles = ['plaintext', 'markdown']
 

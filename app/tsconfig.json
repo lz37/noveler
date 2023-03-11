@@ -10,12 +10,11 @@
     "lib": ["dom", "es2020"],
     "strict": true,
     "forceConsistentCasingInFileNames": true,
-    "baseUrl": "..",
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
-      "@app/*": ["app/*"]
+      "@app/*": ["src/*"]
     },
-    "typeRoots": ["../node_modules/@types", "@types"]
+    "typeRoots": ["node_modules/@types"]
   },
   "exclude": ["node_modules"]
 }

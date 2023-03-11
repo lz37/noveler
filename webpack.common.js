@@ -1,9 +1,10 @@
 const path = require('path')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const resolve = (dir) => path.resolve(__dirname, dir)
 
 const tsConfigPath = path.join(__dirname, 'tsconfig.json')
 
-const config = {
+module.exports = {
   target: 'node',
   entry: './src/extension.ts',
   output: {
@@ -37,11 +38,9 @@ const config = {
       },
     ],
   },
-}
-
-module.exports = (env, argv) => {
-  if (argv.mode === 'development') {
-    config.devtool = 'inline-source-map'
-  }
-  return config
+  devtool: 'inline-source-map',
+  plugins: [],
+  optimization: {
+    minimizer: [new UglifyJsPlugin()],
+  },
 }

@@ -1,3 +1,4 @@
+import { NovelerRouter } from '@/types/webvDto'
 import { promises as fs } from 'fs'
 import * as vscode from 'vscode'
 
@@ -31,11 +32,9 @@ export const isAbsolutePath = (path: string) => {
 }
 
 /**
- * 返回一个数组，数组中的每一项都是一个绝对路径
- * @param path
- * @returns
+ * @returns 一维数组，数组中的每一项都是一个绝对路径
  */
-export const handlePath = async (path: string, suffix: string) => {
+export const getAbsolutePaths = async (path: string, suffix: string) => {
   const paths: string[] = []
   if (!isAbsolutePath(path)) {
     paths.push(`${vscode.workspace.workspaceFolders?.[0].uri.fsPath}/${path}`)
@@ -56,4 +55,47 @@ export const handlePath = async (path: string, suffix: string) => {
     }
   }
   return paths
+}
+
+export const getRelativePathAndRoot = (path: string) => {
+  const roots = vscode.workspace.workspaceFolders?.map(
+    (item) => item.uri.fsPath,
+  )
+  if (!roots) return undefined
+  // 匹配前缀
+  for (let i = 0; i < roots.length; i++) {
+    if (path.startsWith(roots[i])) {
+      return { root: roots[i], path: path.replace(`${roots[i]}/`, '') }
+    }
+  }
+}
+
+export const createWebviewHtml = (
+  router: NovelerRouter,
+  webview: vscode.Webview,
+  context: vscode.ExtensionContext,
+  showScrollbar = false,
+) => {
+  const bundleScriptPath = webview.asWebviewUri(
+    vscode.Uri.joinPath(context.extensionUri, 'out', 'app', 'bundle.js'),
+  )
+  return `
+  <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>React App</title>
+    </head>
+    <body>
+      <div id="root"></div>
+      <script>
+        const vscode = acquireVsCodeApi();
+        const home = '${router}'
+        const showScrollbar = ${showScrollbar}
+      </script>
+      <script src="${bundleScriptPath}"></script>
+    </body>
+  </html>
+`
 }

@@ -1,5 +1,6 @@
 import * as vscode from 'vscode'
 import * as confHandler from '@/modules/ConfigHandler'
+import { ICustomHighlightConfMap, IDealedCustomHighlightConfMap } from '@/types'
 
 const targetFiles = ['plaintext', 'markdown']
 

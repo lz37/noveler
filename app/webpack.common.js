@@ -1,13 +1,14 @@
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
 const path = require('path')
 const resolve = (dir) => path.resolve(__dirname, dir)
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 module.exports = {
-  entry: path.join(__dirname, 'app', 'index.tsx'),
+  entry: path.join(__dirname, 'src', 'index.tsx'),
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.jsx', '.css'],
     alias: {
-      '@': resolve('src'),
-      '@app': resolve('app'),
+      '@app': resolve('src'),
     },
   },
   devtool: 'inline-source-map',
@@ -26,6 +27,10 @@ module.exports = {
   },
   output: {
     filename: 'bundle.js',
-    path: path.resolve(__dirname, 'out', 'app'),
+    path: path.resolve(__dirname, '../out', 'app'),
+  },
+  plugins: [],
+  optimization: {
+    minimizer: [new UglifyJsPlugin(), new CssMinimizerPlugin()],
   },
 }

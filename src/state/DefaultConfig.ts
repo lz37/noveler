@@ -1,3 +1,5 @@
+import { CSVOptions, IConfig, TXTOptions } from '../types/config'
+
 export default {
   showApplyRecommendPlaintextConf: true,
   autoIndentLines: 0,
@@ -12,6 +14,7 @@ export default {
   statusTimeUnit: 10,
   autoIndent: true,
   completionChar: '@',
+  outlinesDir: '.noveler/outlines',
 } as IConfig
 
 export const CSVOpt: CSVOptions = {

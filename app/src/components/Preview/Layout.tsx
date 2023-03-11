@@ -1,5 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Affix } from 'antd'
+import { IConfig } from 'noveler/src/types/config'
+import { PreviewExtRecDto } from 'noveler/src/types/webvDto'
+import './style.css'
 
 const itemMap: {
   name: string
@@ -12,39 +15,23 @@ const itemMap: {
 
 export default () => {
   const options = [-1, 1]
-  const handleReloadWebview = (signal: WebViewConfHandler) => {
+  const handleReloadWebview = (signal: PreviewExtRecDto) => {
     vscode.postMessage(signal)
   }
 
   return (
     <Affix offsetTop={0}>
-      <div
-        style={{
-          backgroundColor: 'grey',
-          // 居中
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
+      <div className='preview-affix'>
         {itemMap.map((item, index1) => (
-          <div
-            key={`${index1}`}
-            style={{
-              display: 'inline-block',
-            }}
-          >
+          <div key={`${index1}`} className='inline-block'>
             {item.name}
             {options.map((option, index2) => (
               <button
                 key={`${index1}-${index2}`}
-                style={{
-                  display: 'inline-block',
-                }}
+                className='inline-block'
                 onClick={() => {
-                  handleReloadWebview({ target: item.handler, option })
-                }}
-              >
+                  handleReloadWebview({ conf: item.handler, option })
+                }}>
                 {option > 0 ? '+' : '-'}
               </button>
             ))}

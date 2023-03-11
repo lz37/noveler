@@ -1,5 +1,6 @@
 import * as vscode from 'vscode'
 import defaultConfig, { CSVOpt, TXTOpt } from '@/state/DefaultConfig'
+import { IConfig } from '@/types/config'
 const extPrefix = 'noveler'
 const editorPrefix = 'editor'
 

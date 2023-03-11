@@ -5,8 +5,20 @@
     "commitlint",
     "Confs",
     "Dealed",
+    "epub",
+    "oldir",
     "Pangu",
+    "pnpm",
+    "postversion",
+    "preversion",
     "schar",
-    "Setted"
-  ]
+    "Setted",
+    "softprops",
+    "vsix",
+    "wbvv",
+    "webv"
+  ],
+  "markdownlint.ignore": ["CHANGELOG.md"],
+  // 排除changelog
+  "cSpell.files": ["**/*", "!CHANGELOG.md"]
 }

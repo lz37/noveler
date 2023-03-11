@@ -13,6 +13,7 @@
 			"editor.autoIndent": "none",
 			"editor.wordWrap": "bounded"
 		},
+		"noveler.autoSaveTime": 10,
 		"noveler.customHighlight": {
 			"\\d+(\\.\\d+)?": { "color": "#23e40a" },
 			"《.*?》": { "color": "#8482e4" }
