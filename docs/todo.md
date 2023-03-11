@@ -10,3 +10,4 @@
 - easier git
 - easier vscode setting & more complex setting in csv and txt (for example setting with comment)
 - webpack split compile
+- unite webview api with extension

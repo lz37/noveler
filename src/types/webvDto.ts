@@ -26,14 +26,16 @@ export enum PanelDtoStatus {
   OutlineFile,
 }
 
+export type Theme = 'light' | 'dark'
+
 export interface PanelDto {
   status: PanelDtoStatus
   workSpaceRoot: string
   path: string
   content: string
+  themeKind?: Theme
 }
 
-// maybe different from PanelDto so use a new type
 export interface PanelExtRecDto {
   status: PanelDtoStatus
   workSpaceRoot: string

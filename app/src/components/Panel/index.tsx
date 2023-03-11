@@ -5,6 +5,7 @@ import {
   PanelDto,
   PanelDtoStatus,
   PanelExtRecDto,
+  Theme,
 } from 'noveler/src/types/webvDto'
 import './style.css'
 
@@ -18,9 +19,13 @@ export default () => {
     path: '',
     workSpaceRoot: '',
   })
+  const [theme, setTheme] = useState<Theme>('light')
   const [replace, setReplace] = useState('')
   const listen = (event: MessageEvent<PanelDto>) => {
     setValue(event.data)
+    if (event.data.themeKind) {
+      setTheme(event.data.themeKind)
+    }
     switch (event.data.status) {
       case PanelDtoStatus.NoEditor:
         setReplace('*无活动编辑器*')
@@ -35,6 +40,7 @@ export default () => {
         setReplace('')
         break
     }
+    setIsEdit(false)
   }
   useEffect(() => {
     window.addEventListener('message', listen)
@@ -42,12 +48,12 @@ export default () => {
       window.removeEventListener('message', listen)
     }
   }, [])
-  const handleReloadWebview = (signal: PanelExtRecDto) => {
+  const handlePostMsg = (signal: PanelExtRecDto) => {
     vscode.postMessage(signal)
   }
   const save = (dto: PanelDto) => {
     const { content, path, workSpaceRoot, status } = dto
-    handleReloadWebview({
+    handlePostMsg({
       status,
       content,
       path,
@@ -78,7 +84,7 @@ export default () => {
           <Col xs={{ order: 2, span: 24 }} sm={{ order: 1, span: 22 }}>
             <div className='textarea-container'>
               <TextArea
-                className='textarea'
+                className={`textarea panel-edit-${theme}`}
                 value={value.content}
                 bordered={false}
                 onChange={(e) =>
@@ -97,7 +103,7 @@ export default () => {
                     setIsEdit(false)
                     save(value)
                   }}>
-                  保存
+                  <span className={`panel-save-${theme}`}>保存</span>
                 </Button>
               </div>
             </Affix>
