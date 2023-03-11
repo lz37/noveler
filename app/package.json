@@ -1,6 +1,6 @@
 {
   "name": "app",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "webview module for noveler",
   "main": "index.tsx",
   "scripts": {
