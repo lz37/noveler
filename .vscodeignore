@@ -7,8 +7,7 @@
 .prettierrc
 tsconfig.json
 tsconfig.json
-webpack.config.js
-webpack4ext.config.js
+webpack.*
 images
 etc
 src

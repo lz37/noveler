@@ -4,8 +4,9 @@
   "description": "webview module for noveler",
   "main": "index.tsx",
   "scripts": {
-    "watch:view": "webpack --watch --mode development",
-    "compile:view": "webpack --mode development --stats-error-details"
+    "watch:view": "webpack --watch --mode development --config webpack.prod.js",
+    "compile:view": "webpack --mode development --config webpack.dev.js",
+    "compile-prod:view": "webpack --mode production --config webpack.prod.js"
   },
   "author": "zerozawa",
   "license": "GPL-3.0",
@@ -20,7 +21,11 @@
   "devDependencies": {
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",
+    "css-minimizer-webpack-plugin": "^4.2.2",
+    "speed-measure-webpack-plugin": "^1.5.0",
+    "uglifyjs-webpack-plugin": "^2.2.0",
     "webpack": "^5.76.0",
+    "webpack-bundle-analyzer": "^4.8.0",
     "webpack-cli": "^5.0.1"
   }
 }
