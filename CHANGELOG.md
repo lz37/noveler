@@ -1,3 +1,13 @@
+## [1.4.3](https://github.com/lz37/noveler/compare/v1.4.2...v1.4.3) (2023-03-12)
+
+
+### Bug Fixes
+
+* async panel & win path ([bb8727a](https://github.com/lz37/noveler/commit/bb8727a5e7508c814611bf4da1a13db5deab641d))
+* open all statusItems in default ([4b3ddf3](https://github.com/lz37/noveler/commit/4b3ddf3a915f09182c78824f249254d8b09b7c0d))
+
+
+
 ## 1.4.2 (2023-03-11)
 
 
