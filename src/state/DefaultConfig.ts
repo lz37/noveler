@@ -10,7 +10,7 @@ export default {
   previewSpaceLines: 1,
   statusShow: true,
   statusIncludingSpace: false,
-  statusItems: ['Time', 'Speed'],
+  statusItems: ['Time', 'Speed', 'InputWordCount', 'TextWordCount'],
   statusTimeUnit: 10,
   autoIndent: true,
   completionChar: '@',

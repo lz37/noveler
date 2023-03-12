@@ -247,7 +247,9 @@
           },
           "default": [
             "Speed",
-            "Time"
+            "Time",
+            "InputWordCount",
+            "TextWordCount"
           ]
         },
         "noveler.customHighlight": {
