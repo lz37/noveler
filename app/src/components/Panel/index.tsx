@@ -91,7 +91,11 @@ export default () => {
       )}
       {isEdit && (
         <Row>
-          <Col xs={{ order: 2, span: 24 }} sm={{ order: 1, span: 22 }}>
+          <Col
+            xs={{ order: 2, span: 24 }}
+            sm={{ order: 1, span: 20 }}
+            md={{ order: 1, span: 21 }}
+            lg={{ order: 1, span: 22 }}>
             <div className='textarea-container'>
               <TextArea
                 className={`textarea panel-edit-${theme}`}
@@ -104,7 +108,11 @@ export default () => {
               />
             </div>
           </Col>
-          <Col xs={{ order: 1, span: 24 }} sm={{ order: 2, span: 2 }}>
+          <Col
+            xs={{ order: 1, span: 24 }}
+            sm={{ order: 2, span: 4 }}
+            md={{ order: 2, span: 3 }}
+            lg={{ order: 2, span: 2 }}>
             <Affix offsetTop={0} className='panel-affix'>
               <div className='button-container'>
                 <Button

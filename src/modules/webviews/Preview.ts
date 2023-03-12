@@ -50,7 +50,11 @@ const init = (cnt: vscode.ExtensionContext) => {
           ),
         )
         const newKVPair = { [target]: newVal } as unknown
-        confHandler.set(newKVPair as IConfig)
+        confHandler.set(newKVPair as IConfig, [
+          'previewFontSize',
+          'previewIndentionLength',
+          'previewSpaceLines',
+        ])
       }
       pushSignal(message)
     },

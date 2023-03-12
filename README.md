@@ -10,7 +10,7 @@
 - [x] 支持工作区
 - [x] 输入回车后自动插入自定义数量的空行和缩进
 - [x] 预览界面，读写分离
-- [x] 格式化内容，可中英文分离 ([pangu.js](https://github.com/vinta/pangu.js))
+- [x] 格式化内容，可中英文分离
 - [x] 输入测速
 - [x] 结构高亮（类似语句、书名号），可自定义
 - [x] 元数据（定义的角色、势力、道具名等）高亮与悬挂
@@ -31,7 +31,31 @@ vscode `ctrl + p` 输入指令
 
 ## 功能预览
 
-[wiki: 功能预览](https://github.com/lz37/noveler/wiki/%E5%8A%9F%E8%83%BD%E9%A2%84%E8%A7%88)
+![statusbar](https://github.com/lz37/noveler/wiki/imgs/func-status-bar.gif)
+状态栏
+
+![auto indent](https://github.com/lz37/noveler/wiki/imgs/func-auto-indent.gif)
+自动缩进与空行
+
+![format](https://github.com/lz37/noveler/wiki/imgs/func-fomat.gif)
+格式化
+
+![preview](https://github.com/lz37/noveler/wiki/imgs/func-preview.gif)
+预览
+
+![highlight & hover](https://github.com/lz37/noveler/wiki/imgs/func-highlight.gif)
+高亮与悬挂
+
+![completion](https://github.com/lz37/noveler/wiki/imgs/func-completion.gif)
+补全
+
+![diagnostic](https://github.com/lz37/noveler/wiki/imgs/func-diagnostic.gif)
+敏感词提示
+
+![outline](https://github.com/lz37/noveler/wiki/imgs/func-outline.gif)
+大纲管理
+
+**详细信息请查看**：[wiki: 功能预览](https://github.com/lz37/noveler/wiki/%E5%8A%9F%E8%83%BD%E9%A2%84%E8%A7%88)
 
 ## 配置
 

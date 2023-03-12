@@ -19,7 +19,8 @@
     "uglifyjs",
     "vsix",
     "wbvv",
-    "webv"
+    "webv",
+    "webviews"
   ],
   "markdownlint.ignore": ["CHANGELOG.md"],
   // 排除changelog

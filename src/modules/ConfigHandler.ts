@@ -29,17 +29,28 @@ export const get = () => {
 
 export const set = (
   config: IConfig,
+  items?: (keyof IConfig)[],
   target = vscode.ConfigurationTarget.Workspace,
 ) => {
-  // 获取config中的所有key
-  const keys = Object.keys(config)
-  // 遍历key
-  keys.forEach((key) => {
-    // 更新配置
-    vscode.workspace
-      .getConfiguration()
-      .update(`${extPrefix}.${key}`, (config as any)[key], target)
-  })
+  console.log('set config', config)
+  if (items) {
+    items.forEach((item) => {
+      if (config[item]) {
+        // 更新配置
+        vscode.workspace
+          .getConfiguration()
+          .update(`${extPrefix}.${item}`, config[item], target)
+      }
+    })
+  } else {
+    const keys = Object.keys(config)
+    keys.forEach((key) => {
+      // 更新配置
+      vscode.workspace
+        .getConfiguration()
+        .update(`${extPrefix}.${key}`, (config as any)[key], target)
+    })
+  }
 }
 
 const judgeConfigIsRecommended = (config: vscode.WorkspaceConfiguration) => {
@@ -61,30 +72,39 @@ export const askForPlaintextConf = async () => {
       '您当前的编辑器配置不适合小说写作，是否应用noveler推荐的配置？',
       '是',
       '否',
-      '不再提示',
+      '不再提示(工作区)',
+      '不再提示(全局)',
     )
-    if (res === '是') {
-      plaintextEditorConf.update(
-        'wrappingIndent',
-        'none',
-        vscode.ConfigurationTarget.Workspace,
-        true,
-      )
-      plaintextEditorConf.update(
-        'autoIndent',
-        'none',
-        vscode.ConfigurationTarget.Workspace,
-        true,
-      )
-      plaintextEditorConf.update(
-        'off',
-        'bounded',
-        vscode.ConfigurationTarget.Workspace,
-        true,
-      )
-    }
-    if (res === '不再提示') {
-      set({ ...get(), showApplyRecommendPlaintextConf: false })
+    switch (res) {
+      case '是':
+        // eslint-disable-next-line @typescript-eslint/no-extra-semi
+        ;[
+          ['wrappingIndent', 'none'],
+          ['autoIndent', 'none'],
+          ['wordWrap', 'bounded'],
+        ].forEach(([key, value]) => {
+          plaintextEditorConf.update(
+            key,
+            value,
+            vscode.ConfigurationTarget.Workspace,
+            true,
+          )
+        })
+        break
+      case '不再提示(工作区)':
+        set({ ...get(), showApplyRecommendPlaintextConf: false }, [
+          'showApplyRecommendPlaintextConf',
+        ])
+        break
+      case '不再提示(全局)':
+        set(
+          { ...get(), showApplyRecommendPlaintextConf: false },
+          ['showApplyRecommendPlaintextConf'],
+          vscode.ConfigurationTarget.Global,
+        )
+        break
+      default:
+        break
     }
   }
 }
