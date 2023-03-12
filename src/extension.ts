@@ -3,13 +3,13 @@ import * as confHandler from '@/modules/ConfigHandler'
 import * as statusBar from '@/modules/StatusBar'
 import * as formatter from '@/modules/Formatter'
 import * as indention from '@/modules/Indention'
-import * as viewLoader from '@/modules/ViewLoader'
+import * as preview from '@/modules/webviews/Preview'
 import * as decoration from '@/modules/Decoration'
 import * as completion from '@/modules/Completion'
 import * as CSVReader from '@/modules/reader/CSVReader'
 import * as TXTReader from '@/modules/reader/TXTReader'
 import * as diagnostic from '@/modules/Diagnostic'
-import * as panel from '@/modules/Panel'
+import * as panel from '@/modules/webviews/Panel'
 import Commands from '@/types/Commands'
 import * as os from 'os'
 
@@ -18,7 +18,7 @@ export const activate = async (context: vscode.ExtensionContext) => {
   const editor = vscode.window.activeTextEditor
   await confHandler.askForPlaintextConf()
   // ------------------ setcontext ------------------
-  const viewLoaderProvider = viewLoader.provider(context)
+  const previewProvider = preview.provider(context)
   completion.setContext(context)
   panel.init(context, os.platform(), editor)
   // ------------------ register ------------------
@@ -29,11 +29,11 @@ export const activate = async (context: vscode.ExtensionContext) => {
     statusBar.change,
     statusBar.changeConf,
     statusBar.changeEditor,
-    viewLoaderProvider.command,
-    viewLoaderProvider.onChangeConf,
-    viewLoaderProvider.onChangeDocument,
-    viewLoaderProvider.onChangeEditor,
-    viewLoaderProvider.onScroll,
+    previewProvider.command,
+    previewProvider.onChangeConf,
+    previewProvider.onChangeDocument,
+    previewProvider.onChangeEditor,
+    previewProvider.onScroll,
     decoration.onChangeConf,
     decoration.onChangeDocument,
     CSVReader.reloadCommand,

@@ -39,6 +39,7 @@
     "@faker-js/faker": "^7.6.0",
     "@types/node": "^16.11.7",
     "@types/prettier": "^2.7.1",
+    "@types/ramda": "^0.28.23",
     "@types/vscode": "^1.32.0",
     "@typescript-eslint/eslint-plugin": "^5.30.0",
     "@typescript-eslint/parser": "^5.30.0",
@@ -62,7 +63,8 @@
     "webpack-cli": "^4.10.0"
   },
   "dependencies": {
-    "csv": "^6.2.6"
+    "csv": "^6.2.6",
+    "ramda": "^0.28.0"
   },
   "engines": {
     "vscode": "^1.71.2"
@@ -72,6 +74,13 @@
   },
   "categories": [
     "Other"
+  ],
+  "keywords": [
+    "novel",
+    "小说",
+    "小説",
+    "plaintext",
+    "markdown"
   ],
   "activationEvents": [
     "onLanguage:plaintext",
@@ -222,7 +231,7 @@
         "noveler.statusIncludingSpace": {
           "type": "boolean",
           "default": false,
-          "markdownDescription": "状态栏计数器是否包含空格",
+          "markdownDescription": "状态栏字数统计是否包含空格",
           "scope": "resource"
         },
         "noveler.statusTimeUnit": {
@@ -250,25 +259,30 @@
             "Time",
             "InputWordCount",
             "TextWordCount"
-          ]
+          ],
+          "scope": "resource"
         },
         "noveler.customHighlight": {
           "type": "object",
-          "markdownDescription": "自定义高亮，键为正则表达式，值为渲染选项，值的结构参照 [DecorationRenderOptions](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions)"
+          "markdownDescription": "自定义高亮，键为正则表达式，值为渲染选项，值的结构参照 [DecorationRenderOptions](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions)",
+          "scope": "resource"
         },
         "noveler.completionChar": {
           "type": "string",
           "default": "@",
-          "markdownDescription": "补全时的触发字符, *注*：请尽量使用英文标点作为触发字符, 默认为@"
+          "markdownDescription": "补全时的触发字符, *注*：请尽量使用英文标点作为触发字符, 默认为@",
+          "scope": "resource"
         },
         "noveler.outlinesDir": {
           "type": "string",
           "default": ".noveler/outlines",
-          "markdownDescription": "大纲文本保存的目录，不支持绝对路径，请使用相对于文件夹的路径"
+          "markdownDescription": "大纲文本保存的目录，不支持绝对路径，请使用相对于文件夹的路径",
+          "scope": "resource"
         },
         "noveler.confCSVFiles": {
           "type": "array",
           "markdownDescription": "高亮与补全的文件配置",
+          "scope": "resource",
           "items": {
             "type": "object",
             "properties": {
@@ -333,6 +347,7 @@
         "noveler.confTXTFiles": {
           "type": "array",
           "markdownDescription": "敏感词配置文件",
+          "scope": "resource",
           "items": {
             "type": "object",
             "properties": {

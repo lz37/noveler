@@ -6,6 +6,7 @@ specifiers:
   '@faker-js/faker': ^7.6.0
   '@types/node': ^16.11.7
   '@types/prettier': ^2.7.1
+  '@types/ramda': ^0.28.23
   '@types/vscode': ^1.32.0
   '@typescript-eslint/eslint-plugin': ^5.30.0
   '@typescript-eslint/parser': ^5.30.0
@@ -20,6 +21,7 @@ specifiers:
   husky: ^8.0.3
   lint-staged: ^13.1.1
   prettier: ^2.7.1
+  ramda: ^0.28.0
   speed-measure-webpack-plugin: ^1.5.0
   style-loader: ^3.3.1
   ts-loader: ^9.4.1
@@ -31,6 +33,7 @@ specifiers:
 
 dependencies:
   csv: 6.2.6
+  ramda: 0.28.0
 
 devDependencies:
   '@commitlint/cli': 17.4.2
@@ -38,6 +41,7 @@ devDependencies:
   '@faker-js/faker': 7.6.0
   '@types/node': 16.11.65
   '@types/prettier': 2.7.1
+  '@types/ramda': 0.28.23
   '@types/vscode': 1.72.0
   '@typescript-eslint/eslint-plugin': 5.40.0_25sstg4uu2sk4pm7xcyzuov7xq
   '@typescript-eslint/parser': 5.40.0_z4bbprzjrhnsfa24uvmcbu7f5q
@@ -439,6 +443,12 @@ packages:
 
   /@types/prettier/2.7.1:
     resolution: {integrity: sha512-ri0UmynRRvZiiUJdiz38MmIblKK+oH30MztdBVR95dv/Ubw6neWSb8u1XpRb72L4qsZOhz+L+z9JD40SJmfWow==}
+    dev: true
+
+  /@types/ramda/0.28.23:
+    resolution: {integrity: sha512-9TYWiwkew+mCMsL7jZ+kkzy6QXn8PL5/SKmBPmjgUlTpkokZWTBr+OhiIUDztpAEbslWyt24NNfEmZUBFmnXig==}
+    dependencies:
+      ts-toolbelt: 6.15.5
     dev: true
 
   /@types/vscode/1.72.0:
@@ -3598,6 +3608,10 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
+  /ramda/0.28.0:
+    resolution: {integrity: sha512-9QnLuG/kPVgWvMQ4aODhsBUFKOUmnbUnsSXACv+NCQZcHbeb+v8Lodp8OVxtRULN1/xOyYLLaL6npE6dMq5QTA==}
+    dev: false
+
   /randombytes/2.1.0:
     resolution: {integrity: sha512-vYl3iOX+4CKUWuxGi9Ukhie6fsqXqS9FE2Zaic4tNFD2N2QQaXOMFbuKK4QmDHC0JO6B1Zp41J0LpT0oR68amQ==}
     dependencies:
@@ -4348,6 +4362,10 @@ packages:
       typescript: 4.8.4
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
+    dev: true
+
+  /ts-toolbelt/6.15.5:
+    resolution: {integrity: sha512-FZIXf1ksVyLcfr7M317jbB67XFJhOO1YqdTcuGaq9q5jLUoTikukZ+98TPjKiP2jC5CgmYdWWYs0s2nLSU0/1A==}
     dev: true
 
   /tslib/1.14.1:
