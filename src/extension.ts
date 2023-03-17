@@ -1,3 +1,13 @@
+/**
+ * developed by
+ * __________            _______    __________
+ * \____    /___________ \   _  \   \____    /____ __  _  _______
+ *   /     // __ \_  __ \/  /_\  \    /     /\__  \\ \/ \/ /\__  \
+ *  /     /\  ___/|  | \/\  \_/   \  /     /_ / __ \\     /  / __ \_
+ * /_______ \___  >__|    \_____  / /_______ (____  /\/\_/  (____  /
+ *         \/   \/              \/          \/    \/             \/
+ */
+
 import * as vscode from 'vscode'
 import * as confHandler from '@/modules/ConfigHandler'
 import * as statusBar from '@/modules/StatusBar'
