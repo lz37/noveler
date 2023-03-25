@@ -1,6 +1,6 @@
 name: Deploy Extension
 on:
-  pull_request:
+  push:
     branches:
       - master
 jobs:
@@ -25,12 +25,14 @@ jobs:
         env:
           VSCE_TOKEN: ${{ secrets.VSCE_TOKEN }}
         run: pnpm run publish $VSCE_TOKEN
+      # ---------- to change this
       - name: get version
         id: version
         uses: ashley-taylor/read-json-property-action@v1.0
         with:
           path: ./package.json
           property: version
+      # ----------
       - name: get description
         id: description
         uses: juliangruber/read-file-action@v1

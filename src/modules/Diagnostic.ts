@@ -55,34 +55,50 @@ const getConfFiles = async () => {
   return confFiles
 }
 
-export const updateDiagnostics = async (document: vscode.TextDocument) => {
+const regexSearch = (
+  document: vscode.TextDocument,
+  regex: RegExp,
+  diagnosticSeverity: DiagnosticSeverityKeys,
+  message: string,
+) => {
   const text = document.getText()
-  const confFiles = await getConfFiles()
-  if (confFiles?.includes(document.fileName)) return
-  if (!targetFiles.includes(document.languageId)) return
-  wordsMap.forEach((words, { message, diagnosticSeverity }) => {
-    const regex = new RegExp(`(${words.join('|')})`, 'g')
-    const diagnostics: vscode.Diagnostic[] = []
-    let match: RegExpExecArray | null
-    while ((match = regex.exec(text)) !== null) {
-      const startPos = document.positionAt(match.index)
-      const endPos = document.positionAt(match.index + match[0].length)
-      const range = new vscode.Range(startPos, endPos)
-      const diagnostic = new vscode.Diagnostic(
-        range,
-        `${message}: ${match[0]}`,
-        vscode.DiagnosticSeverity[diagnosticSeverity],
-      )
-      diagnostics.push(diagnostic)
-    }
-    collection.set(document.uri, diagnostics)
-  })
+  const diagnostics: vscode.Diagnostic[] = []
+  let match: RegExpExecArray | null | undefined = undefined
+  while ((match = regex.exec(text)) !== null) {
+    const startPos = document.positionAt(match.index)
+    const endPos = document.positionAt(match.index + match[0].length)
+    const range = new vscode.Range(startPos, endPos)
+    const diagnostic = new vscode.Diagnostic(
+      range,
+      `${message}: ${match[0]}`,
+      vscode.DiagnosticSeverity[diagnosticSeverity],
+    )
+    diagnostics.push(diagnostic)
+  }
+  collection.set(document.uri, diagnostics)
 }
 
-const wordsMap = new Map<
-  { message: string; diagnosticSeverity: DiagnosticSeverityKeys },
-  string[]
->()
+export const updateDiagnostics = async (document: vscode.TextDocument) => {
+  try {
+    const confFiles = await getConfFiles()
+    if (confFiles?.includes(document.fileName)) return
+    if (!targetFiles.includes(document.languageId)) return
+    wordsMap.forEach((words, key) => {
+      const keys = key.split('.')
+      const diagnosticSeverity = keys[0] as DiagnosticSeverityKeys
+      const message = keys.slice(1).join('.')
+      const regex = new RegExp(`(${words.join('|')})`, 'g')
+      regexSearch(document, regex, diagnosticSeverity, message)
+    })
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+/**
+ * key is `${diagnosticSeverity}.${message}`
+ */
+const wordsMap = new Map<string, string[]>()
 
 export const clearWords = () => {
   wordsMap.clear()
@@ -94,5 +110,6 @@ export const addWords = (
   message: string,
   diagnosticSeverity: DiagnosticSeverityKeys,
 ) => {
-  wordsMap.set({ message, diagnosticSeverity }, words)
+  words = words.filter((word) => word.trim())
+  wordsMap.set(`${diagnosticSeverity}.${message}`, words)
 }

@@ -32,12 +32,12 @@ const init = (cnt: vscode.ExtensionContext) => {
     {
       enableScripts: true,
       retainContextWhenHidden: true,
-      localResourceRoots: [
-        vscode.Uri.file(path.join(context.extensionPath, 'out', 'app')),
-      ],
+      // localResourceRoots: [
+      //   vscode.Uri.file(path.join(context.extensionPath, 'out', 'app')),
+      // ],
     },
   )
-  renderWebview(panel, context)
+  panel.webview.html = createWebviewHtml('/preview', panel.webview, context)
   panel.webview.onDidReceiveMessage(
     (message: PreviewExtRecDto) => {
       if (message.option !== 0) {
@@ -77,14 +77,6 @@ const init = (cnt: vscode.ExtensionContext) => {
   return panel
 }
 
-const renderWebview = (
-  panel: vscode.WebviewPanel,
-  context: vscode.ExtensionContext,
-) => {
-  const html = render(panel, context)
-  panel.webview.html = html
-}
-
 const showWebview = async (context: vscode.ExtensionContext) => {
   const column = vscode.window.activeTextEditor
     ? vscode.window.activeTextEditor.viewColumn
@@ -98,9 +90,6 @@ const showWebview = async (context: vscode.ExtensionContext) => {
 
 const postMessageToWebview = (msg: PreviewDto) =>
   currentPanel?.webview.postMessage(msg)
-
-const render = (panel: vscode.WebviewPanel, context: vscode.ExtensionContext) =>
-  createWebviewHtml('/preview', panel.webview, context)
 
 export const provider = (context: vscode.ExtensionContext) => {
   return {

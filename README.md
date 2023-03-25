@@ -20,7 +20,6 @@
 - [ ] 随机取名 (todo)
 - [ ] 导出为单体 txt、epub 等格式 (todo)
 - [ ] 一键提交 git (todo)
-- [ ] 一键发布到对应网站 (todo)
 - [ ] i18n (todo)
 
 ## 安装

@@ -1,3 +1,19 @@
+## [1.4.4](https://github.com/lz37/noveler/compare/v1.4.3...v1.4.4) (2023-03-25)
+
+
+### Bug Fixes
+
+* 。in  smaple ([aaeadbd](https://github.com/lz37/noveler/commit/aaeadbd12ac9cd0c4e9c9ecdce8a865b2da3ea16))
+* 错别字 ([e401667](https://github.com/lz37/noveler/commit/e4016678e628cfd061381dbb75066858fa3a88a3))
+* **diagnostic.ts:** deal with empty string ([9b6d5ff](https://github.com/lz37/noveler/commit/9b6d5ff46a1f028f6549ae97e31685b3fd4c1362))
+
+
+### Features
+
+* doc, panel outlook, keywords, readme, conf recommand ([f567509](https://github.com/lz37/noveler/commit/f567509eb778e5c31801d7e9a37f1243f69b3cc9))
+
+
+
 ## [1.4.3](https://github.com/lz37/noveler/compare/v1.4.2...v1.4.3) (2023-03-12)
 
 
