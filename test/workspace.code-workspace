@@ -11,7 +11,8 @@
 		"[plaintext]": {
 			"editor.wrappingIndent": "none",
 			"editor.autoIndent": "none",
-			"editor.wordWrap": "bounded"
+			"editor.wordWrap": "bounded",
+			"editor.suggest.showWords": false,
 		},
 		"noveler.autoSaveTime": 10,
 		"noveler.customHighlight": {

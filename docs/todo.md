@@ -13,3 +13,4 @@
 - to be FP
 - AI
 - use vite
+- wasm lsp
