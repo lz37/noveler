@@ -15,10 +15,6 @@
 			"editor.suggest.showWords": false,
 		},
 		"noveler.autoSaveTime": 10,
-		"noveler.customHighlight": {
-			"\\d+(\\.\\d+)?": { "color": "#23e40a" },
-			"《.*?》": { "color": "#8482e4" }
-		},
 		"noveler.confTXTFiles": [
 			{
 				"path": "/home/zerozawa/Sources/mine/noveler/test/folder2/test",
@@ -41,7 +37,7 @@
 				"decorationRenderOptions": {
 					"color": "#9e952f"
 				},
-				"suggestPrefix": "zj",
+				"suggestPrefix": "主角：",
 				"suggestKind": "Method"
 			},
 			{
@@ -51,16 +47,16 @@
 				"decorationRenderOptions": {
 					"color": "#887ec5"
 				},
-				"suggestPrefix": "pj",
+				"suggestPrefix": "配角：",
 				"suggestKind": "Method"
 			}
 		],
 		"noveler.showApplyRecommendPlaintextConf": true,
 		"noveler.autoIndentLines": 1,
 		"noveler.autoIndentSpaces": 4,
-		"noveler.previewFontSize": 35,
-		"noveler.previewIndentionLength": 4,
-		"noveler.previewSpaceLines": 1,
+		"noveler.previewFontSize": 29,
+		"noveler.previewIndentionLength": 2,
+		"noveler.previewSpaceLines": 2,
 		"noveler.statusShow": true,
 		"noveler.statusTimeUnit": 10,
 		"noveler.usePangu": true,
@@ -71,6 +67,6 @@
 			"Time",
 			"InputWordCount",
 			"TextWordCount"
-		]
+		],
 	}
 }

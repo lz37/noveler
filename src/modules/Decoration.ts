@@ -51,17 +51,19 @@ const defaultHighlightConf: IDealedCustomHighlightConfMap = {
   },
   '《.*?》': {
     renderOptions: vscode.window.createTextEditorDecorationType({
-      color: { id: 'bookTitleMark' },
+      textDecoration: 'underline',
     }),
   },
   '“.*?”': {
     renderOptions: vscode.window.createTextEditorDecorationType({
-      color: { id: 'quote' },
+      fontStyle: 'italic',
+      opacity: '0.7',
     }),
   },
   '【.*?】': {
     renderOptions: vscode.window.createTextEditorDecorationType({
-      color: { id: 'squareBracket' },
+      fontWeight: 'bold',
+      opacity: '0.7',
     }),
   },
 }
@@ -81,6 +83,7 @@ export const updateHighlightConf = (extConf?: ICustomHighlightConfMap) => {
   if (extConf) {
     Object.entries(extConf).forEach((entry) => {
       const [key, value] = entry
+      // 设置显示的优先级
       highlightConf[key] = {
         hoverMsg: value.hoverMsg,
         renderOptions: vscode.window.createTextEditorDecorationType(
@@ -97,6 +100,7 @@ const updateDecorations = (activeEditor: vscode.TextEditor) => {
       const [key, value] = highlightConf
       const reg = new RegExp(key, 'g')
       const decorationType = value.renderOptions
+      // sleep
       updateDecoration(reg, decorationType, activeEditor, value.hoverMsg)
     })
   } catch (error) {

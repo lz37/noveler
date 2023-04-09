@@ -1,8 +1,8 @@
 import * as confHandler from '@/modules/ConfigHandler'
 import * as vscode from 'vscode'
-import { createReadStream } from 'fs'
+import { promises as fs } from 'fs'
 import { isAbsolutePath, getAbsolutePaths } from '@/utils'
-import * as csv from 'csv'
+import { parse } from 'csv-parse/sync'
 import * as decoration from '@/modules/Decoration'
 import * as completion from '@/modules/Completion'
 import Commands from '@/types/Commands'
@@ -51,65 +51,58 @@ const updateConf = () => {
   else conf = undefined
 }
 
-const handleCSV = (csvOpt: CSVOptions) => {
-  let firstRow = true
-  let keyIndex = -1
-  let hoverKeyIndex = -1
+const handleCSV = async (csvOpt: CSVOptions) => {
   if (!csvOpt.path) return
-  const stream = createReadStream(csvOpt.path)
-  stream
-    .pipe(csv.parse({ delimiter: ',', from_line: 1 }))
-    .on('data', (row: string[]) => {
-      if (firstRow) {
-        firstRow = false
-        for (let i = 0; i < row.length; i++) {
-          const element = row[i]
-          if (element.trim() === csvOpt.key) {
-            keyIndex = i
-          }
-          if (element.trim() === csvOpt.hoverKey) {
-            hoverKeyIndex = i
-          }
-        }
-        if (keyIndex === -1) {
-          stream.emit(
-            'error',
-            new Error(`配置文件 ${csvOpt.path} 中没有找到 key: ${csvOpt.key}`),
-          )
-        }
-        completion.reset()
-        return
+  // 读取
+  try {
+    const data = await fs.readFile(csvOpt.path, 'utf-8')
+    const records: string[][] = parse(data)
+    const firstRow = records[0]
+    let keyIndex = -1
+    let hoverKeyIndex = -1
+    for (let i = 0; i < firstRow.length; i++) {
+      const element = firstRow[i]
+      if (element.trim() === csvOpt.key) {
+        keyIndex = i
       }
+      if (element.trim() === csvOpt.hoverKey) {
+        hoverKeyIndex = i
+      }
+    }
+    if (keyIndex === -1) {
+      throw new Error(`配置文件 ${csvOpt.path} 中没有找到 key: ${csvOpt.key}`)
+    }
+    const datas = records.slice(1)
+    datas.forEach((row) => {
       const key = row[keyIndex].trim()
-      let hoverKey: string | undefined = undefined
-      if (hoverKeyIndex !== -1) {
-        hoverKey = row[hoverKeyIndex].trim()
+      if (csvOpt.hoverKey && hoverKeyIndex !== -1) {
+        const hover = row[hoverKeyIndex].trim()
+        completion.setKeys(key, csvOpt.suggestPrefix, hover, csvOpt.suggestKind)
+        const editor = vscode.window.activeTextEditor
+        if (!editor) return
+        const markdownStr = new vscode.MarkdownString(hover)
+        highlightConf![key] = {
+          renderOptions: csvOpt.decorationRenderOptions ?? {},
+          hoverMsg: markdownStr,
+        }
+      } else {
+        completion.setKeys(
+          key,
+          csvOpt.suggestPrefix,
+          undefined,
+          csvOpt.suggestKind,
+        )
+        highlightConf![key] = {
+          renderOptions: csvOpt.decorationRenderOptions ?? {},
+        }
       }
-      completion.setKeys(
-        key,
-        csvOpt.suggestPrefix,
-        hoverKey,
-        csvOpt.suggestKind,
-      )
-      const editor = vscode.window.activeTextEditor
-      if (!editor) return
-      const markdownStr = hoverKey
-        ? new vscode.MarkdownString(hoverKey)
-        : undefined
-      highlightConf![key] = {
-        renderOptions: csvOpt.decorationRenderOptions ?? {},
-        hoverMsg: markdownStr,
-      }
     })
-    .on('end', () => {
-      decoration.reloadConf(highlightConf)
-      completion.updateProvider()
-    })
-    .on('error', (error) => {
-      vscode.window.showErrorMessage(
-        `读取配置文件 ${csvOpt.path} 出现错误:\n ${error.message}`,
-      )
-    })
+  } catch (error) {
+    console.error(error)
+    vscode.window.showErrorMessage(
+      `读取配置文件 ${csvOpt.path} 出现错误:\n ${(<Error>error).message}`,
+    )
+  }
 }
 
 const loadFile = async () => {
@@ -121,14 +114,17 @@ const loadFile = async () => {
   if (!conf) return
   const confEntries = Object.entries(conf)
   highlightConf = {}
+  completion.reset()
   for (let i = 0; i < confEntries.length; i++) {
     const [key, value] = confEntries[i]
     const paths = await getAbsolutePaths(key, '.csv')
     if (!paths || paths.length == 0) continue
     for (let j = 0; j < paths.length; j++) {
-      handleCSV({ ...{ path: paths[j] }, ...value })
+      await handleCSV({ ...{ path: paths[j] }, ...value })
     }
   }
+  decoration.reloadConf(highlightConf)
+  completion.updateProvider()
 }
 
 export const reloadCommand = vscode.commands.registerCommand(

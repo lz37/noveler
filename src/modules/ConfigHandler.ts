@@ -32,7 +32,6 @@ export const set = (
   items?: (keyof IConfig)[],
   target = vscode.ConfigurationTarget.Workspace,
 ) => {
-  console.log('set config', config)
   if (items) {
     items.forEach((item) => {
       if (config[item]) {
