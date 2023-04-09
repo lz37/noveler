@@ -1,5 +1,4 @@
 import * as vscode from 'vscode'
-import * as path from 'path'
 import * as confHandler from '@/modules/ConfigHandler'
 import Commands from '@/types/Commands'
 import { PreviewDto, PreviewExtRecDto } from '@/types/webvDto'

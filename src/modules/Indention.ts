@@ -15,13 +15,10 @@ export const indentionCreate = (
   event: vscode.TextDocumentChangeEvent,
   indentionNumber: number,
   spaceLines: number,
+  editor: vscode.TextEditor,
 ) => {
   // 检测输入是否是回车，是的话在输入回车后添加两个空格
   if (!isEnter(event.contentChanges[0]?.text)) {
-    return
-  }
-  const editor = vscode.window.activeTextEditor
-  if (!editor) {
     return
   }
   let indention = ''
@@ -61,7 +58,7 @@ export const provider = vscode.workspace.onDidChangeTextDocument(
     if (event.document === editor.document) {
       if (autoIndentLines == 0 && autoIndentSpaces == 0) return
       if (autoIndentLines >= 0 && autoIndentSpaces > 0) {
-        indentionCreate(event, autoIndentSpaces, autoIndentLines)
+        indentionCreate(event, autoIndentSpaces, autoIndentLines, editor)
       }
     }
   },

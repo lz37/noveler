@@ -64,15 +64,20 @@
     "webpack-cli": "^4.10.0"
   },
   "dependencies": {
-    "csv": "^6.2.6",
+    "csv-parse": "^5.3.6",
     "ramda": "^0.28.0"
   },
   "engines": {
     "vscode": "^1.71.2"
   },
   "repository": {
+    "type": "git",
     "url": "https://github.com/lz37/noveler"
   },
+  "extensionKind": [
+    "workspace"
+  ],
+  "qna": "marketplace",
   "categories": [
     "Other"
   ],
@@ -141,31 +146,7 @@
         "description": "数字的颜色",
         "defaults": {
           "dark": "#6cd8e6",
-          "light": "#00008b"
-        }
-      },
-      {
-        "id": "bookTitleMark",
-        "description": "书名号的颜色",
-        "defaults": {
-          "dark": "#d3090a",
-          "light": "#a83f3f"
-        }
-      },
-      {
-        "id": "quote",
-        "description": "引号的颜色",
-        "defaults": {
-          "dark": "#90ee90",
-          "light": "#006400"
-        }
-      },
-      {
-        "id": "squareBracket",
-        "description": "方括号的颜色",
-        "defaults": {
-          "dark": "#edbefa",
-          "light": "#8b008b"
+          "light": "#3c8dbc"
         }
       }
     ],
