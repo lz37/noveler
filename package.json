@@ -12,22 +12,21 @@
     "package": "vsce package --no-dependencies",
     "publish": "vsce publish --no-dependencies -p",
     "compile-prod": "concurrently npm:compile-prod:*",
-    "compile-prod:view": "cd ./app && npm run compile-prod:view",
-    "compile-prod:extension": "webpack --mode production --config webpack.prod.js",
+    "compile-prod:webview": "cd ./packages/webview && npm run compile-prod",
+    "compile-prod:extension": "cd ./packages/extension && npm run compile-prod",
     "compile": "concurrently npm:compile:*",
-    "compile:view": "cd ./app && npm run compile:view",
-    "compile:extension": "webpack --mode development --config webpack.dev.js",
+    "compile:webview": "cd ./packages/webview && npm run compile",
+    "compile:extension": "cd ./packages/extension && npm run compile",
     "watch": "concurrently npm:watch:*",
-    "watch:extension": "webpack --mode development --watch --config webpack.prod.js",
-    "watch:view": "cd ./app && npm run watch:view",
+    "watch:webview": "cd ./packages/webview && npm run watch",
+    "watch:extension": "cd ./packages/extension && npm run watch",
     "pretest": "npm run compile && npm run lint",
     "test": "node ./out/test/runTest.js",
     "lint": "eslint src --ext ts",
     "prettier": "prettier --write \"**/*.{ts,tsx,js,jsx,json,css,scss}\"",
     "lint-staged": "lint-staged",
     "commit": "cz",
-    "version": "conventional-changelog -p angular -i CHANGELOG.md -s && git add CHANGELOG.md",
-    "install": "pnpm install -C ./app"
+    "version": "conventional-changelog -p angular -i CHANGELOG.md -s && git add CHANGELOG.md"
   },
   "config": {
     "commitizen": {
@@ -40,8 +39,7 @@
     "@faker-js/faker": "^7.6.0",
     "@types/node": "^16.11.7",
     "@types/prettier": "^2.7.1",
-    "@types/ramda": "^0.28.23",
-    "@types/vscode": "^1.32.0",
+    "@types/vscode": "^1.77.0",
     "@typescript-eslint/eslint-plugin": "^5.30.0",
     "@typescript-eslint/parser": "^5.30.0",
     "@vscode/vsce": "^2.18.0",
@@ -49,6 +47,7 @@
     "concurrently": "^7.6.0",
     "conventional-changelog-cli": "^2.2.2",
     "css-loader": "^6.7.1",
+    "css-minimizer-webpack-plugin": "^5.0.0",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^8.13.0",
     "husky": "^8.0.3",
@@ -57,18 +56,14 @@
     "speed-measure-webpack-plugin": "^1.5.0",
     "style-loader": "^3.3.1",
     "ts-loader": "^9.4.1",
-    "typescript": "^4.8.4",
+    "typescript": "^4.9.5",
     "uglifyjs-webpack-plugin": "^2.2.0",
     "webpack": "^5.74.0",
     "webpack-bundle-analyzer": "^4.8.0",
     "webpack-cli": "^4.10.0"
   },
-  "dependencies": {
-    "csv-parse": "^5.3.6",
-    "ramda": "^0.28.0"
-  },
   "engines": {
-    "vscode": "^1.71.2"
+    "vscode": "^1.77.0"
   },
   "repository": {
     "type": "git",

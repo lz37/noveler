@@ -1,6 +1,5 @@
 # todo list
 
-- use npm-workspaces to deal with app & extension
 - i18n
 - `.noveler` folder support
 - random name (maybe should have a server first)
@@ -12,5 +11,3 @@
 - unite webview api with extension
 - to be FP
 - AI
-- use vite
-- wasm lsp

@@ -1,0 +1,11 @@
+{
+  "name": "common",
+  "description": "types definition for noveler",
+  "author": "zerozawa",
+  "license": "GPL-3.0",
+  "version": "0.1.0",
+  "type": "module",
+  "devDependencies": {
+    "@types/node": "^16.11.7"
+  }
+}

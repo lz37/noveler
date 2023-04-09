@@ -1,0 +1,24 @@
+{
+  "name": "webview",
+  "description": "webview module for noveler",
+  "main": "index.tsx",
+  "scripts": {
+    "watch": "webpack --watch --mode development --config webpack.prod.js",
+    "compile": "webpack --mode development --config webpack.dev.js",
+    "compile-prod": "webpack --mode production --config webpack.prod.js"
+  },
+  "author": "zerozawa",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "antd": "^5.3.0",
+    "common": "workspace:*",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-markdown": "^8.0.5",
+    "react-router-dom": "^6.8.2"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.28",
+    "@types/react-dom": "^18.0.11"
+  }
+}

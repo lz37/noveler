@@ -1,0 +1,20 @@
+{
+  "name": "extension",
+  "description": "main extension",
+  "main": "src/extension.ts",
+  "scripts": {
+    "watch": "webpack --watch --mode development --config webpack.prod.js",
+    "compile": "webpack --mode development --config webpack.dev.js",
+    "compile-prod": "webpack --mode production --config webpack.prod.js"
+  },
+  "author": "zerozawa",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "csv-parse": "^5.3.6",
+    "ramda": "^0.28.0",
+    "common": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/ramda": "^0.28.23"
+  }
+}
