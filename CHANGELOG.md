@@ -3,7 +3,7 @@
 
 ### Bug Fixes
 
-* fix: change behavior of default highlight & fix bug of completion ([e377b5d](https://github.com/lz37/noveler/commit/248754445b4e7f9df4d820747db83cf8d907ef31))
+* change behavior of default highlight & fix bug of completion ([e377b5d](https://github.com/lz37/noveler/commit/248754445b4e7f9df4d820747db83cf8d907ef31))
 
 
 
