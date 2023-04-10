@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Layout from './Layout'
-import defaultConfig from 'common/state/DefaultConfig'
+import * as defaultConfig from 'common/state/defaultConfig'
 import { PreviewDto, PreviewExtRecDto } from 'common/types'
 import './style.css'
 
@@ -9,7 +9,7 @@ export default () => {
     text: '',
     scrollPos: 0,
     maxLine: 0,
-    conf: defaultConfig,
+    conf: defaultConfig.config,
   })
   let lastDto = dto
 

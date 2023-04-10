@@ -1,4 +1,5 @@
 import * as vscode from 'vscode'
+
 export interface ICustomHighlightConfMap {
   [key: string]: {
     renderOptions: vscode.DecorationRenderOptions
@@ -16,8 +17,7 @@ export interface IDealedCustomHighlightConfMap {
 export type CompletionItemKindKeys = keyof typeof vscode.CompletionItemKind
 export type DiagnosticSeverityKeys = keyof typeof vscode.DiagnosticSeverity
 
-export interface CSVOptions {
-  path?: string
+export interface CSVOption {
   key: string
   hoverKey?: string
   decorationRenderOptions?: vscode.DecorationRenderOptions
@@ -25,27 +25,9 @@ export interface CSVOptions {
   suggestKind?: CompletionItemKindKeys
 }
 
-export interface CSVOptionMap {
-  [path: string]: {
-    key: string
-    hoverKey?: string
-    decorationRenderOptions?: vscode.DecorationRenderOptions
-    suggestPrefix: string
-    suggestKind?: CompletionItemKindKeys
-  }
-}
-
 export interface TXTOptions {
-  path?: string
   message: string
   diagnosticSeverity: DiagnosticSeverityKeys
-}
-
-export interface TXTOptionMap {
-  [path: string]: {
-    message: string
-    diagnosticSeverity: DiagnosticSeverityKeys
-  }
 }
 
 export type StatusItem = 'Speed' | 'Time' | 'InputWordCount' | 'TextWordCount'
@@ -56,18 +38,14 @@ export interface IConfig {
   autoIndentSpaces: number
   autoIndentLines: number
   usePangu: boolean
-  statusShow: boolean
-  statusTimeUnit: number
-  statusIncludingSpace: boolean
-  statusItems: StatusItem[]
   previewFontSize: number
   previewIndentionLength: number
   previewSpaceLines: number
   customHighlight?: { [key: string]: vscode.DecorationRenderOptions }
   completionChar: string
   outlinesDir: string
-  confCSVFiles?: CSVOptions[]
-  confTXTFiles?: TXTOptions[]
+  infoDir: string
+  diagnosticDir: string
 }
 
 export type NovelerRouter = '/' | '/preview' | '/panel'

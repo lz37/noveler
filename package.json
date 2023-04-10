@@ -7,22 +7,24 @@
   "publisher": "zerozawa",
   "license": "GPL-3.0",
   "scripts": {
-    "vscode:prepublish": "./scripts/rm-out && npm run compile-prod",
+    "vscode:prepublish": "./scripts/rm-out && pnpm run compile-prod",
     "prepare": "husky install",
     "package": "vsce package --no-dependencies",
     "publish": "vsce publish --no-dependencies -p",
-    "compile-prod": "concurrently npm:compile-prod:*",
-    "compile-prod:webview": "cd ./packages/webview && npm run compile-prod",
-    "compile-prod:extension": "cd ./packages/extension && npm run compile-prod",
-    "compile": "concurrently npm:compile:*",
-    "compile:webview": "cd ./packages/webview && npm run compile",
-    "compile:extension": "cd ./packages/extension && npm run compile",
-    "watch": "concurrently npm:watch:*",
-    "watch:webview": "cd ./packages/webview && npm run watch",
-    "watch:extension": "cd ./packages/extension && npm run watch",
-    "pretest": "npm run compile && npm run lint",
-    "test": "node ./out/test/runTest.js",
-    "lint": "eslint src --ext ts",
+    "compile-prod": "concurrently pnpm:compile-prod:*",
+    "compile-prod:webview": "cd ./packages/webview && pnpm run compile-prod",
+    "compile-prod:extension": "cd ./packages/extension && pnpm run compile-prod",
+    "compile-prod:test": "cd ./packages/test && pnpm run compile",
+    "compile": "concurrently pnpm:compile:*",
+    "compile:webview": "cd ./packages/webview && pnpm run compile",
+    "compile:extension": "cd ./packages/extension && pnpm run compile",
+    "compile:test": "cd ./packages/test && pnpm run compile",
+    "watch": "concurrently pnpm:watch:*",
+    "watch:webview": "cd ./packages/webview && pnpm run watch",
+    "watch:extension": "cd ./packages/extension && pnpm run watch",
+    "pretest": "pnpm run compile-prod && pnpm run lint",
+    "test": "pnpm run pretest && node ./out/test/runTest.js",
+    "lint": "eslint \"**/*.{ts,tsx}\" --ext .ts,.tsx",
     "prettier": "prettier --write \"**/*.{ts,tsx,js,jsx,json,css,scss}\"",
     "lint-staged": "lint-staged",
     "commit": "cz",
@@ -37,11 +39,15 @@
     "@commitlint/cli": "^17.4.2",
     "@commitlint/config-conventional": "^17.4.2",
     "@faker-js/faker": "^7.6.0",
+    "@types/glob": "^8.1.0",
+    "@types/mocha": "^10.0.1",
     "@types/node": "^16.11.7",
     "@types/prettier": "^2.7.1",
+    "@types/ramda": "^0.28.23",
     "@types/vscode": "^1.77.0",
-    "@typescript-eslint/eslint-plugin": "^5.30.0",
-    "@typescript-eslint/parser": "^5.30.0",
+    "@typescript-eslint/eslint-plugin": "^5.57.1",
+    "@typescript-eslint/parser": "^5.57.1",
+    "@vscode/test-electron": "^2.3.0",
     "@vscode/vsce": "^2.18.0",
     "commitizen": "^4.3.0",
     "concurrently": "^7.6.0",
@@ -52,6 +58,7 @@
     "eslint": "^8.13.0",
     "husky": "^8.0.3",
     "lint-staged": "^13.1.1",
+    "mocha": "^10.2.0",
     "prettier": "^2.7.1",
     "speed-measure-webpack-plugin": "^1.5.0",
     "style-loader": "^3.3.1",
@@ -61,6 +68,10 @@
     "webpack": "^5.74.0",
     "webpack-bundle-analyzer": "^4.8.0",
     "webpack-cli": "^4.10.0"
+  },
+  "dependencies": {
+    "glob": "^10.0.0",
+    "ramda": "^0.29.0"
   },
   "engines": {
     "vscode": "^1.77.0"
@@ -89,25 +100,6 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
-    "viewsContainers": {
-      "panel": [
-        {
-          "id": "noveler-panel",
-          "title": "Noveler",
-          "icon": "$(notebook-edit)"
-        }
-      ]
-    },
-    "views": {
-      "noveler-panel": [
-        {
-          "type": "webview",
-          "id": "noveler-outline",
-          "name": "大纲",
-          "icon": "$(notebook-edit)"
-        }
-      ]
-    },
     "commands": [
       {
         "command": "noveler.preview",
@@ -254,6 +246,18 @@
           "type": "string",
           "default": ".noveler/outlines",
           "markdownDescription": "大纲文本保存的目录，不支持绝对路径，请使用相对于文件夹的路径",
+          "scope": "resource"
+        },
+        "noveler.infoDir": {
+          "type": "string",
+          "default": ".noveler/infos",
+          "markdownDescription": "信息文本（csv文件）保存的目录，不支持绝对路径，请使用相对于文件夹的路径",
+          "scope": "resource"
+        },
+        "noveler.diagnosticDir": {
+          "type": "string",
+          "default": ".noveler/diagnostics",
+          "markdownDescription": "敏感词文本（txt文件）保存的目录，不支持绝对路径，请使用相对于文件夹的路径",
           "scope": "resource"
         },
         "noveler.confCSVFiles": {

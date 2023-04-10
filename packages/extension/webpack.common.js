@@ -19,10 +19,6 @@ module.exports = {
   },
   resolve: {
     extensions: ['.ts', '.js'],
-    // 设置别名
-    alias: {
-      '@': resolve('src'),
-    },
   },
   module: {
     rules: [

@@ -1,6 +1,7 @@
 import { NovelerRouter } from '../types'
 import { promises as fs } from 'fs'
 import * as vscode from 'vscode'
+import * as osPath from 'path'
 
 const getStrLength = (str: string) => {
   // eslint-disable-next-line no-control-regex
@@ -25,21 +26,17 @@ export const splitStr = (sChars: string) => {
   return str.substring(0, str.length - 1)
 }
 
-export const isAbsolutePath = (path: string) => {
-  return (
-    path.startsWith('/') || path.startsWith('\\') || /^[a-zA-Z]:/.test(path)
-  )
-}
-
 /**
  * @returns 一维数组，数组中的每一项都是一个绝对路径
  */
-export const getAbsolutePaths = async (path: string, suffix: string) => {
+export const getAbsolutePaths = async (p: string, suffix: string) => {
   const paths: string[] = []
-  if (!isAbsolutePath(path)) {
-    paths.push(`${vscode.workspace.workspaceFolders?.[0].uri.fsPath}/${path}`)
+  const workspaceFolders = vscode.workspace.workspaceFolders
+  if (!workspaceFolders) return undefined
+  if (!osPath.isAbsolute(p)) {
+    paths.push(osPath.join(workspaceFolders?.[0].uri.fsPath, p))
   } else {
-    paths.push(path)
+    paths.push(p)
   }
   const stat = await fs.stat(paths[0])
   if (stat.isDirectory()) {
@@ -48,7 +45,7 @@ export const getAbsolutePaths = async (path: string, suffix: string) => {
     if (!p) return
     const files = await fs.readdir(p)
     for (let i = 0; i < files.length; i++) {
-      const f = `${p}/${files[i]}`
+      const f = osPath.join(p, files[i])
       if (files[i].endsWith(suffix) && (await fs.stat(f)).isFile()) {
         paths.push(f)
       }
@@ -57,21 +54,17 @@ export const getAbsolutePaths = async (path: string, suffix: string) => {
   return paths
 }
 
-export const getRelativePathAndRoot = (
-  path: string,
-  platForm: NodeJS.Platform,
-) => {
+export const getRelativePathAndRoot = (p: string) => {
   const roots = vscode.workspace.workspaceFolders?.map(
     (item) => item.uri.fsPath,
   )
   if (!roots) return undefined
   // 匹配前缀
   for (let i = 0; i < roots.length; i++) {
-    if (path.startsWith(roots[i])) {
-      const splitChar = platForm === 'win32' ? '\\' : '/'
+    if (p.startsWith(roots[i])) {
       return {
         root: roots[i],
-        path: path.replace(`${roots[i]}${splitChar}`, ''),
+        path: osPath.relative(roots[i], p),
       }
     }
   }
@@ -106,3 +99,26 @@ export const createWebviewHtml = (
   </html>
 `
 }
+/**
+ *
+ * @param dir 绝对路径
+ * @param fileType 后缀名不带点
+ * @param withFileTypes 是否返回文件类型
+ * @returns
+ */
+export const getFileNameInDir = async (
+  dir: string,
+  fileType?: string,
+  withFileTypes = true,
+) =>
+  (await fs.readdir(dir, { withFileTypes: true }))
+    .map((item) => item.name)
+    .filter((item) => {
+      if (!fileType) return true
+      return item.endsWith(`.${fileType}`)
+    })
+    .map((item) => {
+      if (withFileTypes) return item
+      // 删除最后一个
+      return item.split('.').slice(0, -1).join('.')
+    })

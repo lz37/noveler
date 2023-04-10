@@ -11,9 +11,6 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
-    "paths": {
-      "@app/*": ["src/*"]
-    },
     "typeRoots": ["node_modules/@types"]
   },
   "exclude": ["node_modules"]

@@ -8,9 +8,6 @@ module.exports = {
   entry: path.join(__dirname, 'src', 'index.tsx'),
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.jsx', '.css'],
-    alias: {
-      '@app': resolve('src'),
-    },
   },
   devtool: 'inline-source-map',
   module: {

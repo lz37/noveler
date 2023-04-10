@@ -1,6 +1,6 @@
-import { CSVOptions, IConfig, TXTOptions } from '../types'
+import { CSVOption, IConfig, TXTOptions } from '../types'
 
-export default {
+export const config: IConfig = {
   showApplyRecommendPlaintextConf: true,
   autoIndentLines: 0,
   autoIndentSpaces: 4,
@@ -8,21 +8,19 @@ export default {
   previewFontSize: 16,
   previewIndentionLength: 4,
   previewSpaceLines: 1,
-  statusShow: true,
-  statusIncludingSpace: false,
-  statusItems: ['Time', 'Speed', 'InputWordCount', 'TextWordCount'],
-  statusTimeUnit: 10,
   autoIndent: true,
   completionChar: '@',
   outlinesDir: '.noveler/outlines',
-} as IConfig
+  infoDir: '.noveler/infos',
+  diagnosticDir: '.noveler/diagnostics',
+}
 
-export const CSVOpt: CSVOptions = {
+export const csvOpt: CSVOption = {
   key: 'name',
   suggestPrefix: '',
 }
 
-export const TXTOpt: TXTOptions = {
+export const txtOpt: TXTOptions = {
   message: '敏感词',
   diagnosticSeverity: 'Error',
 }

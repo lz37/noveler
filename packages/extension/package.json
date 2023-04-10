@@ -10,11 +10,10 @@
   "author": "zerozawa",
   "license": "GPL-3.0",
   "dependencies": {
-    "csv-parse": "^5.3.6",
-    "ramda": "^0.28.0",
-    "common": "workspace:*"
+    "common": "workspace:*",
+    "csv-parse": "^5.3.6"
   },
   "devDependencies": {
-    "@types/ramda": "^0.28.23"
+    "@types/node": "^16.11.7"
   }
 }

@@ -10,7 +10,11 @@
     "skipLibCheck": true,
     "typeRoots": ["node_modules/@types"],
     "forceConsistentCasingInFileNames": true,
-    "baseUrl": "."
+    "baseUrl": ".",
+    "rootDir": "src",
+    "paths": {
+      "@/*": ["src/*"]
+    }
   },
   "exclude": ["node_modules"]
 }

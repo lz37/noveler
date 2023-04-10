@@ -5,8 +5,8 @@ import {
   Navigate,
 } from 'react-router-dom'
 import { NovelerRouter } from 'common/types'
-import Preview from '@app/components/Preview'
-import Panel from '@app/components/Panel'
+import Preview from './components/Preview'
+import Panel from './components/Panel'
 import React from 'react'
 
 interface NovelerIndexRouteObject extends IndexRouteObject {
