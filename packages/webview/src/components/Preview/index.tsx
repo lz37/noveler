@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Layout from './Layout'
-import * as defaultConfig from 'common/state/defaultConfig'
-import { PreviewDto, PreviewExtRecDto } from 'common/types'
+import * as defaultConfig from 'extension/src/common/state/defaultConfig'
+import { PreviewDto, PreviewExtRecDto } from 'extension/src/common/types'
 import './style.css'
 
 export default () => {

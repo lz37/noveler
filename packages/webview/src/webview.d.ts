@@ -5,5 +5,5 @@ type VSCode = {
 }
 
 declare const showScrollbar: boolean
-declare const home: import('common/types').NovelerRouter
+declare const home: import('extension/src/common/types').NovelerRouter
 declare const vscode: VSCode

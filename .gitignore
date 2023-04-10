@@ -4,3 +4,4 @@ node_modules
 accesstoken.txt
 local
 .vscode-test
+dist

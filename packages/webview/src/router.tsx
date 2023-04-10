@@ -4,7 +4,7 @@ import {
   NonIndexRouteObject,
   Navigate,
 } from 'react-router-dom'
-import { NovelerRouter } from 'common/types'
+import { NovelerRouter } from 'extension/src/common/types'
 import Preview from './components/Preview'
 import Panel from './components/Panel'
 import React from 'react'

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Affix } from 'antd'
-import { IConfig } from 'common/types'
-import { PreviewExtRecDto } from 'common/types'
+import { IConfig } from 'extension/src/common/types'
+import { PreviewExtRecDto } from 'extension/src/common/types'
 import './style.css'
 
 const itemMap: {

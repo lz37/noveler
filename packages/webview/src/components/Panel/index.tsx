@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { Input, Button, Affix, Row, Col } from 'antd'
 import ReactMarkdown from 'react-markdown'
-import { PanelDto, PanelDtoStatus, PanelExtRecDto, Theme } from 'common/types'
+import {
+  PanelDto,
+  PanelDtoStatus,
+  PanelExtRecDto,
+  Theme,
+} from 'extension/src/common/types'
 import './style.css'
 
 const { TextArea } = Input

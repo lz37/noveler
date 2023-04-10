@@ -12,5 +12,5 @@ scripts
 test
 CHANGELOG.md
 commitlint.config.js
-out/test/**
+out
 

@@ -1,5 +1,5 @@
 #!/bin/sh
 # -*- coding: UTF-8 -*-
-if [ -d "out" ]; then
-  rm -r out
+if [ -d "dist" ]; then
+  rm -r dist
 fi

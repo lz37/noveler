@@ -5,15 +5,16 @@
   "scripts": {
     "watch": "webpack --watch --mode development --config webpack.prod.js",
     "compile": "webpack --mode development --config webpack.dev.js",
-    "compile-prod": "webpack --mode production --config webpack.prod.js"
+    "compile-prod": "webpack --mode production --config webpack.prod.js",
+    "compile-test": "tsc -p . --outDir ../../out"
   },
+  "version": "0.0.1",
   "author": "zerozawa",
   "license": "GPL-3.0",
   "dependencies": {
-    "common": "workspace:*",
     "csv-parse": "^5.3.6"
   },
   "devDependencies": {
-    "@types/node": "^16.11.7"
+    "@types/node": "^16.17"
   }
 }
