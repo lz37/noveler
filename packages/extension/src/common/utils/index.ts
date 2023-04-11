@@ -1,7 +1,6 @@
 import { NovelerRouter } from '../types'
 import * as fs from 'fs/promises'
 import * as vscode from 'vscode'
-import * as osPath from 'path'
 
 const getStrLength = (str: string) => {
   // eslint-disable-next-line no-control-regex
@@ -26,50 +25,6 @@ export const splitStr = (sChars: string) => {
   return str.substring(0, str.length - 1)
 }
 
-/**
- * @returns 一维数组，数组中的每一项都是一个绝对路径
- */
-export const getAbsolutePaths = async (p: string, suffix: string) => {
-  const paths: string[] = []
-  const workspaceFolders = vscode.workspace.workspaceFolders
-  if (!workspaceFolders) return undefined
-  if (!osPath.isAbsolute(p)) {
-    paths.push(osPath.join(workspaceFolders?.[0].uri.fsPath, p))
-  } else {
-    paths.push(p)
-  }
-  const stat = await fs.stat(paths[0])
-  if (stat.isDirectory()) {
-    // read all suffix in this dir
-    const p = paths.pop()
-    if (!p) return
-    const files = await fs.readdir(p)
-    for (let i = 0; i < files.length; i++) {
-      const f = osPath.join(p, files[i])
-      if (files[i].endsWith(suffix) && (await fs.stat(f)).isFile()) {
-        paths.push(f)
-      }
-    }
-  }
-  return paths
-}
-
-export const getRelativePathAndRoot = (p: string) => {
-  const roots = vscode.workspace.workspaceFolders?.map(
-    (item) => item.uri.fsPath,
-  )
-  if (!roots) return undefined
-  // 匹配前缀
-  for (let i = 0; i < roots.length; i++) {
-    if (p.startsWith(roots[i])) {
-      return {
-        root: roots[i],
-        path: osPath.relative(roots[i], p),
-      }
-    }
-  }
-}
-
 export const createWebviewHtml = (
   router: NovelerRouter,
   webview: vscode.Webview,
@@ -77,7 +32,7 @@ export const createWebviewHtml = (
   showScrollbar = false,
 ) => {
   const bundleScriptPath = webview.asWebviewUri(
-    vscode.Uri.joinPath(context.extensionUri, 'out', 'app', 'bundle.js'),
+    vscode.Uri.joinPath(context.extensionUri, 'dist', 'app', 'bundle.js'),
   )
   return `
   <!DOCTYPE html>
@@ -132,8 +87,7 @@ export const isDirOrMkdir = async (p: string) => {
   try {
     const stat = await fs.stat(p)
     // 判断是否为目录
-    if (!stat.isDirectory()) return false
-    return true
+    return stat.isDirectory()
   } catch (error) {
     // 判断是否存在
     console.error(error)
@@ -142,3 +96,6 @@ export const isDirOrMkdir = async (p: string) => {
     return true
   }
 }
+
+export const getEOLOfEditor = (editor: vscode.TextEditor) =>
+  editor.document.eol === vscode.EndOfLine.LF ? '\n' : '\r\n'

@@ -1,7 +1,7 @@
 import * as vscode from 'vscode'
 import * as diagnostics from './diagnostics'
 import * as assert from 'assert'
-import path from 'path'
+import * as path from 'path'
 
 suite('Extension Config Diagnostics Modules Test Suite', () => {
   vscode.window.showInformationMessage('Start config/diagnostics test')

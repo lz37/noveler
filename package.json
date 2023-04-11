@@ -104,29 +104,17 @@
   "contributes": {
     "commands": [
       {
-        "command": "noveler.preview",
-        "title": "preview",
+        "command": "noveler.createIndent",
+        "title": "auto create indent",
         "category": "noveler"
-      },
-      {
-        "command": "noveler.reloadCSV",
-        "title": "reload CSV",
-        "category": "noveler",
-        "shortTitle": "刷新 CSV 配置文件"
       }
     ],
     "keybindings": [
       {
-        "command": "noveler.preview",
-        "key": "alt+\\",
-        "mac": "alt+\\",
+        "command": "noveler.createIndent",
+        "key": "enter",
+        "mac": "enter",
         "when": "editorTextFocus && editorLangId == 'plaintext'"
-      },
-      {
-        "command": "noveler.reloadCSV",
-        "key": "alt+f",
-        "mac": "alt+f",
-        "when": "editorTextFocus"
       }
     ],
     "colors": [

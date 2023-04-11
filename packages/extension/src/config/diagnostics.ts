@@ -64,6 +64,12 @@ export const getTXTSingleData = async (p: string) => {
   return dataSet
 }
 
+/**
+ *
+ * @param p 绝对路径
+ * @param txtFiles 文件名（无后缀）
+ * @returns
+ */
 const getTXTDatas = async (p: string, txtFiles: string[]) => {
   if (txtFiles.length === 0) return undefined
   const map = new Map<string, Set<string>>()
