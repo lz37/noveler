@@ -11,9 +11,6 @@
   "version": "0.0.1",
   "author": "zerozawa",
   "license": "GPL-3.0",
-  "dependencies": {
-    "csv-parse": "^5.3.6"
-  },
   "devDependencies": {
     "@types/node": "^16.17"
   }

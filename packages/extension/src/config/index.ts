@@ -37,7 +37,7 @@ export const set = (
         // 更新配置
         vscode.workspace
           .getConfiguration()
-          .update(`${extPrefix}.${item}`, config[item], target)
+          .update(`${extPrefix}.${String(item)}`, config[item], target)
       }
     })
   } else {

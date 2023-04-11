@@ -1,5 +1,5 @@
 {
-  "key": "key",
+  "nameKey": "key",
   "hoverKey": "hoverKey",
   "decorationRenderOptions": {
     "color": "#9e952f"

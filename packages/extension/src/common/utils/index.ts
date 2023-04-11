@@ -1,5 +1,5 @@
 import { NovelerRouter } from '../types'
-import { promises as fs } from 'fs'
+import * as fs from 'fs/promises'
 import * as vscode from 'vscode'
 import * as osPath from 'path'
 
@@ -122,3 +122,23 @@ export const getFileNameInDir = async (
       // 删除最后一个
       return item.split('.').slice(0, -1).join('.')
     })
+
+/**
+ *
+ * @param p 绝对路径
+ * @returns true: 是目录或新建目录，false: 不是目录
+ */
+export const isDirOrMkdir = async (p: string) => {
+  try {
+    const stat = await fs.stat(p)
+    // 判断是否为目录
+    if (!stat.isDirectory()) return false
+    return true
+  } catch (error) {
+    // 判断是否存在
+    console.error(error)
+    // 递归创建目录
+    await fs.mkdir(p, { recursive: true })
+    return true
+  }
+}

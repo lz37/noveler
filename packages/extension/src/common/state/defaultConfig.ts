@@ -16,7 +16,7 @@ export const config: IConfig = {
 }
 
 export const csvOpt: CSVOption = {
-  key: 'name',
+  nameKey: 'name',
   suggestPrefix: '',
 }
 
