@@ -73,8 +73,7 @@ export const getTXTSingleData = async (p: string) => {
 const getTXTDatas = async (p: string, txtFiles: string[]) => {
   if (txtFiles.length === 0) return undefined
   const map = new Map<string, Set<string>>()
-  for (let i = 0; i < txtFiles.length; i++) {
-    const file = txtFiles[i]
+  for await (const file of txtFiles) {
     const data = await getTXTSingleData(path.join(p, `${file}.txt`))
     map.set(file, data)
   }
@@ -96,8 +95,7 @@ export const getDiagnosticsFromAllWorkspaces = async (
   roots: readonly vscode.WorkspaceFolder[],
 ) => {
   const map = new Map<string, Map<string, TXTContent>>()
-  for (let i = 0; i < roots.length; i++) {
-    const root = roots[i]
+  for await (const root of roots) {
     const p = path.join(root.uri.fsPath, config.get().diagnosticDir)
     const isDir = await utils.isDirOrMkdir(p)
     if (!isDir) continue

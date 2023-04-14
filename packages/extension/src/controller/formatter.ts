@@ -2,13 +2,14 @@ import * as vscode from 'vscode'
 import * as utils from '../common/utils'
 import * as config from '../config'
 import * as R from 'ramda'
+import * as state from '../common/state'
+import { IConfig } from 'src/common/types'
 
 export const init = (context: vscode.ExtensionContext) => {
   context.subscriptions.push(formatProvider)
 }
 
-const formatFoo = (document: vscode.TextDocument) => {
-  const conf = config.get()
+const formatFoo = (document: vscode.TextDocument) => (conf: IConfig) => {
   const lineArr: string[] = []
   const indention = ' '.repeat(conf.autoIndentSpaces)
   const spaceLines = R.range(0)(conf.autoIndentLines).map(() => '')
@@ -27,14 +28,22 @@ const formatFoo = (document: vscode.TextDocument) => {
 }
 
 export const formatProvider =
-  vscode.languages.registerDocumentFormattingEditProvider('plaintext', {
-    provideDocumentFormattingEdits: (document) => {
-      const lineArr = formatFoo(document)
-      return [
-        vscode.TextEdit.replace(
-          new vscode.Range(0, 0, document.lineCount, 0),
-          lineArr.join('\n'),
-        ),
-      ]
+  vscode.languages.registerDocumentFormattingEditProvider(
+    state.funcTarget.formatter,
+    {
+      provideDocumentFormattingEdits: (document) => {
+        return R.ifElse(
+          () => utils.isNovelDoc(document)(config.get()),
+          () => [
+            vscode.TextEdit.replace(
+              new vscode.Range(0, 0, document.lineCount, 0),
+              formatFoo(document)(config.get(true)).join(
+                utils.getEOLOfDoc(document),
+              ),
+            ),
+          ],
+          () => [],
+        )()
+      },
     },
-  })
+  )

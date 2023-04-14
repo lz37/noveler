@@ -10,14 +10,13 @@
 
 import * as vscode from 'vscode'
 import * as config from './config'
-import * as indention from './modules/indention'
-import * as formatter from './modules/formatter'
+import * as controller from './controller'
 
 // this method is called when vs code is activated
 export const activate = async (context: vscode.ExtensionContext) => {
+  const roots = vscode.workspace.workspaceFolders ?? []
   await config.askForPlaintextConf()
-  indention.init(context)
-  formatter.init(context)
+  await controller.init(context, roots)
 }
 
 export const deactivate = () => {

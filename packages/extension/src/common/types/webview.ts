@@ -1,4 +1,4 @@
-import { IConfig } from './csv'
+import { IConfig } from './config'
 
 export type NovelerRouter = '/' | '/preview' | '/panel'
 

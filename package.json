@@ -107,6 +107,11 @@
         "command": "noveler.createIndent",
         "title": "auto create indent",
         "category": "noveler"
+      },
+      {
+        "command": "noveler.reloadDecoration",
+        "title": "reload decoration",
+        "category": "noveler"
       }
     ],
     "keybindings": [

@@ -28,8 +28,7 @@ export const getCSVOptions = async (p: string, csvFiles: string[]) => {
   })
   // 遍历，读取json文件
   const jsonFiles = await utils.getFileNameInDir(p, 'json', false)
-  for (let i = 0; i < jsonFiles.length; i++) {
-    const file = jsonFiles[i]
+  for await (const file of jsonFiles) {
     if (!optMap.has(file)) continue
     const data = await fs.readFile(path.join(p, `${file}.json`), 'utf-8')
     // data解析json
@@ -43,33 +42,50 @@ export const getCSVOptions = async (p: string, csvFiles: string[]) => {
   return optMap
 }
 
-export const getInfosFromAllWorkspaces = async (
-  roots: readonly vscode.WorkspaceFolder[],
-) => {
-  const map = new Map<string, Map<string, CSVContent>>()
-  for (let i = 0; i < roots.length; i++) {
-    const root = roots[i]
-    const p = path.join(root.uri.fsPath, config.get().infoDir)
-    const isDir = await utils.isDirOrMkdir(p)
-    if (!isDir) continue
-    // 遍历，获取csv文件
-    const csvFiles = await utils.getFileNameInDir(p, 'csv', false)
-    const opts = await getCSVOptions(p, csvFiles)
-    if (!opts) continue
-    const datas = await getCSVDatas(p, csvFiles, opts)
-    if (!datas) continue
-    const csvContentMap = new Map<string, CSVContent>()
-    csvFiles.forEach((file) => {
-      const opt = opts.get(file)
-      const data = datas.get(file)
-      if (opt && data) {
-        csvContentMap.set(file, { data, ...opt })
-      }
-    })
-    map.set(root.uri.path, csvContentMap)
+export const getInfosFromAllWorkspacesClosure = () => {
+  const io = async (roots: readonly vscode.WorkspaceFolder[]) => {
+    const map = new Map<string, Map<string, CSVContent>>()
+    for await (const root of roots) {
+      const p = path.join(root.uri.fsPath, config.get().infoDir)
+      const isDir = await utils.isDirOrMkdir(p)
+      if (!isDir) continue
+      // 遍历，获取csv文件
+      const csvFiles = await utils.getFileNameInDir(p, 'csv', false)
+      const opts = await getCSVOptions(p, csvFiles)
+      if (!opts) continue
+      const datas = await getCSVDatas(p, csvFiles, opts)
+      if (!datas) continue
+      const csvContentMap = new Map<string, CSVContent>()
+      csvFiles.forEach((file) => {
+        const opt = opts.get(file)
+        const data = datas.get(file)
+        if (opt && data) {
+          csvContentMap.set(file, { data, ...opt })
+        }
+      })
+      map.set(root.uri.path, csvContentMap)
+    }
+    return map
   }
-  return map
+  let onceIO = R.once(io)
+  /**
+   *
+   * @param fromCache 是否从缓存中读取
+   * @returns
+   */
+  return (roots: readonly vscode.WorkspaceFolder[]) =>
+    (fromCache = true) =>
+      R.ifElse(
+        () => fromCache,
+        () => onceIO(roots),
+        () => {
+          onceIO = R.once(io)
+          return onceIO(roots)
+        },
+      )()
 }
+
+export const getInfosFromAllWorkspaces = getInfosFromAllWorkspacesClosure()
 
 /**
  *
@@ -85,8 +101,7 @@ export const getCSVDatas = async (
 ) => {
   if (csvFiles.length === 0) return undefined
   const csvDataMap = new Map<string, CSVData>()
-  for (let i = 0; i < csvFiles.length; i++) {
-    const csvFile = csvFiles[i]
+  for await (const csvFile of csvFiles) {
     const csvOpt = optMap.get(csvFile)!
     const csvPath = path.join(p, `${csvFile}.csv`)
     const csvData = await readCSV(csvPath, csvOpt)
@@ -121,7 +136,10 @@ const readCSV = async (p: string, csvOpt: CSVOption) => {
     const key = row[nameKetIndex].trim()
     content.set(key, {})
     if (csvOpt.hoverKey && hoverKeyIndex !== -1) {
-      const hover = new vscode.MarkdownString(row[hoverKeyIndex].trim())
+      // split by br tag
+      const hover = row[hoverKeyIndex]
+        .split(new RegExp('<br\\s*?/?>', 'g'))
+        .map((s) => new vscode.MarkdownString(s.trim()))
       content.set(key, { hover })
     }
     if (csvOpt.aliasKey && aliasKeyIndex !== -1) {
@@ -141,13 +159,12 @@ const findKeyPos = (
   let nameKetIndex = -1
   let hoverKeyIndex = -1
   let aliasKeyIndex = -1
-  for (let i = 0; i < firstRow.length; i++) {
-    const element = firstRow[i]
+  firstRow.forEach((element, i) => {
     R.cond([
       [R.equals(nameKey), () => (nameKetIndex = i)],
       [R.equals(hoverKey), () => (hoverKeyIndex = i)],
       [R.equals(aliasKey), () => (aliasKeyIndex = i)],
     ])(element.trim())
-  }
+  })
   return { nameKetIndex, hoverKeyIndex, aliasKeyIndex }
 }

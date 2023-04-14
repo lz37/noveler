@@ -1,3 +1,5 @@
 export * from './webview'
 export * from './csv'
 export * from './txt'
+export * from './config'
+export * from './decoration'

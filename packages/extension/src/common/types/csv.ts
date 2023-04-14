@@ -2,24 +2,6 @@ import * as vscode from 'vscode'
 
 export type CompletionItemKindKeys = keyof typeof vscode.CompletionItemKind
 
-export interface IConfig {
-  showApplyRecommendPlaintextConf: boolean
-  autoIndent: boolean
-  autoIndentSpaces: number
-  autoIndentLines: number
-  usePangu: boolean
-  previewFontSize: number
-  previewIndentionLength: number
-  previewSpaceLines: number
-  customHighlight?: { [key: string]: vscode.DecorationRenderOptions }
-  completionChar: string
-  outlinesDir: string
-  diagnosticDir: string
-  infoDir: string
-}
-//#endregion
-
-//#region csv
 export interface CSVOption {
   /**对应的csv数据是去掉首尾空格的字符串 */
   nameKey: string
@@ -40,7 +22,7 @@ export interface CSVOption {
 export type CSVData = Map<
   string,
   {
-    hover?: vscode.MarkdownString
+    hover?: vscode.MarkdownString[]
     alias?: string[]
   }
 >

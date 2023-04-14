@@ -1,30 +1,46 @@
 import * as vscode from 'vscode'
 import * as defaultConfig from '../common/state/defaultConfig'
 import { IConfig } from '../common/types'
-import { extPrefix, editorPrefix } from '../common/state'
+import { extPrefix } from '../common/state'
 import * as osPath from 'path'
+import * as R from 'ramda'
 
-/** 一次性取出一个整体的配置 而非一个一个 (保证配置一致性以及类型可读性)
- * @returns {IConfig}
- * @throws {Error} 请确保noveler的infoDir、outlinesDir、diagnosticDir都是相对路径
- */
-export const get = () => {
-  const userConf = vscode.workspace
-    .getConfiguration(undefined)
-    .get(extPrefix) as IConfig
-  const conf = { ...defaultConfig.config, ...userConf } as IConfig
-  const { infoDir, outlinesDir, diagnosticDir } = conf
-  if (
-    [infoDir, outlinesDir, diagnosticDir]
-      .map((dir) => !osPath.isAbsolute(dir))
-      .includes(false)
-  ) {
-    throw new Error(
-      '请确保noveler的infoDir、outlinesDir、diagnosticDir都是相对路径',
-    )
+const getClosure = () => {
+  /**
+   * 一次性取出一个整体的配置 而非一个一个 (保证配置一致性以及类型可读性)
+   * @returns {IConfig}
+   * @throws {Error} 请确保noveler的infoDir、outlinesDir、diagnosticDir都是相对路径
+   */
+  const io = () => {
+    const userConf = vscode.workspace
+      .getConfiguration(undefined)
+      .get(extPrefix) as IConfig
+    const conf = { ...defaultConfig.config, ...userConf } as IConfig
+    const { infoDir, outlinesDir, diagnosticDir } = conf
+    if (
+      [infoDir, outlinesDir, diagnosticDir]
+        .map((dir) => !osPath.isAbsolute(dir))
+        .includes(false)
+    ) {
+      throw new Error(
+        '请确保noveler的infoDir、outlinesDir、diagnosticDir都是相对路径',
+      )
+    }
+    return conf
   }
-  return conf
+  let onceIO = R.once(io)
+  return (fromCache = false) =>
+    R.ifElse(
+      () => fromCache,
+      () => onceIO(),
+      () => {
+        onceIO = R.once(io)
+        return onceIO()
+      },
+    )()
 }
+
+export const get = getClosure()
 
 export const set = (
   config: IConfig,
@@ -60,7 +76,7 @@ const judgeConfigIsRecommended = (config: vscode.WorkspaceConfiguration) => {
 }
 
 export const askForPlaintextConf = async () => {
-  const plaintextEditorConf = vscode.workspace.getConfiguration(editorPrefix, {
+  const plaintextEditorConf = vscode.workspace.getConfiguration('editor', {
     languageId: 'plaintext',
   })
   if (!get().showApplyRecommendPlaintextConf) return
@@ -90,13 +106,13 @@ export const askForPlaintextConf = async () => {
         })
         break
       case '不再提示(工作区)':
-        set({ ...get(), showApplyRecommendPlaintextConf: false }, [
+        set({ ...get(true), showApplyRecommendPlaintextConf: false }, [
           'showApplyRecommendPlaintextConf',
         ])
         break
       case '不再提示(全局)':
         set(
-          { ...get(), showApplyRecommendPlaintextConf: false },
+          { ...get(true), showApplyRecommendPlaintextConf: false },
           ['showApplyRecommendPlaintextConf'],
           vscode.ConfigurationTarget.Global,
         )
