@@ -2,6 +2,8 @@ import * as vscode from 'vscode'
 import * as indention from './indention'
 import * as formatter from './formatter'
 import * as decoration from './decoration'
+import * as completion from './completion'
+import * as watcher from './watcher'
 
 export const init = async (
   context: vscode.ExtensionContext,
@@ -9,5 +11,7 @@ export const init = async (
 ) => {
   indention.init(context)
   formatter.init(context)
-  await decoration.init(context, roots)
+  decoration.init(context, roots)
+  completion.init(context, roots)
+  await watcher.init(context, roots)
 }

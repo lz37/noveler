@@ -1,7 +1,8 @@
 export enum Noveler {
-  CreateIndent = 'noveler.createIndent',
-  ReloadDecoration = 'noveler.reloadDecoration',
+  CREATE_INDENT = 'noveler.createIndent',
+  RELOAD_DECORATION = 'noveler.reloadDecoration',
+  RELOAD_COMPLETION = 'noveler.reloadCompletion',
 }
 export enum Etc {
-  FormatDocument = 'editor.action.formatDocument',
+  FORMAT_DOCUMENT = 'editor.action.formatDocument',
 }

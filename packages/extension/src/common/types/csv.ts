@@ -10,7 +10,7 @@ export interface CSVOption {
   /**对应的csv数据是一个json数组 */
   aliasKey?: string
   decorationRenderOptions?: vscode.DecorationRenderOptions
-  suggestPrefix: string
+  description: string
   suggestKind?: CompletionItemKindKeys
 }
 
@@ -22,7 +22,7 @@ export interface CSVOption {
 export type CSVData = Map<
   string,
   {
-    hover?: vscode.MarkdownString[]
+    hover?: vscode.MarkdownString
     alias?: string[]
   }
 >
@@ -33,6 +33,6 @@ export type CSVData = Map<
 export interface CSVContent {
   data: CSVData
   decorationRenderOptions?: vscode.DecorationRenderOptions
-  suggestPrefix: string
+  description: string
   suggestKind?: CompletionItemKindKeys
 }

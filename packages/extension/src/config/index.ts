@@ -5,10 +5,9 @@ import { extPrefix } from '../common/state'
 import * as osPath from 'path'
 import * as R from 'ramda'
 
-const getClosure = () => {
+export const get = (() => {
   /**
    * 一次性取出一个整体的配置 而非一个一个 (保证配置一致性以及类型可读性)
-   * @returns {IConfig}
    * @throws {Error} 请确保noveler的infoDir、outlinesDir、diagnosticDir都是相对路径
    */
   const io = () => {
@@ -38,9 +37,7 @@ const getClosure = () => {
         return onceIO()
       },
     )()
-}
-
-export const get = getClosure()
+})()
 
 export const set = (
   config: IConfig,

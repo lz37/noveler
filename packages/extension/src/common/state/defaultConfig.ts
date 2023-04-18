@@ -18,7 +18,7 @@ export const config: IConfig = {
 
 export const csvOpt: CSVOption = {
   nameKey: 'name',
-  suggestPrefix: '',
+  description: '',
 }
 
 export const txtOpt: TXTOptions = {

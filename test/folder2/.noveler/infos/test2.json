@@ -1,9 +1,6 @@
 {
   "nameKey": "key",
   "hoverKey": "hoverKey",
-  "decorationRenderOptions": {
-    "color": "#9e952f"
-  },
-  "suggestPrefix": "配角：",
+  "description": "配角",
   "suggestKind": "Method"
 }

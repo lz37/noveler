@@ -8,7 +8,7 @@ import * as utils from '../common/utils'
 suite('Extension Formatter Modules Test Suite', () => {
   vscode.window.showInformationMessage('Start modules/formatter test')
 
-  test(commands.Etc.FormatDocument, async () => {
+  test(commands.Etc.FORMAT_DOCUMENT, async () => {
     const testText = '1\n3可以1\n\n1啊'
     const textFilePath = path.join(
       __dirname,
@@ -16,7 +16,7 @@ suite('Extension Formatter Modules Test Suite', () => {
       '..',
       'test',
       'folder1',
-      `testFor${commands.Etc.FormatDocument}.txt`,
+      `testFor${commands.Etc.FORMAT_DOCUMENT}.txt`,
     )
     // vscode 创建文件
     await vscode.workspace.fs.writeFile(
@@ -27,7 +27,7 @@ suite('Extension Formatter Modules Test Suite', () => {
     const doc = await vscode.workspace.openTextDocument(textFilePath)
     const editor = await vscode.window.showTextDocument(doc)
     // 执行命令
-    await vscode.commands.executeCommand(commands.Etc.FormatDocument)
+    await vscode.commands.executeCommand(commands.Etc.FORMAT_DOCUMENT)
     // 获取文本
     const text = editor.document.getText()
     // 删除文件

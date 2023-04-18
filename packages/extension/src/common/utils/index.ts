@@ -3,6 +3,8 @@ import * as fs from 'fs/promises'
 import * as vscode from 'vscode'
 import * as R from 'ramda'
 import * as osPath from 'path'
+import * as md5 from 'ts-md5'
+import chroma from 'chroma-js'
 
 const getStrLength = (str: string) => {
   // eslint-disable-next-line no-control-regex
@@ -106,46 +108,77 @@ export const getEOLOfEditor = (editor: vscode.TextEditor) =>
 export const getEOLOfDoc = (document: vscode.TextDocument) =>
   document.eol === vscode.EndOfLine.LF ? '\n' : '\r\n'
 
-export const getRandomColor = () =>
-  '#' + ('00000' + ((Math.random() * 0x1000000) << 0).toString(16)).slice(-6)
+export const getRandomColor = (str?: string) => {
+  const onceHash = R.once(() => md5.Md5.hashStr(str || ''))
+  return R.ifElse(
+    (str) => !str,
+    R.always(chroma.random()),
+    () =>
+      R.partial(
+        chroma,
+        R.range(0)(3)
+          .map(onceHash)
+          .map((x, i) => x.slice((i * 32) / 3, ((i + 1) * 32) / 3))
+          .map((x) => parseInt(x, 16))
+          .map(Math.abs)
+          .map((x) => x % 256)
+          .map(Math.floor),
+      )(),
+  )(str)
+}
 
 /**
  * 在亮色区间随机生成
  * @returns
  */
-export const getRandomColorLight = () => {
-  const r = Math.floor(Math.random() * 256)
-  const g = Math.floor(Math.random() * 256)
-  const b = Math.floor(Math.random() * 256)
-  const max = Math.max(r, g, b)
-  const min = Math.min(r, g, b)
-  const diff = max - min
-  const l = (max + min) / 2
+export const getRandomColorLight = (str?: string) => {
+  const onceChroma = R.once(() => getRandomColor(str))
   return R.cond([
+    [R.lte(0.5), R.always(onceChroma().hex())],
     [
-      R.lt(0.5),
-      R.always(`rgb(${r - diff / 2}, ${g - diff / 2}, ${b - diff / 2})`),
+      R.T,
+      () =>
+        (function fn(color: chroma.Color, i: number): chroma.Color {
+          return R.ifElse(
+            (i: number) => i > 3,
+            () => color,
+            () =>
+              R.ifElse(
+                (c: chroma.Color) => c.luminance() > 0.5,
+                (c) => c,
+                (c) => fn(c, i + 1),
+              )(color.brighten()),
+          )(i)
+        })(onceChroma(), 0).hex(),
     ],
-    [R.T, R.always(`rgb(${r + diff / 2}, ${g + diff / 2}, ${b + diff / 2})`)],
-  ])(l)
+  ])(onceChroma().luminance())
 }
 
 /**
  * 在暗色区间随机生成
  * @returns
  */
-export const getRandomColorDark = () => {
-  const r = Math.floor(Math.random() * 256)
-  const g = Math.floor(Math.random() * 256)
-  const b = Math.floor(Math.random() * 256)
-  const max = Math.max(r, g, b)
-  const min = Math.min(r, g, b)
-  const diff = max - min
-  const l = (max + min) / 2
+export const getRandomColorDark = (str?: string) => {
+  const onceChroma = R.once(() => getRandomColor(str))
   return R.cond([
-    [R.lt(0.5), R.always(`rgb(${r - diff}, ${g - diff}, ${b - diff})`)],
-    [R.T, R.always(`rgb(${r + diff}, ${g + diff}, ${b + diff})`)],
-  ])(l)
+    [R.gte(0.5), R.always(onceChroma().hex())],
+    [
+      R.T,
+      () =>
+        (function fn(color: chroma.Color, i: number): chroma.Color {
+          return R.ifElse(
+            (i: number) => i > 3,
+            () => color,
+            () =>
+              R.ifElse(
+                (c: chroma.Color) => c.luminance() > 0.5,
+                (c) => c,
+                (c) => fn(c, i + 1),
+              )(color.darken()),
+          )(i)
+        })(onceChroma(), 0).hex(),
+    ],
+  ])(onceChroma().luminance())
 }
 
 export const isNovelDoc =

@@ -9,42 +9,17 @@ import * as decoration from '../modules/decoration'
 import * as defaultConf from '../common/state/defaultConfig'
 import { RenderOptions, CSVContent, DealedRenderOptions } from '../common/types'
 
-export const init = async (
+export const init = (
   context: vscode.ExtensionContext,
   roots: readonly vscode.WorkspaceFolder[],
 ) => {
   context.subscriptions.push(
-    onChangeConf(context, roots),
+    onChangeConf,
     onChangeDocument,
     onChangeEditor,
     reloadCommand(roots),
-    ...watchInfosDir(roots),
   )
-  await execReloadDecorationCommand()
 }
-
-const watchInfosDirClosure = () => {
-  const makeWatcher = (workspace: vscode.WorkspaceFolder) => {
-    const watcher = vscode.workspace.createFileSystemWatcher(
-      // 监控csv与js
-      new vscode.RelativePattern(
-        workspace,
-        `${config.get().infoDir}/*.{csv,json}`,
-      ),
-    )
-    ;[watcher.onDidChange, watcher.onDidCreate, watcher.onDidDelete].forEach(
-      (fn) => fn(execReloadDecorationCommand),
-    )
-    return watcher
-  }
-  let watches: vscode.FileSystemWatcher[] | undefined = undefined
-  return (roots: readonly vscode.WorkspaceFolder[]) => {
-    watches?.forEach((w) => w.dispose())
-    watches = roots.map(makeWatcher)
-    return watches
-  }
-}
-const watchInfosDir = watchInfosDirClosure()
 
 const onChangeEditor = vscode.window.onDidChangeActiveTextEditor((editor) => {
   if (!editor) return
@@ -61,23 +36,18 @@ const onChangeDocument = vscode.workspace.onDidChangeTextDocument((event) => {
   decoration.updateDecorations(editor)(dealedRenderOptionsMapHandle(false)())
 })
 
-const onChangeConf = (
-  context: vscode.ExtensionContext,
-  roots: readonly vscode.WorkspaceFolder[],
-) =>
-  vscode.workspace.onDidChangeConfiguration(async (event) => {
-    if (!event.affectsConfiguration(state.extPrefix)) return
-    await execReloadDecorationCommand()
-    if (!event.affectsConfiguration(`${state.extPrefix}.infoDir`)) return
-    context.subscriptions.push(...watchInfosDir(roots))
-  })
+const onChangeConf = vscode.workspace.onDidChangeConfiguration(
+  async (event) => {
+    if (event.affectsConfiguration(`${state.extPrefix}.customHighlight`))
+      await vscode.commands.executeCommand(command.Noveler.RELOAD_DECORATION)
+  },
+)
 
-const execReloadDecorationCommand = () =>
-  vscode.commands.executeCommand(command.Noveler.ReloadDecoration)
 const reloadCommand = (roots: readonly vscode.WorkspaceFolder[]) =>
   vscode.commands.registerTextEditorCommand(
-    command.Noveler.ReloadDecoration,
+    command.Noveler.RELOAD_DECORATION,
     async (editor) => {
+      // 销毁
       dealedRenderOptionsMapHandle(true)()
       R.pipe(
         getRenderOptionsMap(config.get().customHighlight ?? {}),
@@ -89,6 +59,7 @@ const reloadCommand = (roots: readonly vscode.WorkspaceFolder[]) =>
           return map
         },
         decoration.createDecorations,
+        // 添加
         dealedRenderOptionsMapHandle(true),
         (map) => {
           if (!state.funcTarget.decoration.includes(editor.document.languageId))
@@ -100,10 +71,10 @@ const reloadCommand = (roots: readonly vscode.WorkspaceFolder[]) =>
     },
   )
 
-interface DealedRenderOption2Itself {
-  (map?: Map<RegExp, DealedRenderOptions>): Map<RegExp, DealedRenderOptions>
-}
-const dealedRenderOptionsMapHandleClosure = () => {
+type DealedRenderOption2Itself = (
+  map?: Map<RegExp, DealedRenderOptions>,
+) => Map<RegExp, DealedRenderOptions>
+const dealedRenderOptionsMapHandle = (() => {
   let map = new Map<RegExp, DealedRenderOptions>()
   /**
    * @param set 是否更新缓存， false 给了参数也没用 true 不给参数就销毁
@@ -123,8 +94,7 @@ const dealedRenderOptionsMapHandleClosure = () => {
       (): DealedRenderOption2Itself => () => map,
     )()
   }
-}
-const dealedRenderOptionsMapHandle = dealedRenderOptionsMapHandleClosure()
+})()
 
 const getRenderOptionsMap =
   (customHighlight: { [key: string]: vscode.DecorationRenderOptions }) =>
@@ -133,8 +103,8 @@ const getRenderOptionsMap =
       customHighlightIntoRenderOptionsMap(customHighlight),
       (map) => {
         csvContentsMap.forEach((value) => {
-          value.forEach((value) => {
-            CSVContentIntoRenderOptionsMap(value)(map)
+          value.forEach((value, key) => {
+            CSVContentIntoRenderOptionsMap(key, value)(map)
           })
         })
         return map
@@ -154,10 +124,12 @@ const customHighlightIntoRenderOptionsMap =
     }, map)
 
 const CSVContentIntoRenderOptionsMap =
-  (csvContent: CSVContent) => (map: Map<RegExp, RenderOptions>) => {
+  (filename: string, csvContent: CSVContent) =>
+  (map: Map<RegExp, RenderOptions>) => {
+    const onceGetRandomColorLight = R.once(utils.getRandomColorLight)
+    const onceGetRandomColorDark = R.once(utils.getRandomColorDark)
     const { data, decorationRenderOptions } = csvContent
     data.forEach((value, key) => {
-      if (!decorationRenderOptions && !value.hover) return
       map.set(
         new RegExp(
           value.alias
@@ -168,10 +140,10 @@ const CSVContentIntoRenderOptionsMap =
         {
           renderOpts: decorationRenderOptions ?? {
             dark: {
-              color: utils.getRandomColorLight(),
+              color: onceGetRandomColorLight(filename),
             },
             light: {
-              color: utils.getRandomColorDark(),
+              color: onceGetRandomColorDark(filename),
             },
             cursor: 'pointer',
           },

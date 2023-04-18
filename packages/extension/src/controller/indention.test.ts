@@ -8,7 +8,7 @@ import * as utils from '../common/utils'
 suite('Extension Indention Modules Test Suite', () => {
   vscode.window.showInformationMessage('Start modules/indention test')
 
-  test(commands.Noveler.CreateIndent, async () => {
+  test(commands.Noveler.CREATE_INDENT, async () => {
     const testText = '1'
     const textFilePath = path.join(
       __dirname,
@@ -16,7 +16,7 @@ suite('Extension Indention Modules Test Suite', () => {
       '..',
       'test',
       'folder1',
-      `testFor${commands.Noveler.CreateIndent}.txt`,
+      `testFor${commands.Noveler.CREATE_INDENT}.txt`,
     )
     // vscode 创建文件
     await vscode.workspace.fs.writeFile(
@@ -33,7 +33,7 @@ suite('Extension Indention Modules Test Suite', () => {
     )
     editor.selection = new vscode.Selection(position, position)
     // 执行命令
-    await vscode.commands.executeCommand(commands.Noveler.CreateIndent)
+    await vscode.commands.executeCommand(commands.Noveler.CREATE_INDENT)
     // 获取文本
     const text = editor.document.getText()
     // 删除文件

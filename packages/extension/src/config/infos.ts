@@ -22,7 +22,7 @@ export const getCSVOptions = async (p: string, csvFiles: string[]) => {
   const optMap = new Map<string, CSVOption>()
   csvFiles.forEach((file) => {
     optMap.set(file, {
-      suggestPrefix: file,
+      description: file,
       nameKey: defaultConfig.csvOpt.nameKey,
     })
   })
@@ -42,7 +42,7 @@ export const getCSVOptions = async (p: string, csvFiles: string[]) => {
   return optMap
 }
 
-export const getInfosFromAllWorkspacesClosure = () => {
+export const getInfosFromAllWorkspaces = (() => {
   const io = async (roots: readonly vscode.WorkspaceFolder[]) => {
     const map = new Map<string, Map<string, CSVContent>>()
     for await (const root of roots) {
@@ -53,7 +53,7 @@ export const getInfosFromAllWorkspacesClosure = () => {
       const csvFiles = await utils.getFileNameInDir(p, 'csv', false)
       const opts = await getCSVOptions(p, csvFiles)
       if (!opts) continue
-      const datas = await getCSVDatas(p, csvFiles, opts)
+      const datas = await getCSVDatas(root, p, csvFiles, opts)
       if (!datas) continue
       const csvContentMap = new Map<string, CSVContent>()
       csvFiles.forEach((file) => {
@@ -83,18 +83,17 @@ export const getInfosFromAllWorkspacesClosure = () => {
           return onceIO(roots)
         },
       )()
-}
-
-export const getInfosFromAllWorkspaces = getInfosFromAllWorkspacesClosure()
+})()
 
 /**
- *
+ * @param root vscode.WorkspaceFolder
  * @param p 绝对路径
  * @param csvFiles p目录下的文件名（无后缀）
  * @param optMap
  * @returns 键为无后缀文件名
  */
 export const getCSVDatas = async (
+  root: vscode.WorkspaceFolder,
   p: string,
   csvFiles: string[],
   optMap: Map<string, CSVOption>,
@@ -104,7 +103,7 @@ export const getCSVDatas = async (
   for await (const csvFile of csvFiles) {
     const csvOpt = optMap.get(csvFile)!
     const csvPath = path.join(p, `${csvFile}.csv`)
-    const csvData = await readCSV(csvPath, csvOpt)
+    const csvData = await readCSV(root, csvPath, csvOpt)
     if (!csvData) continue
     csvDataMap.set(csvFile, csvData)
   }
@@ -116,7 +115,11 @@ export const getCSVDatas = async (
  * @param p 绝对路径
  * @throws Error `配置文件 ${p} 中没有找到 nameKey: ${csvOpt.nameKey}`
  */
-const readCSV = async (p: string, csvOpt: CSVOption) => {
+const readCSV = async (
+  root: vscode.WorkspaceFolder,
+  p: string,
+  csvOpt: CSVOption,
+) => {
   const dataString = await fs.readFile(p, 'utf-8')
   const records = <string[][]>csv.parse(dataString)
   const firstRow = records[0]
@@ -137,13 +140,15 @@ const readCSV = async (p: string, csvOpt: CSVOption) => {
     content.set(key, {})
     if (csvOpt.hoverKey && hoverKeyIndex !== -1) {
       // split by br tag
-      const hover = row[hoverKeyIndex]
-        .split(new RegExp('<br\\s*?/?>', 'g'))
-        .map((s) => new vscode.MarkdownString(s.trim()))
+      const hover = new vscode.MarkdownString(row[hoverKeyIndex].trim())
+      hover.supportThemeIcons = true
+      hover.isTrusted = true
+      hover.supportHtml = true
+      hover.baseUri = root.uri
       content.set(key, { hover })
     }
     if (csvOpt.aliasKey && aliasKeyIndex !== -1) {
-      const alias = <string[]>JSON.parse(row[aliasKeyIndex].trim())
+      const alias = row[aliasKeyIndex].split('|').map(R.trim)
       content.set(key, { ...content.get(key), alias })
     }
   })

@@ -10,10 +10,9 @@ import * as state from '../common/state'
 import * as R from 'ramda'
 
 const createIndentCommand = vscode.commands.registerTextEditorCommand(
-  command.Noveler.CreateIndent,
+  command.Noveler.CREATE_INDENT,
   (editor, edit) => {
     const { autoIndent, autoIndentLines, autoIndentSpaces } = config.get()
-    const positions = editor.selections.map((item) => item.active)
     const eol = utils.getEOLOfEditor(editor)
     const includesLangId = state.funcTarget.indention.includes(
       editor.document.languageId,
@@ -30,8 +29,10 @@ const createIndentCommand = vscode.commands.registerTextEditorCommand(
       [R.T, () => eol],
     ])()
     // 获得 multi-cursor 模式下的 position
-    positions.forEach((position) => {
-      edit.insert(position, indention)
+    editor.selections = editor.selections.map((selection) => {
+      edit.replace(new vscode.Range(selection.start, selection.end), indention)
+      // 取消选中
+      return new vscode.Selection(selection.end, selection.end)
     })
   },
 )

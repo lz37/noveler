@@ -1,9 +1,7 @@
 {
   "nameKey": "key",
   "hoverKey": "hoverKey",
-  "decorationRenderOptions": {
-    "color": "#9e952f"
-  },
-  "suggestPrefix": "主角：",
+  "aliasKey": "aliasKey",
+  "description": "主角",
   "suggestKind": "Method"
 }
