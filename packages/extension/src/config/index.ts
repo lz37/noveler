@@ -32,10 +32,7 @@ export const get = (() => {
     R.ifElse(
       () => fromCache,
       () => onceIO(),
-      () => {
-        onceIO = R.once(io)
-        return onceIO()
-      },
+      () => (onceIO = R.once(io))(),
     )()
 })()
 
@@ -43,26 +40,25 @@ export const set = (
   config: IConfig,
   items?: (keyof IConfig)[],
   target = vscode.ConfigurationTarget.Workspace,
-) => {
-  if (items) {
-    items.forEach((item) => {
-      if (config[item]) {
+) =>
+  R.ifElse(
+    () => !items,
+    () =>
+      Object.keys(config).forEach((key) =>
+        // 更新配置
+        vscode.workspace
+          .getConfiguration()
+          .update(`${extPrefix}.${key}`, (config as any)[key], target),
+      ),
+    () =>
+      items?.forEach((item) => {
+        if (config[item]) return
         // 更新配置
         vscode.workspace
           .getConfiguration()
           .update(`${extPrefix}.${String(item)}`, config[item], target)
-      }
-    })
-  } else {
-    const keys = Object.keys(config)
-    keys.forEach((key) => {
-      // 更新配置
-      vscode.workspace
-        .getConfiguration()
-        .update(`${extPrefix}.${key}`, (config as any)[key], target)
-    })
-  }
-}
+      }),
+  )()
 
 const judgeConfigIsRecommended = (config: vscode.WorkspaceConfiguration) => {
   let isCommand = true
