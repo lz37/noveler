@@ -15,9 +15,7 @@ import { runTests } from '@vscode/test-electron'
     await runTests({
       extensionDevelopmentPath,
       extensionTestsPath,
-      launchArgs: [
-        path.resolve(__dirname, '../../test/workspace.code-workspace'),
-      ],
+      launchArgs: [path.resolve(__dirname, '../../test/workspace.code-workspace')],
     })
   } catch (err) {
     console.error('Failed to run tests', err)

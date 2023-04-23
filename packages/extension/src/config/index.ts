@@ -11,19 +11,11 @@ export const get = (() => {
    * @throws {Error} 请确保noveler的infoDir、outlinesDir、diagnosticDir都是相对路径
    */
   const io = () => {
-    const userConf = vscode.workspace
-      .getConfiguration(undefined)
-      .get(extPrefix) as IConfig
+    const userConf = vscode.workspace.getConfiguration(undefined).get(extPrefix) as IConfig
     const conf = { ...defaultConfig.config, ...userConf } as IConfig
     const { infoDir, outlinesDir, diagnosticDir } = conf
-    if (
-      [infoDir, outlinesDir, diagnosticDir]
-        .map((dir) => !osPath.isAbsolute(dir))
-        .includes(false)
-    ) {
-      throw new Error(
-        '请确保noveler的infoDir、outlinesDir、diagnosticDir都是相对路径',
-      )
+    if ([infoDir, outlinesDir, diagnosticDir].map((dir) => !osPath.isAbsolute(dir)).includes(false)) {
+      throw new Error('请确保noveler的infoDir、outlinesDir、diagnosticDir都是相对路径')
     }
     return conf
   }
@@ -36,27 +28,19 @@ export const get = (() => {
     )()
 })()
 
-export const set = (
-  config: IConfig,
-  items?: (keyof IConfig)[],
-  target = vscode.ConfigurationTarget.Workspace,
-) =>
+export const set = (config: IConfig, items?: (keyof IConfig)[], target = vscode.ConfigurationTarget.Workspace) =>
   R.ifElse(
     () => !items,
     () =>
       Object.keys(config).forEach((key) =>
         // 更新配置
-        vscode.workspace
-          .getConfiguration()
-          .update(`${extPrefix}.${key}`, (config as any)[key], target),
+        vscode.workspace.getConfiguration().update(`${extPrefix}.${key}`, (config as any)[key], target),
       ),
     () =>
       items?.forEach((item) => {
         if (config[item]) return
         // 更新配置
-        vscode.workspace
-          .getConfiguration()
-          .update(`${extPrefix}.${String(item)}`, config[item], target)
+        vscode.workspace.getConfiguration().update(`${extPrefix}.${String(item)}`, config[item], target)
       }),
   )()
 
@@ -90,18 +74,11 @@ export const askForPlaintextConf = async () => {
           ['autoIndent', 'none'],
           ['wordWrap', 'bounded'],
         ].forEach(([key, value]) => {
-          plaintextEditorConf.update(
-            key,
-            value,
-            vscode.ConfigurationTarget.Workspace,
-            true,
-          )
+          plaintextEditorConf.update(key, value, vscode.ConfigurationTarget.Workspace, true)
         })
         break
       case '不再提示(工作区)':
-        set({ ...get(true), showApplyRecommendPlaintextConf: false }, [
-          'showApplyRecommendPlaintextConf',
-        ])
+        set({ ...get(true), showApplyRecommendPlaintextConf: false }, ['showApplyRecommendPlaintextConf'])
         break
       case '不再提示(全局)':
         set(

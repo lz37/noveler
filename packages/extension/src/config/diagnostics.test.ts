@@ -5,13 +5,7 @@ import * as path from 'path'
 
 suite('Extension Config Diagnostics Modules Test Suite', () => {
   vscode.window.showInformationMessage('Start config/diagnostics test')
-  const diagnosticsFiles = [
-    '',
-    '国内地名.Warning',
-    '民族.Warning',
-    '宗教.Warning1',
-    'test1',
-  ]
+  const diagnosticsFiles = ['', '国内地名.Warning', '民族.Warning', '宗教.Warning1', 'test1']
   const diagnosticsTest1Path = path.join(
     __dirname,
     '..',

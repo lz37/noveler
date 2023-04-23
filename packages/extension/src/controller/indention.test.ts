@@ -19,10 +19,7 @@ suite('Extension Indention Modules Test Suite', () => {
       `testFor${commands.Noveler.CREATE_INDENT}.txt`,
     )
     // vscode 创建文件
-    await vscode.workspace.fs.writeFile(
-      vscode.Uri.file(textFilePath),
-      Buffer.from(testText),
-    )
+    await vscode.workspace.fs.writeFile(vscode.Uri.file(textFilePath), Buffer.from(testText))
     // vscode打开文件
     const doc = await vscode.workspace.openTextDocument(textFilePath)
     const editor = await vscode.window.showTextDocument(doc)
@@ -40,11 +37,6 @@ suite('Extension Indention Modules Test Suite', () => {
     await vscode.workspace.fs.delete(vscode.Uri.file(textFilePath))
     const conf = config.get()
     const EOL = utils.getEOLOfEditor(editor)
-    assert.strictEqual(
-      text,
-      `${testText}${EOL.repeat(conf.autoIndentLines + 1)}${' '.repeat(
-        conf.autoIndentSpaces,
-      )}`,
-    )
+    assert.strictEqual(text, `${testText}${EOL.repeat(conf.autoIndentLines + 1)}${' '.repeat(conf.autoIndentSpaces)}`)
   })
 })

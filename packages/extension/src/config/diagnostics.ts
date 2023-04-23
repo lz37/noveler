@@ -21,8 +21,7 @@ export const getTXTOptions = (txtFiles: string[]) => {
   return optMap
 }
 
-const isDiagnosticSeverity = (a: string) =>
-  Object.values(vscode.DiagnosticSeverity).includes(a)
+const isDiagnosticSeverity = (a: string) => Object.values(vscode.DiagnosticSeverity).includes(a)
 
 /**
  *
@@ -32,10 +31,7 @@ const isDiagnosticSeverity = (a: string) =>
 const getSingleTXTOption = (txtFile: string): TXTOptions =>
   R.cond([
     [() => !txtFile, () => defaultConfig.txtOpt],
-    [
-      (split) => split.length === 1,
-      (split) => ({ ...defaultConfig.txtOpt, message: split[0] }),
-    ],
+    [(split) => split.length === 1, (split) => ({ ...defaultConfig.txtOpt, message: split[0] })],
     [
       (split) => !isDiagnosticSeverity(split[1]),
       (split) => ({
@@ -91,9 +87,7 @@ const handleTxtData = (data: string) =>
     // 去除空字符串
     .filter((a) => a.trim())
 
-export const getDiagnosticsFromAllWorkspaces = async (
-  roots: readonly vscode.WorkspaceFolder[],
-) => {
+export const getDiagnosticsFromAllWorkspaces = async (roots: readonly vscode.WorkspaceFolder[]) => {
   const map = new Map<string, Map<string, TXTContent>>()
   for await (const root of roots) {
     const p = path.join(root.uri.fsPath, config.get().diagnosticDir)

@@ -16,11 +16,7 @@ export const splitStr = (sChars: string) => {
   let str = ''
   for (let i = 0; i < sChars.length; i++) {
     const schar = sChars.charAt(i)
-    if (
-      typeof schar == 'undefined' ||
-      typeof sChars.charAt(i + 1) == 'undefined'
-    )
-      break
+    if (typeof schar == 'undefined' || typeof sChars.charAt(i + 1) == 'undefined') break
     str += schar
     if (getStrLength(schar) != getStrLength(sChars.charAt(i + 1))) {
       str += ' '
@@ -35,9 +31,7 @@ export const createWebviewHtml = (
   context: vscode.ExtensionContext,
   showScrollbar = false,
 ) => {
-  const bundleScriptPath = webview.asWebviewUri(
-    vscode.Uri.joinPath(context.extensionUri, 'dist', 'app', 'bundle.js'),
-  )
+  const bundleScriptPath = webview.asWebviewUri(vscode.Uri.joinPath(context.extensionUri, 'dist', 'app', 'bundle.js'))
   return `
   <!DOCTYPE html>
     <html lang="en">
@@ -65,11 +59,7 @@ export const createWebviewHtml = (
  * @param withFileTypes 是否返回文件类型
  * @returns
  */
-export const getFileNameInDir = async (
-  dir: string,
-  fileType?: string,
-  withFileTypes = true,
-) =>
+export const getFileNameInDir = async (dir: string, fileType?: string, withFileTypes = true) =>
   (await fs.readdir(dir, { withFileTypes: true }))
     .map((item) => item.name)
     .filter((item) => {
@@ -102,11 +92,9 @@ export const isDirOrMkdir = async (p: string) =>
       return true
     })
 
-export const getEOLOfEditor = (editor: vscode.TextEditor) =>
-  getEOLOfDoc(editor.document)
+export const getEOLOfEditor = (editor: vscode.TextEditor) => getEOLOfDoc(editor.document)
 
-export const getEOLOfDoc = (document: vscode.TextDocument) =>
-  document.eol === vscode.EndOfLine.LF ? '\n' : '\r\n'
+export const getEOLOfDoc = (document: vscode.TextDocument) => (document.eol === vscode.EndOfLine.LF ? '\n' : '\r\n')
 
 export const getRandomColor = (str?: string) => {
   const onceHash = R.once(() => md5.Md5.hashStr(str || ''))
@@ -188,12 +176,7 @@ export const isNovelDoc =
    * @param dirsConf 每个value都得是相对路径
    * @returns
    */
-  (dirsConf: {
-    infoDir: string
-    novelDir: string
-    outlinesDir: string
-    diagnosticDir: string
-  }) => {
+  (dirsConf: { infoDir: string; novelDir: string; outlinesDir: string; diagnosticDir: string }) => {
     // get absolute path of file
     const path = document.uri.path
     // get workspace of file
@@ -202,10 +185,7 @@ export const isNovelDoc =
     // dirsConf 变为绝对路径
     const absoluteDirsConf = R.zipObj(
       R.keys(dirsConf),
-      R.map(
-        (p) => osPath.join(workspace?.uri.path, String(p)),
-        R.values(dirsConf),
-      ),
+      R.map((p) => osPath.join(workspace?.uri.path, String(p)), R.values(dirsConf)),
     )
     // 判断是否在配置的目录下
     return (

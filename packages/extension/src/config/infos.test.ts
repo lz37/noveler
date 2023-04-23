@@ -7,15 +7,7 @@ import { CSVData, CSVOption } from '../common/types'
 
 suite('Extension Config Infos Modules Test Suite', () => {
   vscode.window.showInformationMessage('Start config/infos test')
-  const folder2InfosPath = path.join(
-    __dirname,
-    '..',
-    '..',
-    'test',
-    'folder2',
-    '.noveler',
-    'infos',
-  )
+  const folder2InfosPath = path.join(__dirname, '..', '..', 'test', 'folder2', '.noveler', 'infos')
   const test1Opt: CSVOption = {
     nameKey: 'key',
     hoverKey: 'hoverKey',
@@ -36,11 +28,7 @@ suite('Extension Config Infos Modules Test Suite', () => {
   }
 
   test('getCSVOptions', async () => {
-    const csvFiles = await utils.getFileNameInDir(
-      folder2InfosPath,
-      'csv',
-      false,
-    )
+    const csvFiles = await utils.getFileNameInDir(folder2InfosPath, 'csv', false)
     const csvOptions = await infos.getCSVOptions(folder2InfosPath, csvFiles)
     const map = new Map<string, CSVOption>()
     map.set('test1', test1Opt)
@@ -59,12 +47,7 @@ suite('Extension Config Infos Modules Test Suite', () => {
   test('getCSVDatas', async () => {
     const optMap = new Map<string, CSVOption>()
     optMap.set('test2', test2Opt)
-    const dataMap = await infos.getCSVDatas(
-      vscode.workspace.workspaceFolders![1],
-      folder2InfosPath,
-      ['test2'],
-      optMap,
-    )
+    const dataMap = await infos.getCSVDatas(vscode.workspace.workspaceFolders![1], folder2InfosPath, ['test2'], optMap)
     const testMap = new Map<string, CSVData>()
     testMap.set(
       'test2',

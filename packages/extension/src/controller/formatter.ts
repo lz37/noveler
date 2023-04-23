@@ -27,23 +27,17 @@ const formatFoo = (document: vscode.TextDocument) => (conf: IConfig) => {
   return lineArr
 }
 
-export const formatProvider =
-  vscode.languages.registerDocumentFormattingEditProvider(
-    state.funcTarget.formatter,
-    {
-      provideDocumentFormattingEdits: (document) => {
-        return R.ifElse(
-          () => utils.isNovelDoc(document)(config.get()),
-          () => [
-            vscode.TextEdit.replace(
-              new vscode.Range(0, 0, document.lineCount, 0),
-              formatFoo(document)(config.get(true)).join(
-                utils.getEOLOfDoc(document),
-              ),
-            ),
-          ],
-          () => [],
-        )()
-      },
-    },
-  )
+export const formatProvider = vscode.languages.registerDocumentFormattingEditProvider(state.funcTarget.formatter, {
+  provideDocumentFormattingEdits: (document) => {
+    return R.ifElse(
+      () => utils.isNovelDoc(document)(config.get()),
+      () => [
+        vscode.TextEdit.replace(
+          new vscode.Range(0, 0, document.lineCount, 0),
+          formatFoo(document)(config.get(true)).join(utils.getEOLOfDoc(document)),
+        ),
+      ],
+      () => [],
+    )()
+  },
+})

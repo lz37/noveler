@@ -19,10 +19,7 @@ suite('Extension Formatter Modules Test Suite', () => {
       `testFor${commands.Etc.FORMAT_DOCUMENT}.txt`,
     )
     // vscode 创建文件
-    await vscode.workspace.fs.writeFile(
-      vscode.Uri.file(textFilePath),
-      Buffer.from(testText),
-    )
+    await vscode.workspace.fs.writeFile(vscode.Uri.file(textFilePath), Buffer.from(testText))
     // vscode打开文件
     const doc = await vscode.workspace.openTextDocument(textFilePath)
     const editor = await vscode.window.showTextDocument(doc)

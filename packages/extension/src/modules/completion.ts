@@ -49,21 +49,15 @@ export const makeProvider =
     return vscode.languages.registerCompletionItemProvider(
       state.funcTarget.completion,
       {
-        provideCompletionItems: (
-          document: vscode.TextDocument,
-          position: vscode.Position,
-        ) => {
-          const linePrefix = document
-            .lineAt(position)
-            .text.slice(0, position.character)
+        provideCompletionItems: (document: vscode.TextDocument, position: vscode.Position) => {
+          const linePrefix = document.lineAt(position).text.slice(0, position.character)
           const items: vscode.CompletionItem[] = []
           const needDelete = linePrefix.endsWith(completionChar)
           opts.forEach(({ insertText, label, document, kind }) => {
             const item = new vscode.CompletionItem(label, kind)
             item.insertText = insertText
             item.documentation = document
-            if (needDelete)
-              item.additionalTextEdits = additionalTextEdits(position, 1)
+            if (needDelete) item.additionalTextEdits = additionalTextEdits(position, 1)
             items.push(item)
           })
           return items

@@ -1,9 +1,4 @@
-import {
-  createMemoryRouter,
-  IndexRouteObject,
-  NonIndexRouteObject,
-  Navigate,
-} from 'react-router-dom'
+import { createMemoryRouter, IndexRouteObject, NonIndexRouteObject, Navigate } from 'react-router-dom'
 import { NovelerRouter } from 'extension/src/common/types'
 import Preview from './components/Preview'
 import Panel from './components/Panel'

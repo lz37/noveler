@@ -8,8 +8,7 @@ import * as csv from 'csv-parse/sync'
 import * as R from 'ramda'
 import { CSVContent, CSVData, CSVOption } from '../common/types'
 
-const isCompletionItemKind = (a: string) =>
-  Object.values(vscode.CompletionItemKind).includes(a)
+const isCompletionItemKind = (a: string) => Object.values(vscode.CompletionItemKind).includes(a)
 
 /**
  *
@@ -115,11 +114,7 @@ export const getCSVDatas = async (
  * @param p 绝对路径
  * @throws Error `配置文件 ${p} 中没有找到 nameKey: ${csvOpt.nameKey}`
  */
-const readCSV = async (
-  root: vscode.WorkspaceFolder,
-  p: string,
-  csvOpt: CSVOption,
-) => {
+const readCSV = async (root: vscode.WorkspaceFolder, p: string, csvOpt: CSVOption) => {
   const dataString = await fs.readFile(p, 'utf-8')
   const records = <string[][]>csv.parse(dataString)
   const firstRow = records[0]
@@ -155,12 +150,7 @@ const readCSV = async (
   return content
 }
 
-const findKeyPos = (
-  firstRow: string[],
-  nameKey: string,
-  hoverKey?: string,
-  aliasKey?: string,
-) => {
+const findKeyPos = (firstRow: string[], nameKey: string, hoverKey?: string, aliasKey?: string) => {
   let nameKetIndex = -1
   let hoverKeyIndex = -1
   let aliasKeyIndex = -1
