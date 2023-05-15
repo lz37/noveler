@@ -8,10 +8,10 @@ const statusItem = vscode.window.createStatusBarItem(
   vscode.StatusBarAlignment.Left,
   11.4514,
 )
+let startLength = 0
 let textItems: StatusItem[] = []
 let includingSpace = false
 let inputLength = 0
-let inputLengthIncludingSpace = 0
 let isShow = false
 let accumulateTime = 0
 let timeUnit = 10
@@ -58,6 +58,9 @@ const updateConf = () => {
   timeUnit = statusTimeUnit
   includingSpace = statusIncludingSpace
   textItems = statusItems
+  if (vscode.window.activeTextEditor) {
+    startLength = textLengthHandler(vscode.window.activeTextEditor.document)
+  }
   if (isShow) {
     statusItem.show()
   } else {
@@ -74,14 +77,14 @@ export const init = () => {
     const editor = vscode.window.activeTextEditor
     if (Date.now() < maxTime) {
       updateItemText(
-        includingSpace ? inputLengthIncludingSpace : inputLength,
+        inputLength,
         editor ? textLengthHandler(editor.document) : 0,
         ++accumulateTime,
         false,
       )
     } else {
       updateItemText(
-        includingSpace ? inputLengthIncludingSpace : inputLength,
+        inputLength,
         editor ? textLengthHandler(editor.document) : 0,
         accumulateTime,
         true,
@@ -106,33 +109,6 @@ const textLengthHandler = (doc: vscode.TextDocument) => {
   return textLength
 }
 
-const inputHandler = (
-  inputLength: number,
-  event: vscode.TextDocumentChangeEvent,
-  includingSpace: boolean,
-) => {
-  inputLength += event.contentChanges
-    .map((change) => {
-      let length = 0
-      // 扫描输入内容，去掉空格与回车的权重
-      change.text.split('').forEach((char) => {
-        if (includingSpace) {
-          if (char != '\r' && char != '\n') length += 1
-        } else {
-          if (char != ' ' && char != '\r' && char != '\n') length += 1
-        }
-      })
-      return length - change.rangeLength
-    })
-    .reduce((a, b) => {
-      return a + b
-    }, 0)
-  if (inputLength < 0) {
-    inputLength = 0
-  }
-  return inputLength
-}
-
 const update = (event: vscode.TextDocumentChangeEvent) => {
   if (maxTime == 0) {
     maxTime = Date.now()
@@ -140,23 +116,10 @@ const update = (event: vscode.TextDocumentChangeEvent) => {
   }
   maxTime = Date.now() + timeUnit * 1000
   // 获取总计的输入长度，删除掉的部分计算为负数
-  inputLength = inputHandler(inputLength, event, false)
-  inputLengthIncludingSpace = inputHandler(
-    inputLengthIncludingSpace,
-    event,
-    true,
-  )
+  inputLength = textLengthHandler(event.document) - startLength
   const textLength = textLengthHandler(event.document)
-  updateItemText(
-    includingSpace ? inputLengthIncludingSpace : inputLength,
-    textLength,
-    accumulateTime,
-    false,
-  )
-  updateItemTooltip(
-    includingSpace ? inputLengthIncludingSpace : inputLength,
-    textLength,
-  )
+  updateItemText(inputLength, textLength, accumulateTime, false)
+  updateItemTooltip(inputLength, textLength)
 }
 
 export const change = vscode.workspace.onDidChangeTextDocument((event) => {
@@ -170,11 +133,8 @@ export const changeEditor = vscode.window.onDidChangeActiveTextEditor(
   (editor) => {
     if (!editor) return
     if (!targetFiles.includes(editor.document.languageId)) return
-    const textLength = textLengthHandler(editor.document)
-    updateItemTooltip(
-      includingSpace ? inputLengthIncludingSpace : inputLength,
-      textLength,
-    )
+    startLength = textLengthHandler(editor.document)
+    updateItemTooltip(inputLength, startLength)
   },
 )
 

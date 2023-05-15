@@ -1,3 +1,12 @@
+## [1.4.6](https://github.com/lz37/noveler/compare/v1.4.5...v1.4.6) (2023-05-15)
+
+
+### Bug Fixes
+
+* word count bug ([e43f117](https://github.com/lz37/noveler/commit/e43f117b41c6c8dd8b6a3de6da87a7834d9c5c73))
+
+
+
 ## 1.4.5 (2023-04-09)
 
 

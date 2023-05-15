@@ -2,7 +2,8 @@ const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
 const path = require('path')
 const resolve = (dir) => path.resolve(__dirname, dir)
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
-
+/** @typedef {import('webpack').Configuration} WebpackConfig **/
+/** @type WebpackConfig */
 module.exports = {
   entry: path.join(__dirname, 'src', 'index.tsx'),
   resolve: {
