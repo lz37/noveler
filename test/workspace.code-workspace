@@ -17,7 +17,7 @@
 		"noveler.autoSaveTime": 10,
 		"noveler.confTXTFiles": [
 			{
-				"path": "/home/zerozawa/Sources/mine/noveler/test/folder2/test",
+				"path": "/home/zerozawa/src/mine/noveler/test/folder2/test",
 				"message": "敏感词"
 			}
 		],
@@ -31,7 +31,7 @@
 				}
 			},
 			{
-				"path": "/home/zerozawa/Sources/mine/noveler/test/folder2/test1.csv",
+				"path": "/home/zerozawa/src/mine/noveler/test/folder2/test1.csv",
 				"key": "key",
 				"hoverKey": "hoverKey",
 				"decorationRenderOptions": {
@@ -41,7 +41,7 @@
 				"suggestKind": "Method"
 			},
 			{
-				"path": "/home/zerozawa/Sources/mine/noveler/test/folder2/test2.csv",
+				"path": "/home/zerozawa/src/mine/noveler/test/folder2/test2.csv",
 				"key": "key",
 				"hoverKey": "hoverKey",
 				"decorationRenderOptions": {
