@@ -114,16 +114,17 @@ const loadFile = async () => {
   } catch (error) {
     vscode.window.showErrorMessage((<Error>error).message)
   }
-  if (!conf) return
-  const confEntries = Object.entries(conf)
   highlightConf = {}
   completion.reset()
-  for (let i = 0; i < confEntries.length; i++) {
-    const [key, value] = confEntries[i]
-    const paths = await getAbsolutePaths(key, '.csv')
-    if (!paths || paths.length == 0) continue
-    for (let j = 0; j < paths.length; j++) {
-      await handleCSV({ ...{ path: paths[j] }, ...value })
+  if (conf) {
+    const confEntries = Object.entries(conf)
+    for (let i = 0; i < confEntries.length; i++) {
+      const [key, value] = confEntries[i]
+      const paths = await getAbsolutePaths(key, '.csv')
+      if (!paths || paths.length == 0) continue
+      for (let j = 0; j < paths.length; j++) {
+        await handleCSV({ ...{ path: paths[j] }, ...value })
+      }
     }
   }
   decoration.reloadConf(highlightConf)
