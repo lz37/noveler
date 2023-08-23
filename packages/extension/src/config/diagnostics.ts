@@ -12,14 +12,15 @@ import path from 'path'
  * @param txtFiles 文件名（不带后缀）
  * @returns
  */
-export const getTXTOptions = (txtFiles: string[]) => {
-  if (txtFiles.length === 0) return undefined
-  const optMap = new Map<string, TXTOptions>()
-  txtFiles.forEach((file) => {
-    optMap.set(file, getSingleTXTOption(file))
-  })
-  return optMap
-}
+export const getTXTOptions = R.ifElse(
+  (txtFiles: string[]) => txtFiles.length === 0,
+  () => undefined,
+  (txtFiles) =>
+    R.pipe(
+      () => txtFiles.map((file) => ({ file, opt: getSingleTXTOption(file) })),
+      (m) => new Map(m.map(({ file, opt }) => [file, opt])),
+    )(),
+)
 
 const isDiagnosticSeverity = (a: string) => Object.values(vscode.DiagnosticSeverity).includes(a)
 
@@ -28,16 +29,12 @@ const isDiagnosticSeverity = (a: string) => Object.values(vscode.DiagnosticSever
  * @param txtFile 文件名（不带后缀）
  * @returns
  */
-const getSingleTXTOption = (txtFile: string): TXTOptions =>
+const getSingleTXTOption = (txtFile: string) =>
   R.cond([
     [() => !txtFile, () => defaultConfig.txtOpt],
-    [(split) => split.length === 1, (split) => ({ ...defaultConfig.txtOpt, message: split[0] })],
     [
-      (split) => !isDiagnosticSeverity(split[1]),
-      (split) => ({
-        message: split[0],
-        diagnosticSeverity: defaultConfig.txtOpt.diagnosticSeverity,
-      }),
+      (split: string[]) => split.length === 1 || !isDiagnosticSeverity(split[1]),
+      (split) => ({ ...defaultConfig.txtOpt, message: split[0] }),
     ],
     [
       R.T,
@@ -53,12 +50,11 @@ const getSingleTXTOption = (txtFile: string): TXTOptions =>
  * @param p 绝对路径
  * @returns
  */
-export const getTXTSingleData = async (p: string) => {
-  const data = await fs.readFile(p, 'utf-8')
-  const dealedData = handleTxtData(data)
-  const dataSet = new Set(dealedData)
-  return dataSet
-}
+export const getTXTSingleData = (p: string) =>
+  fs
+    .readFile(p, 'utf-8')
+    .then(handleTxtData)
+    .then((data) => new Set(data))
 
 /**
  *
@@ -66,15 +62,19 @@ export const getTXTSingleData = async (p: string) => {
  * @param txtFiles 文件名（无后缀）
  * @returns
  */
-const getTXTDatas = async (p: string, txtFiles: string[]) => {
-  if (txtFiles.length === 0) return undefined
-  const map = new Map<string, Set<string>>()
-  for await (const file of txtFiles) {
-    const data = await getTXTSingleData(path.join(p, `${file}.txt`))
-    map.set(file, data)
-  }
-  return map
-}
+const getTXTDatas = async (p: string, txtFiles: string[]) =>
+  R.ifElse(
+    () => txtFiles.length === 0,
+    () => undefined,
+    () =>
+      R.pipe(
+        () => (file: string) => getTXTSingleData(path.join(p, `${file}.txt`)).then((data) => ({ file, data })),
+        (handle) =>
+          Promise.all(txtFiles.map((file) => handle(file))).then(
+            (m) => new Map(m.map(({ file, data }) => [file, data])),
+          ),
+      )(),
+  )()
 
 const handleTxtData = (data: string) =>
   data
@@ -103,9 +103,7 @@ export const getDiagnosticsFromAllWorkspaces = async (roots: readonly vscode.Wor
     txtFiles.forEach((file) => {
       const opt = opts.get(file)
       const data = datas.get(file)
-      if (opt && data) {
-        txtMap.set(file, { data, ...opt })
-      }
+      opt && data && txtMap.set(file, { data, ...opt })
     })
     map.set(root.uri.fsPath, txtMap)
   }

@@ -21,11 +21,13 @@ const createIndentCommand = vscode.commands.registerTextEditorCommand(command.No
     [R.T, () => eol],
   ])()
   // 获得 multi-cursor 模式下的 position
-  editor.selections = editor.selections.map((selection) => {
-    edit.replace(new vscode.Range(selection.start, selection.end), indention)
-    // 取消选中
-    return new vscode.Selection(selection.end, selection.end)
-  })
+  editor.selections = editor.selections.map((selection) =>
+    R.pipe(
+      () => edit.replace(new vscode.Range(selection.start, selection.end), indention),
+      // 取消选中
+      () => new vscode.Selection(selection.end, selection.end),
+    )(),
+  )
 })
 
 export const init = (context: vscode.ExtensionContext) => {

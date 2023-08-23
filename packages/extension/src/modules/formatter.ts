@@ -5,9 +5,7 @@ import * as R from 'ramda'
 import * as state from '../common/state'
 import { IConfig } from 'src/common/types'
 
-export const init = (context: vscode.ExtensionContext) => {
-  context.subscriptions.push(formatProvider)
-}
+export const init = (context: vscode.ExtensionContext) => context.subscriptions.push(formatProvider)
 
 const formatFoo = (document: vscode.TextDocument) => (conf: IConfig) => {
   const lineArr: string[] = []
@@ -28,8 +26,8 @@ const formatFoo = (document: vscode.TextDocument) => (conf: IConfig) => {
 }
 
 export const formatProvider = vscode.languages.registerDocumentFormattingEditProvider(state.funcTarget.formatter, {
-  provideDocumentFormattingEdits: (document) => {
-    return R.ifElse(
+  provideDocumentFormattingEdits: (document) =>
+    R.ifElse(
       () => utils.isNovelDoc(document)(config.get()),
       () => [
         vscode.TextEdit.replace(
@@ -38,6 +36,5 @@ export const formatProvider = vscode.languages.registerDocumentFormattingEditPro
         ),
       ],
       () => [],
-    )()
-  },
+    )(),
 })

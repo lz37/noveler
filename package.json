@@ -123,6 +123,12 @@
         "key": "enter",
         "mac": "enter",
         "when": "editorTextFocus && editorLangId == 'plaintext' && !suggestWidgetVisible && !findWidgetVisible && !replaceInputBoxFocus && !renameInputBoxFocus && !inSnippetMode && !editorReadonly && !editorTabMovesFocus && !editorHasMult"
+      },
+      {
+        "command": "noveler.triggerCompletion",
+        "key": "ctrl+space",
+        "mac": "cmd+space",
+        "when": "editorTextFocus && editorLangId == 'plaintext' && !suggestWidgetVisible && !findWidgetVisible && !replaceInputBoxFocus && !renameInputBoxFocus && !inSnippetMode && !editorReadonly && !editorTabMovesFocus && !editorHasMult && !editorHasSelection && !editorHasMultipleSelections"
       }
     ],
     "colors": [

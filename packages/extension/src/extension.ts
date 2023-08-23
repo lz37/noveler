@@ -10,14 +10,11 @@
 
 import * as vscode from 'vscode'
 import * as config from './config'
-import * as controller from './controller'
+import * as modules from './modules'
 
 // this method is called when vs code is activated
-export const activate = async (context: vscode.ExtensionContext) => {
-  const roots = vscode.workspace.workspaceFolders ?? []
-  await config.askForPlaintextConf()
-  await controller.init(context, roots)
-}
+export const activate = (context: vscode.ExtensionContext) =>
+  config.askForPlaintextConf().then(() => modules.init(context, vscode.workspace.workspaceFolders ?? []))
 
 export const deactivate = () => {
   // nothing to do

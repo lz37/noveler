@@ -1,6 +1,71 @@
 import * as vscode from 'vscode'
+import * as commands from '../common/commands'
+import * as config from '../config'
+import * as infos from '../config/infos'
+import * as R from 'ramda'
 import * as state from '../common/state'
 import { CSVContent, CompletionOption, IConfig } from '../common/types'
+
+export const init = async (context: vscode.ExtensionContext, roots: readonly vscode.WorkspaceFolder[]) => {
+  context.subscriptions.push(reloadCommand(context, roots))
+  context.subscriptions.push(deletePrefixCommand)
+  context.subscriptions.push(triggerCommandRegister(context))
+}
+
+const deletePrefixCommand = vscode.commands.registerTextEditorCommand(
+  commands.Noveler.DELETE_COMPLETION_PREFIX,
+  async (_, edit, position: vscode.Position, num: number) => {
+    const start = new vscode.Position(position.line, position.character - num)
+    const end = new vscode.Position(position.line, position.character - 1)
+    await new Promise((resolve) => {
+      edit.delete(new vscode.Range(start, end))
+      resolve(undefined)
+    })
+    vscode.commands.executeCommand(commands.Etc.TRIGGER_SUGGEST)
+  },
+)
+
+const triggerCommandRegister = (context: vscode.ExtensionContext) => {
+  const makeCommand = () =>
+    vscode.commands.registerTextEditorCommand(commands.Noveler.TRIGGER_COMPLETION, async (editor, edit) => {
+      await new Promise((resolve) => {
+        edit.insert(editor.selection.active, config.get().completionChar)
+        resolve(undefined)
+      })
+      vscode.commands.executeCommand(commands.Etc.TRIGGER_SUGGEST)
+    })
+  let triggerCommand: vscode.Disposable = makeCommand()
+  return vscode.workspace.onDidChangeConfiguration(() => {
+    triggerCommand.dispose()
+    triggerCommand = makeCommand()
+    context.subscriptions.push(triggerCommand)
+    vscode.commands.executeCommand(commands.Noveler.RELOAD_COMPLETION)
+  })
+}
+
+const reloadCommand = (context: vscode.ExtensionContext, roots: readonly vscode.WorkspaceFolder[]) =>
+  vscode.commands.registerCommand(commands.Noveler.RELOAD_COMPLETION, async () => {
+    storeProvider()()
+    R.pipe(
+      (map: Map<string, Map<string, CSVContent>>) => {
+        const newMap = new Map<string, CSVContent>()
+        map.forEach((value) => value.forEach((value, key) => newMap.set(key, value)))
+        return newMap
+      },
+      createCompletionOptions,
+      makeProvider(config.get()),
+      storeProvider(context),
+    )(await infos.getInfosFromAllWorkspaces(roots)())
+  })
+
+const storeProvider = (() => {
+  let disposable: vscode.Disposable | undefined = undefined
+  return (context?: vscode.ExtensionContext) => (provider?: vscode.Disposable) => {
+    disposable?.dispose()
+    disposable = provider
+    provider && context?.subscriptions.push(provider)
+  }
+})()
 
 const additionalTextEdits = (position: vscode.Position, l: number) => [
   vscode.TextEdit.delete(
@@ -11,7 +76,7 @@ const additionalTextEdits = (position: vscode.Position, l: number) => [
   ),
 ]
 
-export const createCompletionOptions = (map: Map<string, CSVContent>) => {
+const createCompletionOptions = (map: Map<string, CSVContent>) => {
   const completionOptions: CompletionOption[] = []
   map.forEach(({ suggestKind, description, data }) => {
     data.forEach(({ alias, hover }, key) => {
@@ -24,9 +89,7 @@ export const createCompletionOptions = (map: Map<string, CSVContent>) => {
         document.supportThemeIcons = hover?.supportThemeIcons
       }
       const insertTextChoices = [key]
-      if (alias) {
-        insertTextChoices.push(...alias)
-      }
+      if (alias) insertTextChoices.push(...alias)
       completionOptions.push({
         insertText: new vscode.SnippetString().appendChoice(insertTextChoices),
         document,
@@ -42,7 +105,7 @@ export const createCompletionOptions = (map: Map<string, CSVContent>) => {
   return completionOptions
 }
 
-export const makeProvider =
+const makeProvider =
   ({ completionChar }: IConfig) =>
   (opts: CompletionOption[]) => {
     const completionChars = completionChar === '' ? [''] : ['', completionChar]
@@ -55,6 +118,11 @@ export const makeProvider =
           const needDelete = linePrefix.endsWith(completionChar)
           opts.forEach(({ insertText, label, document, kind }) => {
             const item = new vscode.CompletionItem(label, kind)
+            item.command = {
+              command: commands.Noveler.DELETE_COMPLETION_PREFIX,
+              title: 'delete completion prefix',
+              arguments: [position, config.get().completionChar.length],
+            }
             item.insertText = insertText
             item.documentation = document
             if (needDelete) item.additionalTextEdits = additionalTextEdits(position, 1)

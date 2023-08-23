@@ -6,11 +6,12 @@ import * as osPath from 'path'
 import * as md5 from 'ts-md5'
 import chroma from 'chroma-js'
 
-const getStrLength = (str: string) => {
-  // eslint-disable-next-line no-control-regex
-  const cArr = str.match(/[^\x00-\xff]/gi)
-  return str.length + (cArr == null ? 0 : cArr.length)
-}
+const getStrLength = (str: string) =>
+  R.pipe(
+    // eslint-disable-next-line no-control-regex
+    () => str.match(/[^\x00-\xff]/gi),
+    (cArr) => str.length + (cArr == null ? 0 : cArr.length),
+  )()
 
 export const splitStr = (sChars: string) => {
   let str = ''
@@ -30,28 +31,35 @@ export const createWebviewHtml = (
   webview: vscode.Webview,
   context: vscode.ExtensionContext,
   showScrollbar = false,
-) => {
-  const bundleScriptPath = webview.asWebviewUri(vscode.Uri.joinPath(context.extensionUri, 'dist', 'app', 'bundle.js'))
-  return `
-  <!DOCTYPE html>
+) =>
+  R.pipe(
+    () => webview.asWebviewUri(vscode.Uri.joinPath(context.extensionUri, 'dist', 'app', 'bundle.js')),
+    (bundleScriptPath) =>
+      `
+    <!DOCTYPE html>
     <html lang="en">
-    <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>React App</title>
-    </head>
-    <body>
-      <div id="root"></div>
-      <script>
-        const vscode = acquireVsCodeApi();
-        const home = '${router}'
-        const showScrollbar = ${showScrollbar}
-      </script>
-      <script src="${bundleScriptPath}"></script>
-    </body>
-  </html>
-`
-}
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>React App</title>
+      </head>
+      <body>
+        <div id="root"></div>
+        <script>
+          const vscode = acquireVsCodeApi();
+          const home = '${router}'
+          const showScrollbar = ${showScrollbar}
+        </script>
+        <script src="${bundleScriptPath}"></script>
+      </body>
+    </html>
+  `
+        .split(/\r?\n/)
+        .map((s) => s.trim())
+        .filter((s) => s)
+        .join(''),
+  )()
+
 /**
  *
  * @param dir 绝对路径
@@ -59,115 +67,90 @@ export const createWebviewHtml = (
  * @param withFileTypes 是否返回文件类型
  * @returns
  */
-export const getFileNameInDir = async (dir: string, fileType?: string, withFileTypes = true) =>
-  (await fs.readdir(dir, { withFileTypes: true }))
-    .map((item) => item.name)
-    .filter((item) => {
-      if (!fileType) return true
-      return item.endsWith(`.${fileType}`)
-    })
-    .map((item) => {
-      if (withFileTypes) return item
-      // 删除最后一个
-      return item.split('.').slice(0, -1).join('.')
-    })
+export const getFileNameInDir = (dir: string, fileType?: string, withFileTypes = true) =>
+  fs.readdir(dir, { withFileTypes: true }).then((files) =>
+    files
+      .map((item) => item.name)
+      .filter((item) => {
+        if (!fileType) return true
+        return item.endsWith(`.${fileType}`)
+      })
+      .map((item) => {
+        if (withFileTypes) return item
+        // 删除最后一个
+        return item.split('.').slice(0, -1).join('.')
+      }),
+  )
 
 /**
  *
  * @param p 绝对路径
  * @returns true: 是目录或新建目录，false: 不是目录
  */
-export const isDirOrMkdir = async (p: string) =>
+export const isDirOrMkdir = (p: string) =>
   fs
     .stat(p)
     .then(
       // 判断是否为目录
       (stat) => stat.isDirectory(),
     )
-    .catch(async (err) => {
-      // 判断是否存在
-      console.log(err)
-      // 递归创建目录
-      await fs.mkdir(p, { recursive: true })
-      return true
-    })
+    .catch(R.pipe(console.log, () => fs.mkdir(p, { recursive: true }).then(R.T)))
 
 export const getEOLOfEditor = (editor: vscode.TextEditor) => getEOLOfDoc(editor.document)
 
 export const getEOLOfDoc = (document: vscode.TextDocument) => (document.eol === vscode.EndOfLine.LF ? '\n' : '\r\n')
 
-export const getRandomColor = (str?: string) => {
-  const onceHash = R.once(() => md5.Md5.hashStr(str || ''))
-  return R.ifElse(
-    (str) => !str,
-    R.always(chroma.random()),
-    () =>
-      R.partial(
-        chroma,
-        R.range(0)(3)
-          .map(onceHash)
-          .map((x, i) => x.slice((i * 32) / 3, ((i + 1) * 32) / 3))
-          .map((x) => parseInt(x, 16))
-          .map(Math.abs)
-          .map((x) => x % 256)
-          .map(Math.floor),
-      )(),
-  )(str)
-}
+const getRandomColor = (str?: string) =>
+  R.pipe(
+    () => R.once(() => md5.Md5.hashStr(str || '')),
+    (onceHash) =>
+      R.ifElse(
+        (str) => !str,
+        R.always(chroma.random()),
+        () =>
+          R.partial(
+            chroma,
+            R.range(0)(3)
+              // 调用三次 后面两次取缓存
+              .map(onceHash)
+              .map((x, i) => x.slice((i * 32) / 3, ((i + 1) * 32) / 3))
+              .map((x) => parseInt(x, 16))
+              .map(Math.abs)
+              .map((x) => x % 256)
+              .map(Math.floor),
+          )(),
+      )(str),
+  )()
+
+const getRandomColorWrapper = (compare: (l: number) => boolean, action: 'brighten' | 'darken', str?: string) =>
+  R.pipe(
+    () => R.once(() => getRandomColor(str)),
+    (onceChroma) =>
+      (function fn(color: chroma.Color, i: number): chroma.Color {
+        return R.ifElse(
+          () => i > 3,
+          () => color,
+          () =>
+            R.ifElse(
+              (c: chroma.Color) => compare(c.luminance()),
+              (c) => c,
+              (c) => fn(c, i + 1),
+            )(color[action]()),
+        )()
+      })(onceChroma(), 0).hex(),
+  )()
 
 /**
  * 在亮色区间随机生成
  * @returns
  */
-export const getRandomColorLight = (str?: string) => {
-  const onceChroma = R.once(() => getRandomColor(str))
-  return R.cond([
-    [R.lte(0.5), R.always(onceChroma().hex())],
-    [
-      R.T,
-      () =>
-        (function fn(color: chroma.Color, i: number): chroma.Color {
-          return R.ifElse(
-            (i: number) => i > 3,
-            () => color,
-            () =>
-              R.ifElse(
-                (c: chroma.Color) => c.luminance() > 0.5,
-                (c) => c,
-                (c) => fn(c, i + 1),
-              )(color.brighten()),
-          )(i)
-        })(onceChroma(), 0).hex(),
-    ],
-  ])(onceChroma().luminance())
-}
+export const getRandomColorLight = (str?: string) => getRandomColorWrapper(R.lte(0.5), 'brighten', str)
 
 /**
  * 在暗色区间随机生成
  * @returns
  */
-export const getRandomColorDark = (str?: string) => {
-  const onceChroma = R.once(() => getRandomColor(str))
-  return R.cond([
-    [R.gte(0.5), R.always(onceChroma().hex())],
-    [
-      R.T,
-      () =>
-        (function fn(color: chroma.Color, i: number): chroma.Color {
-          return R.ifElse(
-            (i: number) => i > 3,
-            () => color,
-            () =>
-              R.ifElse(
-                (c: chroma.Color) => c.luminance() > 0.5,
-                (c) => c,
-                (c) => fn(c, i + 1),
-              )(color.darken()),
-          )(i)
-        })(onceChroma(), 0).hex(),
-    ],
-  ])(onceChroma().luminance())
-}
+export const getRandomColorDark = (str?: string) => getRandomColorWrapper(R.gte(0.5), 'darken', str)
 
 export const isNovelDoc =
   (document: vscode.TextDocument) =>
