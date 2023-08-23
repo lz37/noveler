@@ -6,11 +6,21 @@ import * as R from 'ramda'
 import * as config from '../config'
 import * as infos from '../config/infos'
 import * as defaultConf from '../common/state/defaultConfig'
-import { RenderOptions, CSVContent, DealedRenderOptions } from '../common/types'
+import {
+  RenderOptions,
+  CSVContent,
+  DealedRenderOptions,
+  RootCSVContentMapMap,
+  RegExpRenderOptionsMap as RegExpStrRenderOptionsMap,
+  RegExpDealedRenderOptionsMap,
+} from '../common/types'
 
+//#region init
 export const init = (context: vscode.ExtensionContext, roots: readonly vscode.WorkspaceFolder[]) =>
   context.subscriptions.push(onChangeConf, onChangeDocument, onChangeEditor, reloadCommand(roots))
+//#endregion
 
+//#region hooks
 const onChangeEditor = vscode.window.onDidChangeActiveTextEditor((editor) => {
   if (!editor) return
   if (!state.funcTarget.decoration.includes(editor.document.languageId)) return
@@ -37,10 +47,7 @@ const reloadCommand = (roots: readonly vscode.WorkspaceFolder[]) =>
     dealedRenderOptionsMapHandle(true)()
     R.pipe(
       getRenderOptionsMap(config.get().customHighlight ?? {}),
-      (map) => {
-        defaultConf.decorations.forEach((value, key) => !map.has(key) && map.set(key, value))
-        return map
-      },
+      (map) => R.mergeDeepLeft(map, defaultConf.decorations) as RegExpStrRenderOptionsMap,
       createDecorations,
       // 添加
       dealedRenderOptionsMapHandle(true),
@@ -50,22 +57,23 @@ const reloadCommand = (roots: readonly vscode.WorkspaceFolder[]) =>
         updateDecorations(editor)(map),
     )(await infos.getInfosFromAllWorkspaces(roots)(false))
   })
+//#endregion
 
-type DealedRenderOption2Itself = (map?: Map<RegExp, DealedRenderOptions>) => Map<RegExp, DealedRenderOptions>
+type DealedRenderOption2Itself = (map?: RegExpDealedRenderOptionsMap) => RegExpDealedRenderOptionsMap
 const dealedRenderOptionsMapHandle = (() => {
-  let map = new Map<RegExp, DealedRenderOptions>()
+  let map: RegExpDealedRenderOptionsMap = {}
   /**
    * @param set 是否更新缓存， false 给了参数也没用 true 不给参数就销毁
    */
   return (set: boolean) =>
     R.ifElse(
       () => set,
-      (): DealedRenderOption2Itself => (newMap?: Map<RegExp, DealedRenderOptions>) => {
-        map.forEach((value) => {
+      (): DealedRenderOption2Itself => (newMap?: RegExpDealedRenderOptionsMap) => {
+        R.values(map).forEach((value) => {
           value.hoverMsg = undefined
           value.decorationType.dispose()
         })
-        map = newMap ?? new Map()
+        map = newMap ?? {}
         return map
       },
       (): DealedRenderOption2Itself => () => map,
@@ -73,32 +81,37 @@ const dealedRenderOptionsMapHandle = (() => {
 })()
 
 const getRenderOptionsMap =
-  (customHighlight: { [key: string]: vscode.DecorationRenderOptions }) =>
-  (csvContentsMap: Map<string, Map<string, CSVContent>>) =>
-    R.pipe(customHighlightIntoRenderOptionsMap(customHighlight), (map) => {
-      csvContentsMap.forEach((value) => value.forEach((value, key) => CSVContentIntoRenderOptionsMap(key, value)(map)))
-      return map
-    })(new Map<RegExp, RenderOptions>())
-
-const customHighlightIntoRenderOptionsMap =
-  (customHighlight: { [key: string]: vscode.DecorationRenderOptions }) => (map: Map<RegExp, RenderOptions>) =>
-    Object.entries(customHighlight).reduce((acc, [key, value]) => {
-      acc.set(new RegExp(key), {
-        renderOpts: value,
-      })
-      return acc
-    }, map)
-
-const CSVContentIntoRenderOptionsMap =
-  (filename: string, csvContent: CSVContent) => (map: Map<RegExp, RenderOptions>) =>
+  (customHighlight: { [key: string]: vscode.DecorationRenderOptions }) => (csvContentsMap: RootCSVContentMapMap) =>
     R.pipe(
-      () => ({
-        light: R.once(utils.getRandomColorLight),
-        dark: R.once(utils.getRandomColorDark),
-      }),
-      (once) =>
-        csvContent.data.forEach((value, key) => {
-          map.set(new RegExp(value.alias ? `(${key})|${value.alias.map((item) => `(${item})`).join('|')}` : key, 'g'), {
+      () => customHighlightIntoRenderOptionsMap(customHighlight),
+      (map) => {
+        R.values(csvContentsMap).forEach((value) =>
+          Object.entries(value).forEach(([key, value]) => {
+            CSVContentIntoRenderOptionsMap(key.toString(), value)(map)
+          }),
+        )
+        return map
+      },
+    )()
+
+const customHighlightIntoRenderOptionsMap = (customHighlight: { [key: string]: vscode.DecorationRenderOptions }) =>
+  Object.entries(customHighlight).reduce((acc, [key, value]) => {
+    acc[key] = {
+      renderOpts: value,
+    }
+    return acc
+  }, {} as RegExpStrRenderOptionsMap)
+
+const CSVContentIntoRenderOptionsMap = (filename: string, csvContent: CSVContent) => (map: RegExpStrRenderOptionsMap) =>
+  R.pipe(
+    () => ({
+      light: R.once(utils.getRandomColorLight),
+      dark: R.once(utils.getRandomColorDark),
+    }),
+    (once) =>
+      Object.entries(csvContent.data).forEach(
+        ([key, value]) =>
+          (map[value.alias ? `(${key})|${value.alias.map((item) => `(${item})`).join('|')}` : key] = {
             renderOpts: csvContent.decorationRenderOptions ?? {
               dark: {
                 color: once.light(filename),
@@ -109,28 +122,28 @@ const CSVContentIntoRenderOptionsMap =
               cursor: 'pointer',
             },
             hoverMsg: value.hover,
-          })
-        }),
-      () => map,
-    )()
+          }),
+      ),
+    () => map,
+  )()
 
 /**
  * 不会刷新高亮
  */
-export const createDecorations = (map: Map<RegExp, RenderOptions>) => {
-  const decorations = new Map<RegExp, DealedRenderOptions>()
-  map.forEach((value, key) => {
+export const createDecorations = (map: RegExpStrRenderOptionsMap) => {
+  const decorations: RegExpDealedRenderOptionsMap = {}
+  Object.entries(map).forEach(([key, value]) => {
     const decoration: DealedRenderOptions = {
       decorationType: vscode.window.createTextEditorDecorationType(value.renderOpts),
       hoverMsg: value.hoverMsg,
     }
-    decorations.set(key, decoration)
+    decorations[key] = decoration
   })
   return decorations
 }
 
-export const updateDecorations = (editor: vscode.TextEditor) => (map: Map<RegExp, DealedRenderOptions>) => {
-  map.forEach(updateSingleDecoration(editor))
+export const updateDecorations = (editor: vscode.TextEditor) => (map: RegExpDealedRenderOptionsMap) => {
+  Object.entries(map).forEach(([key, value]) => updateSingleDecoration(editor)(value, new RegExp(key, 'g')))
 }
 
 const updateSingleDecoration = (editor: vscode.TextEditor) => (opts: DealedRenderOptions, reg: RegExp) => {

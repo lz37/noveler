@@ -6,7 +6,15 @@ import * as utils from '../common/utils'
 import * as fs from 'fs/promises'
 import * as csv from 'csv-parse/sync'
 import * as R from 'ramda'
-import { CSVContent, CSVData, CSVOption } from '../common/types'
+import {
+  CSVContent,
+  CSVData,
+  CSVOption,
+  FileCSVContentMap,
+  FileCSVDataMap,
+  FileCSVOptionMap,
+  RootCSVContentMapMap,
+} from '../common/types'
 
 const isCompletionItemKind = (a: string) => Object.values(vscode.CompletionItemKind).includes(a)
 
@@ -18,17 +26,18 @@ const isCompletionItemKind = (a: string) => Object.values(vscode.CompletionItemK
  */
 export const getCSVOptions = async (p: string, csvFiles: string[]) => {
   if (csvFiles.length === 0) return undefined
-  const optMap = new Map<string, CSVOption>()
+  // @todo
+  const optMap: FileCSVOptionMap = {}
   csvFiles.forEach((file) => {
-    optMap.set(file, {
+    optMap[file] = {
       description: file,
       nameKey: defaultConfig.csvOpt.nameKey,
-    })
+    }
   })
   // 遍历，读取json文件
   const jsonFiles = await utils.getFileNameInDir(p, 'json', false)
   for await (const file of jsonFiles) {
-    if (!optMap.has(file)) continue
+    if (!R.keys(optMap).includes(file)) continue
     const data = await fs.readFile(path.join(p, `${file}.json`), 'utf-8')
     // data解析json
     const json = <CSVOption>JSON.parse(data)
@@ -36,14 +45,14 @@ export const getCSVOptions = async (p: string, csvFiles: string[]) => {
       json.suggestKind = undefined
     }
     if (!json) continue
-    optMap.set(file, { ...optMap.get(file), ...json })
+    optMap[file] = { ...optMap[file], ...json }
   }
   return optMap
 }
 
 export const getInfosFromAllWorkspaces = (() => {
   const io = async (roots: readonly vscode.WorkspaceFolder[]) => {
-    const map = new Map<string, Map<string, CSVContent>>()
+    const map: RootCSVContentMapMap = {}
     for await (const root of roots) {
       const p = path.join(root.uri.fsPath, config.get().infoDir)
       const isDir = await utils.isDirOrMkdir(p)
@@ -54,15 +63,16 @@ export const getInfosFromAllWorkspaces = (() => {
       if (!opts) continue
       const datas = await getCSVDatas(root, p, csvFiles, opts)
       if (!datas) continue
-      const csvContentMap = new Map<string, CSVContent>()
+      // @todo
+      const csvContentMap: FileCSVContentMap = {}
       csvFiles.forEach((file) => {
-        const opt = opts.get(file)
-        const data = datas.get(file)
+        const opt = opts[file]
+        const data = datas[file]
         if (opt && data) {
-          csvContentMap.set(file, { data, ...opt })
+          csvContentMap[file] = { data, ...opt }
         }
       })
-      map.set(root.uri.path, csvContentMap)
+      map[root.uri.path] = csvContentMap
     }
     return map
   }
@@ -95,16 +105,18 @@ export const getCSVDatas = async (
   root: vscode.WorkspaceFolder,
   p: string,
   csvFiles: string[],
-  optMap: Map<string, CSVOption>,
+  // @todo
+  optMap: FileCSVOptionMap,
 ) => {
   if (csvFiles.length === 0) return undefined
-  const csvDataMap = new Map<string, CSVData>()
+  // @todo
+  const csvDataMap: FileCSVDataMap = {}
   for await (const csvFile of csvFiles) {
-    const csvOpt = optMap.get(csvFile)!
+    const csvOpt = optMap[csvFile]
     const csvPath = path.join(p, `${csvFile}.csv`)
     const csvData = await readCSV(root, csvPath, csvOpt)
     if (!csvData) continue
-    csvDataMap.set(csvFile, csvData)
+    csvDataMap[csvFile] = csvData
   }
   return csvDataMap
 }
@@ -129,10 +141,10 @@ const readCSV = async (root: vscode.WorkspaceFolder, p: string, csvOpt: CSVOptio
   }
   const datas = records.slice(1)
   if (datas.length === 0) return undefined
-  const content: CSVData = new Map()
+  const content: CSVData = {}
   datas.forEach((row) => {
     const key = row[nameKetIndex].trim()
-    content.set(key, {})
+    content[key] = {}
     if (csvOpt.hoverKey && hoverKeyIndex !== -1) {
       // split by br tag
       const hover = new vscode.MarkdownString(row[hoverKeyIndex].trim())
@@ -140,11 +152,11 @@ const readCSV = async (root: vscode.WorkspaceFolder, p: string, csvOpt: CSVOptio
       hover.isTrusted = true
       hover.supportHtml = true
       hover.baseUri = root.uri
-      content.set(key, { hover })
+      content[key] = { ...content[key], hover }
     }
     if (csvOpt.aliasKey && aliasKeyIndex !== -1) {
       const alias = row[aliasKeyIndex].split('|').map(R.trim)
-      content.set(key, { ...content.get(key), alias })
+      content[key] = { ...content[key], alias }
     }
   })
   return content

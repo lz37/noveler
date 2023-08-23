@@ -4,7 +4,7 @@ import * as config from '../config'
 import * as infos from '../config/infos'
 import * as R from 'ramda'
 import * as state from '../common/state'
-import { CSVContent, CompletionOption, IConfig } from '../common/types'
+import { CSVContent, CompletionOption, FileCSVContentMap, IConfig, RootCSVContentMapMap } from '../common/types'
 
 export const init = async (context: vscode.ExtensionContext, roots: readonly vscode.WorkspaceFolder[]) => {
   context.subscriptions.push(reloadCommand(context, roots))
@@ -47,11 +47,10 @@ const reloadCommand = (context: vscode.ExtensionContext, roots: readonly vscode.
   vscode.commands.registerCommand(commands.Noveler.RELOAD_COMPLETION, async () => {
     storeProvider()()
     R.pipe(
-      (map: Map<string, Map<string, CSVContent>>) => {
-        const newMap = new Map<string, CSVContent>()
-        map.forEach((value) => value.forEach((value, key) => newMap.set(key, value)))
-        return newMap
-      },
+      (map: RootCSVContentMapMap) =>
+        R.values(map)
+          .map((value) => value)
+          .reduce((acc, value) => R.mergeDeepWith(R.concat, acc, value), {}),
       createCompletionOptions,
       makeProvider(config.get()),
       storeProvider(context),
@@ -76,10 +75,10 @@ const additionalTextEdits = (position: vscode.Position, l: number) => [
   ),
 ]
 
-const createCompletionOptions = (map: Map<string, CSVContent>) => {
+const createCompletionOptions = (map: FileCSVContentMap) => {
   const completionOptions: CompletionOption[] = []
-  map.forEach(({ suggestKind, description, data }) => {
-    data.forEach(({ alias, hover }, key) => {
+  R.values(map).forEach(({ suggestKind, description, data }) => {
+    Object.entries(data).forEach(([key, { alias, hover }]) => {
       const document = hover ? new vscode.MarkdownString() : undefined
       if (document) {
         document.value = `***${description}***<br />${hover?.value}`
@@ -91,11 +90,11 @@ const createCompletionOptions = (map: Map<string, CSVContent>) => {
       const insertTextChoices = [key]
       if (alias) insertTextChoices.push(...alias)
       completionOptions.push({
-        insertText: new vscode.SnippetString().appendChoice(insertTextChoices),
+        insertText: new vscode.SnippetString().appendChoice(insertTextChoices.map((v) => v.toString())),
         document,
         kind: suggestKind ? vscode.CompletionItemKind[suggestKind] : undefined,
         label: {
-          label: key,
+          label: key.toString(),
           description,
           detail: alias ? `(${alias.join(', ')})` : undefined,
         },

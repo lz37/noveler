@@ -1,4 +1,4 @@
-import { CSVOption, IConfig, RenderOptions, TXTOptions } from '../types'
+import { CSVOption, IConfig, RegExpRenderOptionsMap, RenderOptions, TXTOptions } from '../types'
 
 export const config: IConfig = {
   showApplyRecommendPlaintextConf: true,
@@ -26,39 +26,27 @@ export const txtOpt: TXTOptions = {
   diagnosticSeverity: 'Error',
 }
 
-export const decorations = new Map<RegExp, RenderOptions>([
-  [
-    new RegExp('\\d+(\\.\\d+)?', 'g'),
-    {
-      renderOpts: {
-        color: { id: 'number' },
-      },
+export const decorations: RegExpRenderOptionsMap = {
+  '\\d+(\\.\\d+)?': {
+    renderOpts: {
+      color: { id: 'number' },
     },
-  ],
-  [
-    new RegExp('《.*?》', 'g'),
-    {
-      renderOpts: {
-        textDecoration: 'underline',
-      },
+  },
+  '《.*?》': {
+    renderOpts: {
+      textDecoration: 'underline',
     },
-  ],
-  [
-    new RegExp('“.*?”', 'g'),
-    {
-      renderOpts: {
-        fontStyle: 'italic',
-        opacity: '0.7',
-      },
+  },
+  '“.*?”': {
+    renderOpts: {
+      fontStyle: 'italic',
+      opacity: '0.7',
     },
-  ],
-  [
-    new RegExp('【.*?】', 'g'),
-    {
-      renderOpts: {
-        fontWeight: 'bold',
-        opacity: '0.7',
-      },
+  },
+  '【.*?】': {
+    renderOpts: {
+      fontWeight: 'bold',
+      opacity: '0.7',
     },
-  ],
-])
+  },
+}
