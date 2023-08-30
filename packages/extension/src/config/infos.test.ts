@@ -3,7 +3,7 @@ import * as infos from './infos'
 import * as vscode from 'vscode'
 import * as path from 'path'
 import * as utils from '../common/utils'
-import { CSVOption, FileCSVOptionMap } from '../common/types'
+import { CSVOption } from '../common/types'
 
 suite('Extension Config Infos Modules Test Suite', () => {
   vscode.window.showInformationMessage('Start config/infos test')
@@ -30,7 +30,7 @@ suite('Extension Config Infos Modules Test Suite', () => {
   test('getCSVOptions', async () => {
     const csvFiles = await utils.getFileNameInDir(folder2InfosPath, 'csv', false)
     const csvOptions = await infos.getCSVOptions(folder2InfosPath, csvFiles)
-    const map: FileCSVOptionMap = {
+    const map = {
       test1: test1Opt,
       test2: test2Opt,
     }

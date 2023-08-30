@@ -9,6 +9,8 @@ import * as utils from '../common/utils'
 import * as state from '../common/state'
 import * as R from 'ramda'
 
+export const init = (context: vscode.ExtensionContext) => context.subscriptions.push(createIndentCommand)
+
 const createIndentCommand = vscode.commands.registerTextEditorCommand(command.Noveler.CREATE_INDENT, (editor, edit) => {
   const { autoIndent, autoIndentLines, autoIndentSpaces } = config.get()
   const eol = utils.getEOLOfEditor(editor)
@@ -29,7 +31,3 @@ const createIndentCommand = vscode.commands.registerTextEditorCommand(command.No
     )(),
   )
 })
-
-export const init = (context: vscode.ExtensionContext) => {
-  context.subscriptions.push(createIndentCommand)
-}

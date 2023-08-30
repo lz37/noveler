@@ -18,28 +18,13 @@ export interface CSVOption {
  * 用于存储csv文件的数据
  * key: csv文件中的nameKey对应的内容
  */
-export interface CSVData {
-  [key: string]: {
+export type CSVData = Record<
+  string,
+  {
     hover?: vscode.MarkdownString
     alias?: string[]
   }
-}
-
-export interface FileCSVOptionMap {
-  [file: string]: CSVOption
-}
-
-export interface FileCSVDataMap {
-  [file: string]: CSVData
-}
-
-export interface FileCSVContentMap {
-  [file: string]: CSVContent
-}
-
-export interface RootCSVContentMapMap {
-  [root: string]: FileCSVContentMap
-}
+>
 
 /**
  * 一组csv和json包含的最终信息

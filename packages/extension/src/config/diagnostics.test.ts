@@ -2,6 +2,7 @@ import * as vscode from 'vscode'
 import * as diagnostics from './diagnostics'
 import * as assert from 'assert'
 import * as path from 'path'
+import * as R from 'ramda'
 
 suite('Extension Config Diagnostics Modules Test Suite', () => {
   vscode.window.showInformationMessage('Start config/diagnostics test')
@@ -20,12 +21,12 @@ suite('Extension Config Diagnostics Modules Test Suite', () => {
 
   test('getTXTOptions', () => {
     const map = diagnostics.getTXTOptions(diagnosticsFiles)
-    assert.strictEqual(map?.size, 5)
-    assert.strictEqual(map.get('国内地名.Warning')?.message, '国内地名')
-    assert.strictEqual(map.get('民族.Warning')?.diagnosticSeverity, 'Warning')
-    assert.strictEqual(map.get('宗教.Warning1')?.diagnosticSeverity, 'Error')
-    assert.strictEqual(map.get('test1')?.diagnosticSeverity, 'Error')
-    assert.strictEqual(map.get('')?.message, '敏感词')
+    assert.strictEqual(R.keys(map).length, 5)
+    assert.strictEqual(map?.['国内地名.Warning'].message, '国内地名')
+    assert.strictEqual(map?.['民族.Warning'].diagnosticSeverity, 'Warning')
+    assert.strictEqual(map?.['宗教.Warning1'].diagnosticSeverity, 'Error')
+    assert.strictEqual(map?.['test1'].diagnosticSeverity, 'Error')
+    assert.strictEqual(map?.[''].message, '敏感词')
   })
 
   test('getTXTData', async () => {
@@ -37,6 +38,6 @@ suite('Extension Config Diagnostics Modules Test Suite', () => {
     const roots = vscode.workspace.workspaceFolders
     if (!roots) return
     const txtContents = await diagnostics.getDiagnosticsFromAllWorkspaces(roots)
-    assert.strictEqual(txtContents?.size, 1)
+    assert.strictEqual(R.keys(txtContents).length, 1)
   })
 })

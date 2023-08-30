@@ -1,4 +1,3 @@
-export const state = {}
 export const funcTarget = {
   indention: ['plaintext'],
   formatter: ['plaintext'],

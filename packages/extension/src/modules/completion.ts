@@ -4,9 +4,9 @@ import * as config from '../config'
 import * as infos from '../config/infos'
 import * as R from 'ramda'
 import * as state from '../common/state'
-import { CSVContent, CompletionOption, FileCSVContentMap, IConfig, RootCSVContentMapMap } from '../common/types'
+import { CSVContent, CompletionOption, IConfig } from '../common/types'
 
-export const init = async (context: vscode.ExtensionContext, roots: readonly vscode.WorkspaceFolder[]) => {
+export const init = (context: vscode.ExtensionContext, roots: readonly vscode.WorkspaceFolder[]) => {
   context.subscriptions.push(reloadCommand(context, roots))
   context.subscriptions.push(deletePrefixCommand)
   context.subscriptions.push(triggerCommandRegister(context))
@@ -47,7 +47,7 @@ const reloadCommand = (context: vscode.ExtensionContext, roots: readonly vscode.
   vscode.commands.registerCommand(commands.Noveler.RELOAD_COMPLETION, async () => {
     storeProvider()()
     R.pipe(
-      (map: RootCSVContentMapMap) =>
+      (map: Record<string, Record<string, CSVContent>>) =>
         R.values(map)
           .map((value) => value)
           .reduce((acc, value) => R.mergeDeepWith(R.concat, acc, value), {}),
@@ -75,7 +75,7 @@ const additionalTextEdits = (position: vscode.Position, l: number) => [
   ),
 ]
 
-const createCompletionOptions = (map: FileCSVContentMap) => {
+const createCompletionOptions = (map: Record<string, CSVContent>) => {
   const completionOptions: CompletionOption[] = []
   R.values(map).forEach(({ suggestKind, description, data }) => {
     Object.entries(data).forEach(([key, { alias, hover }]) => {

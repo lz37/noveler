@@ -7,10 +7,8 @@ import * as config from '../config'
 import * as infos from '../config/infos'
 import * as defaultConf from '../common/state/defaultConfig'
 import {
-  RenderOptions,
   CSVContent,
   DealedRenderOptions,
-  RootCSVContentMapMap,
   RegExpRenderOptionsMap as RegExpStrRenderOptionsMap,
   RegExpDealedRenderOptionsMap,
 } from '../common/types'
@@ -81,7 +79,8 @@ const dealedRenderOptionsMapHandle = (() => {
 })()
 
 const getRenderOptionsMap =
-  (customHighlight: { [key: string]: vscode.DecorationRenderOptions }) => (csvContentsMap: RootCSVContentMapMap) =>
+  (customHighlight: { [key: string]: vscode.DecorationRenderOptions }) =>
+  (csvContentsMap: Record<string, Record<string, CSVContent>>) =>
     R.pipe(
       () => customHighlightIntoRenderOptionsMap(customHighlight),
       (map) => {

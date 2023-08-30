@@ -6,15 +6,7 @@ import * as utils from '../common/utils'
 import * as fs from 'fs/promises'
 import * as csv from 'csv-parse/sync'
 import * as R from 'ramda'
-import {
-  CSVContent,
-  CSVData,
-  CSVOption,
-  FileCSVContentMap,
-  FileCSVDataMap,
-  FileCSVOptionMap,
-  RootCSVContentMapMap,
-} from '../common/types'
+import { CSVContent, CSVData, CSVOption } from '../common/types'
 
 const isCompletionItemKind = (a: string) => Object.values(vscode.CompletionItemKind).includes(a)
 
@@ -26,8 +18,7 @@ const isCompletionItemKind = (a: string) => Object.values(vscode.CompletionItemK
  */
 export const getCSVOptions = async (p: string, csvFiles: string[]) => {
   if (csvFiles.length === 0) return undefined
-  // @todo
-  const optMap: FileCSVOptionMap = {}
+  const optMap: Record<string, CSVOption> = {}
   csvFiles.forEach((file) => {
     optMap[file] = {
       description: file,
@@ -52,7 +43,7 @@ export const getCSVOptions = async (p: string, csvFiles: string[]) => {
 
 export const getInfosFromAllWorkspaces = (() => {
   const io = async (roots: readonly vscode.WorkspaceFolder[]) => {
-    const map: RootCSVContentMapMap = {}
+    const map: Record<string, Record<string, CSVContent>> = {}
     for await (const root of roots) {
       const p = path.join(root.uri.fsPath, config.get().infoDir)
       const isDir = await utils.isDirOrMkdir(p)
@@ -63,8 +54,7 @@ export const getInfosFromAllWorkspaces = (() => {
       if (!opts) continue
       const datas = await getCSVDatas(root, p, csvFiles, opts)
       if (!datas) continue
-      // @todo
-      const csvContentMap: FileCSVContentMap = {}
+      const csvContentMap: Record<string, CSVContent> = {}
       csvFiles.forEach((file) => {
         const opt = opts[file]
         const data = datas[file]
@@ -105,12 +95,10 @@ export const getCSVDatas = async (
   root: vscode.WorkspaceFolder,
   p: string,
   csvFiles: string[],
-  // @todo
-  optMap: FileCSVOptionMap,
+  optMap: Record<string, CSVOption>,
 ) => {
   if (csvFiles.length === 0) return undefined
-  // @todo
-  const csvDataMap: FileCSVDataMap = {}
+  const csvDataMap: Record<string, CSVData> = {}
   for await (const csvFile of csvFiles) {
     const csvOpt = optMap[csvFile]
     const csvPath = path.join(p, `${csvFile}.csv`)

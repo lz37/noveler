@@ -18,7 +18,11 @@ export const getTXTOptions = R.ifElse(
   (txtFiles) =>
     R.pipe(
       () => txtFiles.map((file) => ({ file, opt: getSingleTXTOption(file) })),
-      (m) => new Map(m.map(({ file, opt }) => [file, opt])),
+      (m) =>
+        m.reduce(
+          (acc: Record<string, TXTOptions>, { file, opt }) => R.mergeDeepWith(R.concat, acc, { [file]: opt }),
+          {},
+        ),
     )(),
 )
 
@@ -29,7 +33,7 @@ const isDiagnosticSeverity = (a: string) => Object.values(vscode.DiagnosticSever
  * @param txtFile 文件名（不带后缀）
  * @returns
  */
-const getSingleTXTOption = (txtFile: string) =>
+const getSingleTXTOption = (txtFile: string): TXTOptions =>
   R.cond([
     [() => !txtFile, () => defaultConfig.txtOpt],
     [
@@ -70,8 +74,11 @@ const getTXTDatas = async (p: string, txtFiles: string[]) =>
       R.pipe(
         () => (file: string) => getTXTSingleData(path.join(p, `${file}.txt`)).then((data) => ({ file, data })),
         (handle) =>
-          Promise.all(txtFiles.map((file) => handle(file))).then(
-            (m) => new Map(m.map(({ file, data }) => [file, data])),
+          Promise.all(txtFiles.map((file) => handle(file))).then((m) =>
+            m.reduce(
+              (acc: Record<string, Set<string>>, { file, data }) => R.mergeDeepWith(R.concat, acc, { [file]: data }),
+              {},
+            ),
           ),
       )(),
   )()
@@ -88,7 +95,7 @@ const handleTxtData = (data: string) =>
     .filter((a) => a.trim())
 
 export const getDiagnosticsFromAllWorkspaces = async (roots: readonly vscode.WorkspaceFolder[]) => {
-  const map = new Map<string, Map<string, TXTContent>>()
+  const map: Record<string, Record<string, TXTContent>> = {}
   for await (const root of roots) {
     const p = path.join(root.uri.fsPath, config.get().diagnosticDir)
     const isDir = await utils.isDirOrMkdir(p)
@@ -99,13 +106,13 @@ export const getDiagnosticsFromAllWorkspaces = async (roots: readonly vscode.Wor
     if (!opts) continue
     const datas = await getTXTDatas(p, txtFiles)
     if (!datas) continue
-    const txtMap = new Map<string, TXTContent>()
+    const txtMap: Record<string, TXTContent> = {}
     txtFiles.forEach((file) => {
-      const opt = opts.get(file)
-      const data = datas.get(file)
-      opt && data && txtMap.set(file, { data, ...opt })
+      const opt = opts[file]
+      const data = datas[file]
+      opt && data && (txtMap[file] = { data, ...opt })
     })
-    map.set(root.uri.fsPath, txtMap)
+    map[root.uri.fsPath] = txtMap
   }
   return map
 }
