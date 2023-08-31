@@ -29,6 +29,7 @@ const reloadCommand = (roots: readonly vscode.WorkspaceFolder[]) =>
         .reduce((acc, value) => R.concat(acc, value), []),
     )
     collection.clear()
+    if (vscode.window.activeTextEditor) updateDiagnostics(vscode.window.activeTextEditor.document)
   })
 
 const onChangeDocument = vscode.workspace.onDidChangeTextDocument((event) => {
@@ -63,15 +64,17 @@ const regexSearch = (
   return diagnostics
 }
 
-export const updateDiagnostics = async (document: vscode.TextDocument) => {
+export const updateDiagnostics = (document: vscode.TextDocument) => {
+  if (!state.funcTarget.diagnostics.includes(document.languageId)) return
   try {
-    if (!state.funcTarget.diagnostics.includes(document.languageId)) return
-    TXTContents().map(({ data, diagnosticSeverity, message }) => {
-      const words: string[] = []
-      data.forEach((value) => words.push(value))
-      const diagnostics = regexSearch(document, new RegExp(`(${words.join('|')})`, 'g'), diagnosticSeverity, message)
-      collection.set(document.uri, diagnostics)
-    })
+    const diagnostics = TXTContents()
+      .map(({ data, diagnosticSeverity, message }) => {
+        const words: string[] = []
+        data.forEach((value) => words.push(value))
+        return regexSearch(document, new RegExp(`(${words.join('|')})`, 'g'), diagnosticSeverity, message)
+      })
+      .reduce((acc, value) => acc.concat(value), [])
+    collection.set(document.uri, diagnostics)
   } catch (error) {
     console.error(error)
   }
