@@ -1,4 +1,5 @@
 import * as vscode from 'vscode'
+import { StatusItem } from './statusbar'
 
 export interface IConfig {
   showApplyRecommendPlaintextConf: boolean
@@ -15,4 +16,8 @@ export interface IConfig {
   diagnosticDir: string
   infoDir: string
   novelDir: string
+  statusItems: StatusItem[]
+  statusTimeUnit: number
+  statusIncludingSpace: boolean
+  statusShow: boolean
 }

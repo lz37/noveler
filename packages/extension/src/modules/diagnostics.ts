@@ -1,7 +1,8 @@
 import * as vscode from 'vscode'
 import * as R from 'ramda'
 import * as command from '../common/commands'
-
+import * as utils from '../common/utils'
+import * as config from '../config'
 import { getDiagnosticsFromAllWorkspaces } from '../config/diagnostics'
 import { DiagnosticSeverityKeys, TXTContent } from '../common/types'
 import * as state from '../common/state'
@@ -33,11 +34,13 @@ const reloadCommand = (roots: readonly vscode.WorkspaceFolder[]) =>
   })
 
 const onChangeDocument = vscode.workspace.onDidChangeTextDocument((event) => {
+  if (!utils.isNovelDoc(event.document)(config.get())) return
   updateDiagnostics(event.document)
 })
 
 const onChangeEditor = vscode.window.onDidChangeActiveTextEditor((editor) => {
   if (!editor) return
+  if (!utils.isNovelDoc(editor.document)(config.get())) return
   updateDiagnostics(editor.document)
 })
 

@@ -14,6 +14,10 @@ export const config: IConfig = {
   infoDir: '.noveler/infos',
   diagnosticDir: '.noveler/diagnostics',
   novelDir: '.',
+  statusItems: ['Time', 'InputWordCount', 'TextWordCount', 'Speed'],
+  statusIncludingSpace: false,
+  statusShow: true,
+  statusTimeUnit: 10,
 }
 
 export const csvOpt: CSVOption = {
