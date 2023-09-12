@@ -5,7 +5,8 @@ export enum Noveler {
   RELOAD_DIAGNOSTIC = 'noveler.reloadDiagnostic',
   DELETE_COMPLETION_PREFIX = 'noveler.deleteCompletionPrefix',
   TRIGGER_COMPLETION = 'noveler.triggerCompletion',
-  STATUSBAR_INIT_COMPLETION = 'noveler.statusbarInitCompletion',
+  INFO_BAR_SHOW = 'noveler.infoBarShow',
+  INFO_BAR_HIDE = 'noveler.infoBarHide',
 }
 export enum Etc {
   FORMAT_DOCUMENT = 'editor.action.formatDocument',

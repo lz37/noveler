@@ -15,7 +15,7 @@ const createIndentCommand = vscode.commands.registerTextEditorCommand(command.No
   const { autoIndent, autoIndentLines, autoIndentSpaces } = config.get()
   const eol = utils.getEOLOfEditor(editor)
   const includesLangId = state.funcTarget.indention.includes(editor.document.languageId)
-  const isNovel = utils.isNovelDoc(editor.document)(config.get(true))
+  const isNovel = utils.isNovelDoc(editor.document)(config.get())
   const indention = R.cond([
     [() => !includesLangId, () => eol],
     [() => !isNovel, () => eol],

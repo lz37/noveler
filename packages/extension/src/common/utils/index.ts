@@ -1,4 +1,4 @@
-import { NovelerRouter } from '../types'
+import { IDirs, NovelerRouter } from '../types'
 import * as fs from 'fs/promises'
 import * as vscode from 'vscode'
 import * as R from 'ramda'
@@ -159,7 +159,7 @@ export const isNovelDoc =
    * @param dirsConf 每个value都得是相对路径
    * @returns
    */
-  (dirsConf: { infoDir: string; novelDir: string; outlinesDir: string; diagnosticDir: string }) => {
+  (dirsConf: Record<keyof IDirs, string>) => {
     // get absolute path of file
     const path = document.uri.path
     // get workspace of file

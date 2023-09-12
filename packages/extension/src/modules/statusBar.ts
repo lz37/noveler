@@ -1,9 +1,10 @@
-import { IConfig, StatusItem } from '../common/types'
+import { IConfig, IStatusBar, StatusItem } from '../common/types'
 import * as vscode from 'vscode'
 import * as config from '../config'
 import * as defaultConf from '../common/state/defaultConfig'
 import * as state from '../common/state'
-import * as commands from '../common/commands'
+import * as utils from '../common/utils'
+import * as R from 'ramda'
 
 let handler: NovelerCountBarHandler | undefined = undefined
 
@@ -13,24 +14,25 @@ export const init = (context: vscode.ExtensionContext) => {
 }
 
 const changeDocument = vscode.workspace.onDidChangeTextDocument((event) => {
-  const editor = vscode.window.activeTextEditor
-  if (!editor) return
-  if (!state.funcTarget.statusbar.includes(event.document.languageId)) return
+  if (!state.funcTarget.countBar.includes(event.document.languageId)) return
+  if (!utils.isNovelDoc(event.document)(config.get())) return
   handler?.update(event)
 })
 
 const changeEditor = vscode.window.onDidChangeActiveTextEditor((editor) => {
   if (!editor) return
-  if (!state.funcTarget.statusbar.includes(editor.document.languageId)) return
+  if (!state.funcTarget.countBar.includes(editor.document.languageId)) return
+  if (!utils.isNovelDoc(editor.document)(config.get())) return
   handler?.reset(editor)
 })
 
-const changeConf = vscode.workspace.onDidChangeConfiguration(() => {
-  handler?.updateConf(config.get())
-})
-
-const initedCommand = vscode.commands.registerCommand(commands.Noveler.STATUSBAR_INIT_COMPLETION, () => {
-  handler?.reset(vscode.window.activeTextEditor!)
+const changeConf = vscode.workspace.onDidChangeConfiguration((event) => {
+  if (
+    R.identity<(keyof IStatusBar)[]>(['statusItems', 'statusIncludingSpace', 'statusShow', 'statusTimeUnit'])
+      .map((key) => event.affectsConfiguration(`${state.extPrefix}.${key}`))
+      .reduce((acc, cur) => acc || cur, false)
+  )
+    handler?.updateConf(config.get())
 })
 
 class NovelerCountBarHandler {
@@ -60,6 +62,7 @@ class NovelerCountBarHandler {
     }, 1000)
     if (this.isShow) this.show()
   }
+  //#region field
   private bar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, state.barsPriority.count)
   private startLength = 0
   private textItems = defaultConf.config.statusItems
@@ -69,6 +72,7 @@ class NovelerCountBarHandler {
   private accumulateTime = 0
   private timeUnit = defaultConf.config.statusTimeUnit
   private maxTime = 0
+  //#endregion
   private textLengthHandler = (doc: vscode.TextDocument) =>
     doc
       .getText()

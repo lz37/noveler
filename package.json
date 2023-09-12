@@ -157,25 +157,25 @@
           "type": "boolean",
           "default": true,
           "markdownDescription": "是否在回车后自动插入缩进、空行",
-          "scope": "resource"
+          "scope": "language-overridable"
         },
         "noveler.autoIndentLines": {
           "type": "number",
           "default": 0,
           "markdownDescription": "回车后自动插入的行数， `noveler.autoIndent` 关闭时，此功能也会作为格式化属性读取",
-          "scope": "resource"
+          "scope": "language-overridable"
         },
         "noveler.autoIndentSpaces": {
           "type": "number",
           "default": 4,
           "markdownDescription": "回车后自动插入的空格数， `noveler.autoIndent` 关闭时，此功能也会作为格式化属性读取",
-          "scope": "resource"
+          "scope": "language-overridable"
         },
         "noveler.usePangu": {
           "type": "boolean",
           "default": true,
           "markdownDescription": "格式化时是否中在英文之间添加空格（不再使用第三方盘古包，改为插件内置实现）",
-          "scope": "resource"
+          "scope": "language-overridable"
         },
         "noveler.previewFontSize": {
           "type": "number",
@@ -238,13 +238,13 @@
         "noveler.customHighlight": {
           "type": "object",
           "markdownDescription": "自定义高亮，键为正则表达式，值为渲染选项，值的结构参照 [DecorationRenderOptions](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions)",
-          "scope": "resource"
+          "scope": "language-overridable"
         },
         "noveler.completionChar": {
           "type": "string",
           "default": "@",
           "markdownDescription": "补全时的触发字符, *注*：请尽量使用英文标点作为触发字符, 默认为@",
-          "scope": "resource"
+          "scope": "language-overridable"
         },
         "noveler.outlinesDir": {
           "type": "string",
@@ -263,6 +263,26 @@
           "default": ".noveler/diagnostics",
           "markdownDescription": "敏感词文本（txt文件）保存的目录，不支持绝对路径，请使用相对于文件夹的路径",
           "scope": "resource"
+        },
+        "noveler.pairCompletion": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "是否开启成对符号自动补全",
+          "scope": "language-overridable"
+        },
+        "noveler.pairCompletionChars": {
+          "type": "array",
+          "markdownDescription": "成对符号组",
+          "scope": "language-overridable",
+          "items": {
+            "type": "string"
+          }
+        },
+        "noveler.pairDeletion": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "是否自动删除成对符号",
+          "scope": "language-overridable"
         },
         "noveler.confCSVFiles": {
           "type": "array",

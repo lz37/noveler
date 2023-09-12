@@ -4,7 +4,9 @@ import * as config from '../config'
 import * as infos from '../config/infos'
 import * as R from 'ramda'
 import * as state from '../common/state'
-import { CSVContent, CompletionOption, IConfig } from '../common/types'
+import * as utils from '../common/utils'
+import { CSVContent, CompletionOption, IConfig, ICompletion } from '../common/types'
+import { isNovelDoc } from '../common/utils'
 
 export const init = (context: vscode.ExtensionContext, roots: readonly vscode.WorkspaceFolder[]) => {
   context.subscriptions.push(reloadCommand(context, roots))
@@ -14,7 +16,8 @@ export const init = (context: vscode.ExtensionContext, roots: readonly vscode.Wo
 
 const deletePrefixCommand = vscode.commands.registerTextEditorCommand(
   commands.Noveler.DELETE_COMPLETION_PREFIX,
-  async (_, edit, position: vscode.Position, num: number) => {
+  async (editor, edit, position: vscode.Position, num: number) => {
+    if (!isNovelDoc(editor.document)(config.get())) return
     const start = new vscode.Position(position.line, position.character - num)
     const end = new vscode.Position(position.line, position.character - 1)
     await new Promise((resolve) => {
@@ -28,6 +31,7 @@ const deletePrefixCommand = vscode.commands.registerTextEditorCommand(
 const triggerCommandRegister = (context: vscode.ExtensionContext) => {
   const makeCommand = () =>
     vscode.commands.registerTextEditorCommand(commands.Noveler.TRIGGER_COMPLETION, async (editor, edit) => {
+      if (!isNovelDoc(editor.document)(config.get())) return
       await new Promise((resolve) => {
         edit.insert(editor.selection.active, config.get().completionChar)
         resolve(undefined)
@@ -35,7 +39,8 @@ const triggerCommandRegister = (context: vscode.ExtensionContext) => {
       vscode.commands.executeCommand(commands.Etc.TRIGGER_SUGGEST)
     })
   let triggerCommand: vscode.Disposable = makeCommand()
-  return vscode.workspace.onDidChangeConfiguration(() => {
+  return vscode.workspace.onDidChangeConfiguration((event) => {
+    if (!event.affectsConfiguration(`${state.extPrefix}.${R.identity<keyof ICompletion>('completionChar')}`)) return
     triggerCommand.dispose()
     triggerCommand = makeCommand()
     context.subscriptions.push(triggerCommand)
@@ -112,6 +117,7 @@ const makeProvider =
       state.funcTarget.completion,
       {
         provideCompletionItems: (document: vscode.TextDocument, position: vscode.Position) => {
+          if (!utils.isNovelDoc(document)(config.get())) return []
           const linePrefix = document.lineAt(position).text.slice(0, position.character)
           const items: vscode.CompletionItem[] = []
           const needDelete = linePrefix.endsWith(completionChar)

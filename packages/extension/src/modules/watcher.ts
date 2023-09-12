@@ -2,27 +2,29 @@ import * as vscode from 'vscode'
 import * as config from '../config'
 import * as commands from '../common/commands'
 import * as state from '../common/state'
-import { IConfig } from '../common/types'
+import * as R from 'ramda'
+import { IConfig, IDirs } from '../common/types'
 
-const execInfosCommands = async () => {
-  await vscode.commands.executeCommand(commands.Noveler.RELOAD_DECORATION)
-  await vscode.commands.executeCommand(commands.Noveler.RELOAD_COMPLETION)
+const execInfosCommands = () => {
+  vscode.commands.executeCommand(commands.Noveler.RELOAD_DECORATION)
+  vscode.commands.executeCommand(commands.Noveler.RELOAD_COMPLETION)
 }
 
-const execDiagnosticsCommands = async () => {
-  await vscode.commands.executeCommand(commands.Noveler.RELOAD_DIAGNOSTIC)
+const execDiagnosticsCommands = () => {
+  vscode.commands.executeCommand(commands.Noveler.RELOAD_DIAGNOSTIC)
 }
 
-export const init = async (context: vscode.ExtensionContext, roots: readonly vscode.WorkspaceFolder[]) => {
+export const init = (context: vscode.ExtensionContext, roots: readonly vscode.WorkspaceFolder[]) => {
   context.subscriptions.push(onChangeConf(context, roots), ...watchInfosDir(roots), ...watchDiagnosticDir(roots))
-  await execInfosCommands()
-  await execDiagnosticsCommands()
+  execInfosCommands()
+  execDiagnosticsCommands()
 }
 
 const onChangeConf = (context: vscode.ExtensionContext, roots: readonly vscode.WorkspaceFolder[]) =>
   vscode.workspace.onDidChangeConfiguration(async (event) => {
-    if (event.affectsConfiguration(`${state.extPrefix}.infoDir`)) context.subscriptions.push(...watchInfosDir(roots))
-    if (event.affectsConfiguration(`${state.extPrefix}.diagnosticDir`))
+    if (event.affectsConfiguration(`${state.extPrefix}.${R.identity<keyof IDirs>('infoDir')}`))
+      context.subscriptions.push(...watchInfosDir(roots))
+    if (event.affectsConfiguration(`${state.extPrefix}.${R.identity<keyof IDirs>('diagnosticDir')}`))
       context.subscriptions.push(...watchDiagnosticDir(roots))
   })
 
@@ -37,7 +39,7 @@ const watchDir = (() => {
   }
   let watches: vscode.FileSystemWatcher[] | undefined = undefined
   return (roots: readonly vscode.WorkspaceFolder[], { infoDir }: IConfig, exts: string[], hook: () => any) => {
-    watches?.forEach((w) => w.dispose())
+    watches?.map((w) => w.dispose())
     watches = roots.map(makeWatcher(infoDir, exts)(hook))
     return watches
   }

@@ -10,6 +10,11 @@ export const config: IConfig = {
   previewSpaceLines: 1,
   autoIndent: true,
   completionChar: '@',
+  pairCompletion: true,
+  pairCompletionChars: [
+    // '""', "''", '（）', '[]', '{}', '《》', '【】', '「」', '『』', '“”', '‘’'
+  ],
+  pairDeletion: true,
   outlinesDir: '.noveler/outlines',
   infoDir: '.noveler/infos',
   diagnosticDir: '.noveler/diagnostics',

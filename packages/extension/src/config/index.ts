@@ -5,28 +5,21 @@ import { extPrefix } from '../common/state'
 import * as osPath from 'path'
 import * as R from 'ramda'
 
-export const get = (() => {
-  /**
-   * 一次性取出一个整体的配置 而非一个一个 (保证配置一致性以及类型可读性)
-   * @throws {Error} 请确保noveler的infoDir、outlinesDir、diagnosticDir都是相对路径
-   */
-  const io = R.pipe(
-    () => vscode.workspace.getConfiguration(undefined).get(extPrefix) as IConfig,
-    (conf) => ({ ...defaultConfig.config, ...conf } as IConfig),
-    R.cond([
-      [
-        ({ infoDir, outlinesDir, diagnosticDir }) =>
-          [infoDir, outlinesDir, diagnosticDir].map((dir) => !osPath.isAbsolute(dir)).includes(false),
-        () => {
-          throw new Error('请确保noveler的infoDir、outlinesDir、diagnosticDir都是相对路径')
-        },
-      ],
-      [R.T, R.identity<IConfig>],
-    ]),
-  )
-  let onceIO = R.once(io)
-  return (fromCache = false) => R.ifElse(() => fromCache, onceIO, (onceIO = R.once(io)))()
-})()
+export const get = R.pipe(
+  (languageId?: string) =>
+    vscode.workspace.getConfiguration(undefined, languageId ? { languageId } : undefined).get(extPrefix) as IConfig,
+  (conf) => ({ ...defaultConfig.config, ...conf } as IConfig),
+  R.cond([
+    [
+      ({ infoDir, outlinesDir, diagnosticDir }) =>
+        [infoDir, outlinesDir, diagnosticDir].map((dir) => !osPath.isAbsolute(dir)).includes(false),
+      () => {
+        throw new Error('请确保noveler的infoDir、outlinesDir、diagnosticDir都是相对路径')
+      },
+    ],
+    [R.T, R.identity<IConfig>],
+  ]),
+)
 
 /**
  *
@@ -81,14 +74,13 @@ export const askForPlaintextConf = async () =>
               ],
               [
                 () => res === '不再提示(工作区)',
-                () =>
-                  set({ ...get(true), showApplyRecommendPlaintextConf: false }, ['showApplyRecommendPlaintextConf']),
+                () => set({ ...get(), showApplyRecommendPlaintextConf: false }, ['showApplyRecommendPlaintextConf']),
               ],
               [
                 () => res === '不再提示(全局)',
                 () =>
                   set(
-                    { ...get(true), showApplyRecommendPlaintextConf: false },
+                    { ...get(), showApplyRecommendPlaintextConf: false },
                     ['showApplyRecommendPlaintextConf'],
                     vscode.ConfigurationTarget.Global,
                   ),

@@ -5,18 +5,26 @@ import * as decoration from './decoration'
 import * as completion from './completion'
 import * as watcher from './watcher'
 import * as diagnostics from './diagnostics'
-import * as countbar from './countbar'
-import * as statusbar from './statusbar'
-import * as command from '../common/commands'
+import * as statusbar from './statusBar'
+import * as infoBar from './infoBar'
+import * as commands from '../common/commands'
+import * as pairCompletion from './pairCompletion'
 
-export const init = async (context: vscode.ExtensionContext, roots: readonly vscode.WorkspaceFolder[]) => {
-  statusbar.init(context)
+export const init = (context: vscode.ExtensionContext, roots: readonly vscode.WorkspaceFolder[]) => {
+  infoBar.init(context)
+  vscode.commands.executeCommand(commands.Noveler.INFO_BAR_SHOW, 'Noveler is loading...')
   indention.init(context)
   formatter.init(context)
   decoration.init(context, roots)
   completion.init(context, roots)
   diagnostics.init(context, roots)
-  await watcher.init(context, roots)
-  countbar.init(context)
-  // await vscode.commands.executeCommand(command.Noveler.STATUSBAR_INIT_COMPLETION)
+  pairCompletion.init(context)
+  watcher.init(context, roots)
+  statusbar.init(context)
+  vscode.commands.executeCommand(commands.Noveler.INFO_BAR_HIDE)
+}
+
+export const destory = (context: vscode.ExtensionContext) => {
+  context.subscriptions.map((sub) => sub.dispose())
+  while (context.subscriptions.pop());
 }

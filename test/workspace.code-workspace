@@ -13,6 +13,7 @@
 			"editor.autoIndent": "none",
 			"editor.wordWrap": "bounded",
 			"editor.suggest.showWords": false,
+			"noveler.pairCompletionChars": ["\"\"", "''", "（）", "[]", "{}", "《》", "【】", "「」", "『』", "“”", "‘’"],
 		},
 		"noveler.autoSaveTime": 10,
 		"noveler.showApplyRecommendPlaintextConf": true,

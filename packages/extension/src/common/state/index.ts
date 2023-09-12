@@ -3,8 +3,11 @@ export const funcTarget = {
   formatter: ['plaintext'],
   decoration: ['plaintext', 'markdown'],
   completion: ['plaintext', 'markdown'],
+  pairCompletion: ['plaintext', 'markdown'],
   diagnostics: ['plaintext', 'markdown'],
-  statusbar: ['plaintext', 'markdown'],
+  countBar: ['plaintext', 'markdown'],
+  webviewPreview: ['plaintext'],
+  webviewPanel: ['plaintext', 'markdown'],
 }
 export const extPrefix = 'noveler'
 export const barsPriority = {

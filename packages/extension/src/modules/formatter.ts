@@ -32,7 +32,7 @@ export const formatProvider = vscode.languages.registerDocumentFormattingEditPro
       () => [
         vscode.TextEdit.replace(
           new vscode.Range(0, 0, document.lineCount, 0),
-          formatFoo(document)(config.get(true)).join(utils.getEOLOfDoc(document)),
+          formatFoo(document)(config.get()).join(utils.getEOLOfDoc(document)),
         ),
       ],
       () => [],

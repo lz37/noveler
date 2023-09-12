@@ -11,6 +11,7 @@ import {
   DealedRenderOptions,
   RegExpRenderOptionsMap as RegExpStrRenderOptionsMap,
   RegExpDealedRenderOptionsMap,
+  ICustomHighlight,
 } from '../common/types'
 
 //#region init
@@ -35,7 +36,7 @@ const onChangeDocument = vscode.workspace.onDidChangeTextDocument((event) => {
 })
 
 const onChangeConf = vscode.workspace.onDidChangeConfiguration(async (event) => {
-  if (event.affectsConfiguration(`${state.extPrefix}.customHighlight`))
+  if (event.affectsConfiguration(`${state.extPrefix}.${R.identity<keyof ICustomHighlight>('customHighlight')}`))
     await vscode.commands.executeCommand(command.Noveler.RELOAD_DECORATION)
 })
 
@@ -51,7 +52,7 @@ const reloadCommand = (roots: readonly vscode.WorkspaceFolder[]) =>
       dealedRenderOptionsMapHandle(true),
       (map) =>
         state.funcTarget.decoration.includes(editor.document.languageId) &&
-        utils.isNovelDoc(editor.document)(config.get(true)) &&
+        utils.isNovelDoc(editor.document)(config.get()) &&
         updateDecorations(editor)(map),
     )(await infos.getInfosFromAllWorkspaces(roots)(false))
   })
