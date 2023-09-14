@@ -32,7 +32,6 @@ export interface ICompletion {
 export interface IPairCompletion {
   pairCompletion: boolean
   pairCompletionChars: string[]
-  pairDeletion: boolean
 }
 
 export interface IDirs {

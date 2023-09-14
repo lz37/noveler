@@ -1,35 +1,54 @@
 import * as vscode from 'vscode'
-import * as R from 'ramda'
-import { IConfig, IPairCompletion } from '../common/types'
+import { IPairCompletion } from '../common/types'
 import * as state from '../common/state'
 import * as config from '../config'
-import * as utils from '../common/utils'
 
 export const init = (context: vscode.ExtensionContext) => {
-  console.log('init')
-  context.subscriptions.push(onChangeDocument(config.get()))
+  context.subscriptions.push(...onChangeDocument(config.get()))
 }
 
 const onChangeDocument = ({ pairCompletionChars }: IPairCompletion) => {
   const charsGroups = pairCompletionChars.map((chars) => chars.split('')).filter((chars) => chars.length === 2)
-  let onCompleting = false
-  return vscode.workspace.onDidChangeTextDocument((event) => {
-    const editor = vscode.window.activeTextEditor
-    if (!editor) return
-    if (!state.funcTarget.pairCompletion.includes(event.document.languageId)) return
-    event.contentChanges.forEach((change) => {
-      if (change.text.length !== 1) return
-      const chars = charsGroups.find((chPair) => chPair[0] === change.text)
-      if (!chars) return
-      // write
-      if (onCompleting) {
-        onCompleting = false
+  let selected: { range: vscode.Range; text: string }[] = []
+  let isPairCompleting = false
+  return [
+    vscode.window.onDidChangeTextEditorSelection((event) => {
+      isPairCompleting = false
+      selected = []
+      if (!state.funcTarget.pairCompletion.includes(event.textEditor.document.languageId)) return
+      event.selections.forEach((selection) => {
+        selected = selected.concat({
+          range: selection,
+          text: event.textEditor.document.getText(selection),
+        })
+      })
+    }),
+    vscode.workspace.onDidChangeTextDocument((event) => {
+      if (event.reason) return
+      const editor = vscode.window.activeTextEditor
+      if (!editor) return
+      if (isPairCompleting) {
+        isPairCompleting = false
         return
       }
-      onCompleting = true
+      if (!state.funcTarget.pairCompletion.includes(event.document.languageId)) return
+      if (event.contentChanges[0].text.length !== 1) return
+      const chars = charsGroups.find((chPair) => chPair.includes(event.contentChanges[0].text))
+      if (!chars) return
+      isPairCompleting = true
       editor.edit((editBuilder) => {
-        editBuilder.insert(new vscode.Position(change.range.start.line, change.range.start.character + 1), chars[1])
+        selected.forEach(({ range, text }) => {
+          editBuilder.delete(new vscode.Range(range.start, range.start.translate(0, 1)))
+          if (text.length !== 0) {
+            editBuilder.insert(range.start, `${chars[0]}${text}${chars[1]}`)
+          } else {
+            editBuilder.insert(range.start, `${chars[0]}${chars[1]}`)
+          }
+        })
       })
-    })
-  })
+      editor.selections = selected.map(
+        ({ range }) => new vscode.Selection(range.start.translate(0, 1), range.end.translate(0, 1)),
+      )
+    }),
+  ]
 }

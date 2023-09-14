@@ -19,23 +19,6 @@ import * as R from 'ramda'
 export const activate = async (context: vscode.ExtensionContext) => {
   await config.askForPlaintextConf()
   modules.init(context, vscode.workspace.workspaceFolders ?? [])
-  // workspaceFolders 改变
-  // context.subscriptions.push(
-  //   vscode.workspace.onDidChangeWorkspaceFolders(() => {
-  //     // modules.destory(context)
-  //     modules.init(context, vscode.workspace.workspaceFolders ?? [])
-  //   }),
-  //   vscode.workspace.onDidChangeConfiguration((event) => {
-  //     if (
-  //       R.always<(keyof IDirs)[]>(['infoDir', 'novelDir', 'outlinesDir', 'diagnosticDir'])()
-  //         .map((key) => event.affectsConfiguration(`${state.extPrefix}.${key}`))
-  //         .reduce((acc, cur) => acc || cur, false)
-  //     )
-  //       return
-  //     // modules.destory(context)
-  //     modules.init(context, vscode.workspace.workspaceFolders ?? [])
-  //   }),
-  // )
 }
 
 export const deactivate = () => {

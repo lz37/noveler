@@ -11,10 +11,7 @@ export const config: IConfig = {
   autoIndent: true,
   completionChar: '@',
   pairCompletion: true,
-  pairCompletionChars: [
-    // '""', "''", '（）', '[]', '{}', '《》', '【】', '「」', '『』', '“”', '‘’'
-  ],
-  pairDeletion: true,
+  pairCompletionChars: ['（）', '《》', '【】', '「」', '『』', '“”', '‘’'],
   outlinesDir: '.noveler/outlines',
   infoDir: '.noveler/infos',
   diagnosticDir: '.noveler/diagnostics',

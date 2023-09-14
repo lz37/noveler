@@ -276,13 +276,16 @@
           "scope": "language-overridable",
           "items": {
             "type": "string"
-          }
-        },
-        "noveler.pairDeletion": {
-          "type": "boolean",
-          "default": true,
-          "markdownDescription": "是否自动删除成对符号",
-          "scope": "language-overridable"
+          },
+          "default": [
+            "（）",
+            "《》",
+            "【】",
+            "「」",
+            "『』",
+            "“”",
+            "‘’"
+          ]
         },
         "noveler.confCSVFiles": {
           "type": "array",
