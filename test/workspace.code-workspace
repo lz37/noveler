@@ -27,6 +27,16 @@
 		"noveler.autoIndent": true,
 		"noveler.completionChar": "@",
 		"noveler.statusIncludingSpace": false,
+		"noveler.pairCompletionChars": [
+			"（）",
+			"《》",
+			"【】",
+			"「」",
+			"『』",
+			"“”",
+			// "‘’",
+		],
+		"noveler.pairCompletion": true,
 		"noveler.statusItems": [
 			"Speed",
 			"Time",
