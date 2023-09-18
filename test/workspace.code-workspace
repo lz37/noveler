@@ -34,7 +34,7 @@
 			"「」",
 			"『』",
 			"“”",
-			// "‘’",
+			"‘’",
 		],
 		"noveler.pairCompletion": true,
 		"noveler.statusItems": [

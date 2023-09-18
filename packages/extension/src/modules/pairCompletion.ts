@@ -9,10 +9,11 @@ export const init = (context: vscode.ExtensionContext) => {
 }
 
 const onChangeConf = (context: vscode.ExtensionContext) =>
-  vscode.workspace.onDidChangeConfiguration(async (event) => {
+  vscode.workspace.onDidChangeConfiguration((event) => {
     if (
-      !event.affectsConfiguration(`${state.extPrefix}.${R.identity<keyof IPairCompletion>('pairCompletion')}`) &&
-      !event.affectsConfiguration(`${state.extPrefix}.${R.identity<keyof IPairCompletion>('pairCompletionChars')}`)
+      R.identity<(keyof IPairCompletion)[]>(['pairCompletion', 'pairCompletionChars']).every(
+        (key) => !event.affectsConfiguration(`${state.extPrefix}.${key}`),
+      )
     )
       return
     context.subscriptions.push(...onChangeDocument(config.get()))
