@@ -26,16 +26,11 @@ export const splitStr = (sChars: string) => {
   return str.substring(0, str.length - 1)
 }
 
-export const createWebviewHtml = (
-  router: NovelerRouter,
-  webview: vscode.Webview,
-  context: vscode.ExtensionContext,
-  showScrollbar = false,
-) =>
-  R.pipe(
-    () => webview.asWebviewUri(vscode.Uri.joinPath(context.extensionUri, 'dist', 'app', 'bundle.js')),
-    (bundleScriptPath) =>
-      `
+export const createWebviewHtml =
+  (context: vscode.ExtensionContext) =>
+  (router: NovelerRouter, showScrollbar = false) =>
+  (webview: vscode.Webview) =>
+    `
     <!DOCTYPE html>
     <html lang="en">
       <head>
@@ -47,18 +42,19 @@ export const createWebviewHtml = (
         <div id="root"></div>
         <script>
           const vscode = acquireVsCodeApi();
-          const home = '${router}'
-          const showScrollbar = ${showScrollbar}
+          const home = '${router}';
+          const showScrollbar = ${showScrollbar};
         </script>
-        <script src="${bundleScriptPath}"></script>
+        <script src="${webview.asWebviewUri(
+          vscode.Uri.joinPath(context.extensionUri, 'dist', 'app', 'bundle.js'),
+        )}"></script>
       </body>
     </html>
   `
-        .split(/\r?\n/)
-        .map((s) => s.trim())
-        .filter((s) => s)
-        .join(''),
-  )()
+      .split(/\r?\n/)
+      .map((s) => s.trim())
+      .filter((s) => s)
+      .join('')
 
 /**
  *

@@ -9,6 +9,7 @@ import * as statusbar from './statusBar'
 import * as infoBar from './infoBar'
 import * as commands from '../common/commands'
 import * as pairCompletion from './pairCompletion'
+import * as webviewPreview from './webviewPreview'
 
 export const init = (context: vscode.ExtensionContext, roots: readonly vscode.WorkspaceFolder[]) => {
   infoBar.init(context)
@@ -21,6 +22,7 @@ export const init = (context: vscode.ExtensionContext, roots: readonly vscode.Wo
   pairCompletion.init(context)
   watcher.init(context, roots)
   statusbar.init(context)
+  webviewPreview.init(context)
   vscode.commands.executeCommand(commands.Noveler.INFO_BAR_HIDE)
 }
 

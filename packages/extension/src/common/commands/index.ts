@@ -7,6 +7,7 @@ export enum Noveler {
   TRIGGER_COMPLETION = 'noveler.triggerCompletion',
   INFO_BAR_SHOW = 'noveler.infoBarShow',
   INFO_BAR_HIDE = 'noveler.infoBarHide',
+  PANEL_PREVIEW_SHOW = 'noveler.panelPreviewShow',
 }
 export enum Etc {
   FORMAT_DOCUMENT = 'editor.action.formatDocument',

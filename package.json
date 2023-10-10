@@ -82,7 +82,7 @@
     "ts-md5": "^1.3.1"
   },
   "engines": {
-    "vscode": "^1.81.0"
+    "vscode": "^1.78.0"
   },
   "repository": {
     "type": "git",
@@ -118,9 +118,20 @@
         "command": "noveler.reloadDecoration",
         "title": "reload decoration",
         "category": "noveler"
+      },
+      {
+        "command": "noveler.panelPreviewShow",
+        "title": "panel preview show",
+        "category": "noveler"
       }
     ],
     "keybindings": [
+      {
+        "command": "noveler.panelPreviewShow",
+        "key": "alt+\\",
+        "mac": "alt+\\",
+        "when": "editorTextFocus && editorLangId == 'plaintext'"
+      },
       {
         "command": "noveler.createIndent",
         "key": "enter",
@@ -160,25 +171,25 @@
           "type": "boolean",
           "default": true,
           "markdownDescription": "是否在回车后自动插入缩进、空行",
-          "scope": "language-overridable"
+          "scope": "resource"
         },
         "noveler.autoIndentLines": {
           "type": "number",
           "default": 0,
           "markdownDescription": "回车后自动插入的行数， `noveler.autoIndent` 关闭时，此功能也会作为格式化属性读取",
-          "scope": "language-overridable"
+          "scope": "resource"
         },
         "noveler.autoIndentSpaces": {
           "type": "number",
           "default": 4,
           "markdownDescription": "回车后自动插入的空格数， `noveler.autoIndent` 关闭时，此功能也会作为格式化属性读取",
-          "scope": "language-overridable"
+          "scope": "resource"
         },
         "noveler.usePangu": {
           "type": "boolean",
           "default": true,
           "markdownDescription": "格式化时是否中在英文之间添加空格（不再使用第三方盘古包，改为插件内置实现）",
-          "scope": "language-overridable"
+          "scope": "resource"
         },
         "noveler.previewFontSize": {
           "type": "number",
@@ -241,13 +252,13 @@
         "noveler.customHighlight": {
           "type": "object",
           "markdownDescription": "自定义高亮，键为正则表达式，值为渲染选项，值的结构参照 [DecorationRenderOptions](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions)",
-          "scope": "language-overridable"
+          "scope": "resource"
         },
         "noveler.completionChar": {
           "type": "string",
           "default": "@",
           "markdownDescription": "补全时的触发字符, *注*：请尽量使用英文标点作为触发字符, 默认为@",
-          "scope": "language-overridable"
+          "scope": "resource"
         },
         "noveler.outlinesDir": {
           "type": "string",
@@ -271,12 +282,12 @@
           "type": "boolean",
           "default": true,
           "markdownDescription": "是否开启成对符号自动补全",
-          "scope": "language-overridable"
+          "scope": "resource"
         },
         "noveler.pairCompletionChars": {
           "type": "array",
           "markdownDescription": "成对符号组",
-          "scope": "language-overridable",
+          "scope": "resource",
           "items": {
             "type": "string"
           },

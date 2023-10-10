@@ -2,7 +2,6 @@
   "version": "0.2.0",
   "configurations": [
     {
-      // lanuch前运行一下yarn watch
       "name": "Launch Extension",
       "type": "extensionHost",
       "request": "launch",
