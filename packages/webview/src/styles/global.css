@@ -1,9 +1,0 @@
-html,
-body {
-  margin: 0;
-  padding: 0;
-}
-
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;
-}

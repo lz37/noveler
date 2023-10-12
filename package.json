@@ -129,8 +129,7 @@
       {
         "command": "noveler.panelPreviewShow",
         "key": "alt+\\",
-        "mac": "alt+\\",
-        "when": "editorTextFocus && editorLangId == 'plaintext'"
+        "mac": "alt+\\"
       },
       {
         "command": "noveler.createIndent",

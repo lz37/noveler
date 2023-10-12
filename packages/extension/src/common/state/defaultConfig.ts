@@ -1,4 +1,4 @@
-import { CSVOption, IConfig, RegExpRenderOptionsMap, RenderOptions, TXTOptions } from '../types'
+import { ICSVOption, IConfig, IRegExpRenderOptionsMap, IRenderOptions, ITXTOptions } from '../types'
 
 export const config: IConfig = {
   showApplyRecommendPlaintextConf: true,
@@ -22,17 +22,17 @@ export const config: IConfig = {
   statusTimeUnit: 10,
 }
 
-export const csvOpt: CSVOption = {
+export const csvOpt: ICSVOption = {
   nameKey: 'name',
   description: '',
 }
 
-export const txtOpt: TXTOptions = {
+export const txtOpt: ITXTOptions = {
   message: '敏感词',
   diagnosticSeverity: 'Error',
 }
 
-export const decorations: RegExpRenderOptionsMap = {
+export const decorations: IRegExpRenderOptionsMap = {
   '\\d+(\\.\\d+)?': {
     renderOpts: {
       color: { id: 'number' },

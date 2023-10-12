@@ -6,7 +6,7 @@ import * as utils from '../common/utils'
 import * as fs from 'fs/promises'
 import * as csv from 'csv-parse/sync'
 import * as R from 'ramda'
-import { CSVContent, CSVData, CSVOption } from '../common/types'
+import { ICSVContent, ICSVData, ICSVOption } from '../common/types'
 
 const isCompletionItemKind = (a: string) => Object.values(vscode.CompletionItemKind).includes(a)
 
@@ -18,7 +18,7 @@ const isCompletionItemKind = (a: string) => Object.values(vscode.CompletionItemK
  */
 export const getCSVOptions = async (p: string, csvFiles: string[]) => {
   if (csvFiles.length === 0) return undefined
-  const optMap: Record<string, CSVOption> = {}
+  const optMap: Record<string, ICSVOption> = {}
   csvFiles.forEach((file) => {
     optMap[file] = {
       description: file,
@@ -31,7 +31,7 @@ export const getCSVOptions = async (p: string, csvFiles: string[]) => {
     if (!R.keys(optMap).includes(file)) continue
     const data = await fs.readFile(path.join(p, `${file}.json`), 'utf-8')
     // data解析json
-    const json = <CSVOption>JSON.parse(data)
+    const json = <ICSVOption>JSON.parse(data)
     if (json.suggestKind && !isCompletionItemKind(json.suggestKind)) {
       json.suggestKind = undefined
     }
@@ -43,7 +43,7 @@ export const getCSVOptions = async (p: string, csvFiles: string[]) => {
 
 export const getInfosFromAllWorkspaces = (() => {
   const io = async (roots: readonly vscode.WorkspaceFolder[]) => {
-    const map: Record<string, Record<string, CSVContent>> = {}
+    const map: Record<string, Record<string, ICSVContent>> = {}
     for await (const root of roots) {
       const p = path.join(root.uri.fsPath, config.get().infoDir)
       const isDir = await utils.isDirOrMkdir(p)
@@ -54,7 +54,7 @@ export const getInfosFromAllWorkspaces = (() => {
       if (!opts) continue
       const datas = await getCSVDatas(root, p, csvFiles, opts)
       if (!datas) continue
-      const csvContentMap: Record<string, CSVContent> = {}
+      const csvContentMap: Record<string, ICSVContent> = {}
       csvFiles.forEach((file) => {
         const opt = opts[file]
         const data = datas[file]
@@ -95,10 +95,10 @@ export const getCSVDatas = async (
   root: vscode.WorkspaceFolder,
   p: string,
   csvFiles: string[],
-  optMap: Record<string, CSVOption>,
+  optMap: Record<string, ICSVOption>,
 ) => {
   if (csvFiles.length === 0) return undefined
-  const csvDataMap: Record<string, CSVData> = {}
+  const csvDataMap: Record<string, ICSVData> = {}
   for await (const csvFile of csvFiles) {
     const csvOpt = optMap[csvFile]
     const csvPath = path.join(p, `${csvFile}.csv`)
@@ -114,7 +114,7 @@ export const getCSVDatas = async (
  * @param p 绝对路径
  * @throws Error `配置文件 ${p} 中没有找到 nameKey: ${csvOpt.nameKey}`
  */
-const readCSV = async (root: vscode.WorkspaceFolder, p: string, csvOpt: CSVOption) => {
+const readCSV = async (root: vscode.WorkspaceFolder, p: string, csvOpt: ICSVOption) => {
   const dataString = await fs.readFile(p, 'utf-8')
   const records = <string[][]>csv.parse(dataString)
   const firstRow = records[0]
@@ -129,7 +129,7 @@ const readCSV = async (root: vscode.WorkspaceFolder, p: string, csvOpt: CSVOptio
   }
   const datas = records.slice(1)
   if (datas.length === 0) return undefined
-  const content: CSVData = {}
+  const content: ICSVData = {}
   datas.forEach((row) => {
     const key = row[nameKetIndex].trim()
     content[key] = {}

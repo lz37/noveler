@@ -5,8 +5,8 @@ import * as infos from '../config/infos'
 import * as R from 'ramda'
 import * as state from '../common/state'
 import * as utils from '../common/utils'
-import { CSVContent, CompletionOption, IConfig, ICompletion } from '../common/types'
 import { isNovelDoc } from '../common/utils'
+import { ICSVContent, ICompletion, ICompletionOption, IConfig } from '../common/types'
 
 export const init = (context: vscode.ExtensionContext, roots: readonly vscode.WorkspaceFolder[]) => {
   context.subscriptions.push(reloadCommand(context, roots))
@@ -52,7 +52,7 @@ const reloadCommand = (context: vscode.ExtensionContext, roots: readonly vscode.
   vscode.commands.registerCommand(commands.Noveler.RELOAD_COMPLETION, async () => {
     storeProvider()()
     R.pipe(
-      (map: Record<string, Record<string, CSVContent>>) =>
+      (map: Record<string, Record<string, ICSVContent>>) =>
         R.values(map)
           .map((value) => value)
           .reduce((acc, value) => R.mergeDeepWith(R.concat, acc, value), {}),
@@ -80,8 +80,8 @@ const additionalTextEdits = (position: vscode.Position, l: number) => [
   ),
 ]
 
-const createCompletionOptions = (map: Record<string, CSVContent>) => {
-  const completionOptions: CompletionOption[] = []
+const createCompletionOptions = (map: Record<string, ICSVContent>) => {
+  const completionOptions: ICompletionOption[] = []
   R.values(map).forEach(({ suggestKind, description, data }) => {
     Object.entries(data).forEach(([key, { alias, hover }]) => {
       const document = hover ? new vscode.MarkdownString() : undefined
@@ -111,7 +111,7 @@ const createCompletionOptions = (map: Record<string, CSVContent>) => {
 
 const makeProvider =
   ({ completionChar }: IConfig) =>
-  (opts: CompletionOption[]) => {
+  (opts: ICompletionOption[]) => {
     const completionChars = completionChar === '' ? [''] : ['', completionChar]
     return vscode.languages.registerCompletionItemProvider(
       state.funcTarget.completion,

@@ -3,12 +3,12 @@ import * as infos from './infos'
 import * as vscode from 'vscode'
 import * as path from 'path'
 import * as utils from '../common/utils'
-import { CSVOption } from '../common/types'
+import { ICSVOption } from '../common/types'
 
 suite('Extension Config Infos Modules Test Suite', () => {
   vscode.window.showInformationMessage('Start config/infos test')
   const folder2InfosPath = path.join(__dirname, '..', '..', 'test', 'folder2', '.noveler', 'infos')
-  const test1Opt: CSVOption = {
+  const test1Opt: ICSVOption = {
     nameKey: 'key',
     hoverKey: 'hoverKey',
     description: '主角：',
@@ -17,7 +17,7 @@ suite('Extension Config Infos Modules Test Suite', () => {
       color: '#9e952f',
     },
   }
-  const test2Opt: CSVOption = {
+  const test2Opt: ICSVOption = {
     nameKey: 'key',
     hoverKey: 'hoverKey',
     description: '配角：',

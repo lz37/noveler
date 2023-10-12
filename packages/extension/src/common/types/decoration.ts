@@ -1,11 +1,11 @@
 import * as vscode from 'vscode'
 
-export interface RenderOptions {
+export interface IRenderOptions {
   renderOpts: vscode.DecorationRenderOptions
   hoverMsg?: vscode.MarkdownString
 }
 
-export interface DealedRenderOptions {
+export interface IDealedRenderOptions {
   decorationType: vscode.TextEditorDecorationType
   hoverMsg?: vscode.MarkdownString
 }
@@ -13,10 +13,10 @@ export interface DealedRenderOptions {
 /**
  * key should be a RegExp string
  */
-export interface RegExpRenderOptionsMap {
-  [key: string]: RenderOptions
+export interface IRegExpRenderOptionsMap {
+  [key: string]: IRenderOptions
 }
 
-export interface RegExpDealedRenderOptionsMap {
-  [key: string]: DealedRenderOptions
+export interface IRegExpDealedRenderOptionsMap {
+  [key: string]: IDealedRenderOptions
 }

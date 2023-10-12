@@ -7,11 +7,11 @@ import * as config from '../config'
 import * as infos from '../config/infos'
 import * as defaultConf from '../common/state/defaultConfig'
 import {
-  CSVContent,
-  DealedRenderOptions,
-  RegExpRenderOptionsMap as RegExpStrRenderOptionsMap,
-  RegExpDealedRenderOptionsMap,
+  ICSVContent,
   ICustomHighlight,
+  IDealedRenderOptions,
+  IRegExpDealedRenderOptionsMap,
+  IRegExpRenderOptionsMap,
 } from '../common/types'
 
 //#region init
@@ -46,7 +46,7 @@ const reloadCommand = (roots: readonly vscode.WorkspaceFolder[]) =>
     dealedRenderOptionsMapHandle(true)()
     R.pipe(
       getRenderOptionsMap(config.get().customHighlight ?? {}),
-      (map) => R.mergeDeepLeft(map, defaultConf.decorations) as RegExpStrRenderOptionsMap,
+      (map) => R.mergeDeepLeft(map, defaultConf.decorations) as IRegExpRenderOptionsMap,
       createDecorations,
       // 添加
       dealedRenderOptionsMapHandle(true),
@@ -58,16 +58,16 @@ const reloadCommand = (roots: readonly vscode.WorkspaceFolder[]) =>
   })
 //#endregion
 
-type DealedRenderOption2Itself = (map?: RegExpDealedRenderOptionsMap) => RegExpDealedRenderOptionsMap
+type DealedRenderOption2Itself = (map?: IRegExpDealedRenderOptionsMap) => IRegExpDealedRenderOptionsMap
 const dealedRenderOptionsMapHandle = (() => {
-  let map: RegExpDealedRenderOptionsMap = {}
+  let map: IRegExpDealedRenderOptionsMap = {}
   /**
    * @param set 是否更新缓存， false 给了参数也没用 true 不给参数就销毁
    */
   return (set: boolean) =>
     R.ifElse(
       () => set,
-      (): DealedRenderOption2Itself => (newMap?: RegExpDealedRenderOptionsMap) => {
+      (): DealedRenderOption2Itself => (newMap?: IRegExpDealedRenderOptionsMap) => {
         R.values(map).forEach((value) => {
           value.hoverMsg = undefined
           value.decorationType.dispose()
@@ -81,7 +81,7 @@ const dealedRenderOptionsMapHandle = (() => {
 
 const getRenderOptionsMap =
   (customHighlight: { [key: string]: vscode.DecorationRenderOptions }) =>
-  (csvContentsMap: Record<string, Record<string, CSVContent>>) =>
+  (csvContentsMap: Record<string, Record<string, ICSVContent>>) =>
     R.pipe(
       () => customHighlightIntoRenderOptionsMap(customHighlight),
       (map) => {
@@ -100,9 +100,9 @@ const customHighlightIntoRenderOptionsMap = (customHighlight: { [key: string]: v
       renderOpts: value,
     }
     return acc
-  }, {} as RegExpStrRenderOptionsMap)
+  }, {} as IRegExpRenderOptionsMap)
 
-const CSVContentIntoRenderOptionsMap = (filename: string, csvContent: CSVContent) => (map: RegExpStrRenderOptionsMap) =>
+const CSVContentIntoRenderOptionsMap = (filename: string, csvContent: ICSVContent) => (map: IRegExpRenderOptionsMap) =>
   R.pipe(
     () => ({
       light: R.once(utils.getRandomColorLight),
@@ -130,10 +130,10 @@ const CSVContentIntoRenderOptionsMap = (filename: string, csvContent: CSVContent
 /**
  * 不会刷新高亮
  */
-export const createDecorations = (map: RegExpStrRenderOptionsMap) => {
-  const decorations: RegExpDealedRenderOptionsMap = {}
+export const createDecorations = (map: IRegExpRenderOptionsMap) => {
+  const decorations: IRegExpDealedRenderOptionsMap = {}
   Object.entries(map).forEach(([key, value]) => {
-    const decoration: DealedRenderOptions = {
+    const decoration: IDealedRenderOptions = {
       decorationType: vscode.window.createTextEditorDecorationType(value.renderOpts),
       hoverMsg: value.hoverMsg,
     }
@@ -142,11 +142,11 @@ export const createDecorations = (map: RegExpStrRenderOptionsMap) => {
   return decorations
 }
 
-export const updateDecorations = (editor: vscode.TextEditor) => (map: RegExpDealedRenderOptionsMap) => {
+export const updateDecorations = (editor: vscode.TextEditor) => (map: IRegExpDealedRenderOptionsMap) => {
   Object.entries(map).forEach(([key, value]) => updateSingleDecoration(editor)(value, new RegExp(key, 'g')))
 }
 
-const updateSingleDecoration = (editor: vscode.TextEditor) => (opts: DealedRenderOptions, reg: RegExp) => {
+const updateSingleDecoration = (editor: vscode.TextEditor) => (opts: IDealedRenderOptions, reg: RegExp) => {
   const text = editor.document.getText()
   const options: vscode.DecorationOptions[] = []
   let match: RegExpExecArray | null = null

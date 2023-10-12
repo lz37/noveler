@@ -2,7 +2,8 @@ import * as vscode from 'vscode'
 import * as R from 'ramda'
 import * as utils from '../common/utils'
 import * as commands from '../common/commands'
-import { NovelerRouter } from '../common/types'
+import * as state from '../common/state'
+import {} from '../common/types'
 
 let panel: PanelHandler | undefined
 
@@ -12,23 +13,30 @@ export const init = (context: vscode.ExtensionContext) => {
 }
 
 const panelShow = vscode.commands.registerCommand(commands.Noveler.PANEL_PREVIEW_SHOW, () => {
-  panel?.show()
+  panel?.show(vscode.window.activeTextEditor)
 })
 
 class PanelHandler {
   private panel: vscode.WebviewPanel | undefined
-  private disposables: vscode.Disposable[] = []
-  constructor(createWebviewHtml: (webview: vscode.Webview) => string) {
+  private webviewCreator: (webview: vscode.Webview) => string
+  constructor(webviewCreator: (webview: vscode.Webview) => string) {
+    this.webviewCreator = webviewCreator
+  }
+  private panelCreator = () => {
     const panel = vscode.window.createWebviewPanel('NovelerPreview', 'Noveler Preview', vscode.ViewColumn.Two, {
       enableScripts: true,
       retainContextWhenHidden: true,
     })
-    panel.webview.html = createWebviewHtml(panel.webview)
+    panel.webview.html = this.webviewCreator(panel.webview)
+    panel.onDidDispose(() => (this.panel = undefined))
     this.panel = panel
   }
-  show() {
-    console.log('show')
-    const column = vscode.window.activeTextEditor?.viewColumn
-    this.panel?.reveal(column)
+  show = (editor?: vscode.TextEditor) => {
+    if (this.panel) {
+      this.panel.dispose()
+    } else if (editor && state.funcTarget.webviewPreview.includes(editor.document.languageId)) {
+      this.panelCreator()
+      console.log(editor.document.getText())
+    }
   }
 }

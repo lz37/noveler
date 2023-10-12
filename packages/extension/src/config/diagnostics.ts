@@ -4,8 +4,8 @@ import * as R from 'ramda'
 import * as fs from 'fs/promises'
 import * as config from '.'
 import * as utils from '../common/utils'
-import { DiagnosticSeverityKeys, TXTContent, TXTOptions } from '../common/types'
 import path from 'path'
+import { DiagnosticSeverityKeys, ITXTContent, ITXTOptions } from '../common/types'
 
 /**
  *
@@ -20,7 +20,7 @@ export const getTXTOptions = R.ifElse(
       () => txtFiles.map((file) => ({ file, opt: getSingleTXTOption(file) })),
       (m) =>
         m.reduce(
-          (acc: Record<string, TXTOptions>, { file, opt }) => R.mergeDeepWith(R.concat, acc, { [file]: opt }),
+          (acc: Record<string, ITXTOptions>, { file, opt }) => R.mergeDeepWith(R.concat, acc, { [file]: opt }),
           {},
         ),
     )(),
@@ -33,7 +33,7 @@ const isDiagnosticSeverity = (a: string) => Object.values(vscode.DiagnosticSever
  * @param txtFile 文件名（不带后缀）
  * @returns
  */
-const getSingleTXTOption = (txtFile: string): TXTOptions =>
+const getSingleTXTOption = (txtFile: string): ITXTOptions =>
   R.cond([
     [() => !txtFile, () => defaultConfig.txtOpt],
     [
@@ -95,7 +95,7 @@ const handleTxtData = (data: string) =>
     .filter((a) => a.trim())
 
 export const getDiagnosticsFromAllWorkspaces = async (roots: readonly vscode.WorkspaceFolder[]) => {
-  const map: Record<string, Record<string, TXTContent>> = {}
+  const map: Record<string, Record<string, ITXTContent>> = {}
   for await (const root of roots) {
     const p = path.join(root.uri.fsPath, config.get().diagnosticDir)
     const isDir = await utils.isDirOrMkdir(p)
@@ -106,7 +106,7 @@ export const getDiagnosticsFromAllWorkspaces = async (roots: readonly vscode.Wor
     if (!opts) continue
     const datas = await getTXTDatas(p, txtFiles)
     if (!datas) continue
-    const txtMap: Record<string, TXTContent> = {}
+    const txtMap: Record<string, ITXTContent> = {}
     txtFiles.forEach((file) => {
       const opt = opts[file]
       const data = datas[file]

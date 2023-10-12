@@ -4,8 +4,8 @@ import * as command from '../common/commands'
 import * as utils from '../common/utils'
 import * as config from '../config'
 import { getDiagnosticsFromAllWorkspaces } from '../config/diagnostics'
-import { DiagnosticSeverityKeys, TXTContent } from '../common/types'
 import * as state from '../common/state'
+import { DiagnosticSeverityKeys, ITXTContent } from '../common/types'
 
 const collection = vscode.languages.createDiagnosticCollection('noveler')
 
@@ -13,8 +13,8 @@ export const init = (context: vscode.ExtensionContext, roots: readonly vscode.Wo
   context.subscriptions.push(collection, onChangeDocument, onChangeEditor, reloadCommand(roots))
 
 const TXTContents = (() => {
-  let contents: TXTContent[] = []
-  return (newContents?: TXTContent[]) => {
+  let contents: ITXTContent[] = []
+  return (newContents?: ITXTContent[]) => {
     if (newContents !== undefined) contents = newContents
     return contents
   }

@@ -1,9 +1,9 @@
 import * as vscode from 'vscode'
 import * as defaultConfig from '../common/state/defaultConfig'
-import { IConfig } from '../common/types'
 import { extPrefix } from '../common/state'
 import * as osPath from 'path'
 import * as R from 'ramda'
+import { IConfig } from '../common/types'
 
 export const get = R.pipe(
   (languageId?: string) =>

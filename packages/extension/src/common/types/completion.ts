@@ -1,6 +1,6 @@
 import * as vscode from 'vscode'
 
-export interface CompletionOption {
+export interface ICompletionOption {
   insertText: vscode.SnippetString
   kind?: vscode.CompletionItemKind
   label: vscode.CompletionItemLabel
