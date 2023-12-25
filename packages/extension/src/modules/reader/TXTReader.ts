@@ -47,7 +47,7 @@ const handleTxt = async (path: string) => {
   return words
 }
 
-const loadFile = async () => {
+export const loadFile = async () => {
   try {
     updateConf()
   } catch (error) {

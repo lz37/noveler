@@ -11,6 +11,7 @@ import {
   Commands,
   ICustomHighlightConfMap,
 } from 'common/types'
+import { initing } from '@/extension'
 
 let conf: CSVOptionMap | undefined = undefined
 let highlightConf: ICustomHighlightConfMap | undefined = undefined
@@ -108,7 +109,7 @@ const handleCSV = async (csvOpt: CSVOptions) => {
   }
 }
 
-const loadFile = async () => {
+export const loadFile = async () => {
   try {
     updateConf()
   } catch (error) {
@@ -138,6 +139,10 @@ export const reloadCommand = vscode.commands.registerCommand(
   },
 )
 
-export const onChangeConf = vscode.workspace.onDidChangeConfiguration(() => {
-  vscode.commands.executeCommand(Commands.ReloadCSV)
-})
+export const onChangeConf = vscode.workspace.onDidChangeConfiguration(
+  (event) => {
+    if (initing) return
+    if (!event.affectsConfiguration('noveler')) return
+    vscode.commands.executeCommand(Commands.ReloadCSV)
+  },
+)

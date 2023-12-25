@@ -4,6 +4,7 @@ import {
   ICustomHighlightConfMap,
   IDealedCustomHighlightConfMap,
 } from 'common/types'
+import { initing } from '@/extension'
 
 const targetFiles = ['plaintext', 'markdown']
 
@@ -40,6 +41,7 @@ export const reloadConf = (extConf?: ICustomHighlightConfMap) => {
 
 export const onChangeConf = vscode.workspace.onDidChangeConfiguration(
   (event) => {
+    if (initing) return
     if (!event.affectsConfiguration('noveler')) return
     reloadConf()
   },
@@ -153,4 +155,13 @@ const destroyHovers = () => {
 export const triggerUpdateDecorations = (activeEditor: vscode.TextEditor) => {
   if (!targetFiles.includes(activeEditor.document.languageId)) return
   updateDecorations(activeEditor)
+}
+
+export const deactivate = () => {
+  // 注销掉高亮
+  const editor = vscode.window.activeTextEditor
+  destroyHovers()
+  if (editor) {
+    destroyDecorations(editor)
+  }
 }

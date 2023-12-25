@@ -1,0 +1,3 @@
+{
+  "packages": ["nodePackages.pnpm@latest", "nodejs@18.17.1"]
+}

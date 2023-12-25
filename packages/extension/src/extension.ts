@@ -23,8 +23,11 @@ import * as panel from '@/modules/webviews/Panel'
 import { Commands } from 'common/types'
 import * as os from 'os'
 
+export let initing = false
+
 // this method is called when vs code is activated
 export const activate = async (context: vscode.ExtensionContext) => {
+  initing = true
   const editor = vscode.window.activeTextEditor
   await confHandler.askForPlaintextConf()
   // ------------------ setcontext ------------------
@@ -56,6 +59,9 @@ export const activate = async (context: vscode.ExtensionContext) => {
     diagnostic.onChangeConfDocument,
   )
   // ------------------ extension-init ------------------
-  await vscode.commands.executeCommand(Commands.ReloadCSV)
-  await vscode.commands.executeCommand(Commands.ReloadTXT)
+  CSVReader.loadFile()
+  TXTReader.loadFile()
+  initing = false
 }
+
+// export const deactivate = () => {}

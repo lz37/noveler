@@ -1,6 +1,7 @@
 import * as vscode from 'vscode'
 import * as confHandler from '@/modules/ConfigHandler'
 import { StatusItem } from 'common/types'
+import { initing } from '@/extension'
 
 const targetFiles = ['plaintext', 'markdown']
 
@@ -138,6 +139,8 @@ export const changeEditor = vscode.window.onDidChangeActiveTextEditor(
   },
 )
 
-export const changeConf = vscode.workspace.onDidChangeConfiguration(() => {
+export const changeConf = vscode.workspace.onDidChangeConfiguration((event) => {
+  if (initing) return
+  if (!event.affectsConfiguration('noveler')) return
   updateConf()
 })

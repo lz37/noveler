@@ -2,6 +2,7 @@ import * as vscode from 'vscode'
 import * as confHandler from '@/modules/ConfigHandler'
 import { PreviewDto, PreviewExtRecDto, Commands, IConfig } from 'common/types'
 import { createWebviewHtml } from 'common/utils'
+import { initing } from '@/extension'
 
 const targetFiles = ['plaintext']
 
@@ -150,6 +151,7 @@ export const provider = (context: vscode.ExtensionContext) => {
       },
     ),
     onChangeConf: vscode.workspace.onDidChangeConfiguration(async (event) => {
+      if (initing) return
       if (!event.affectsConfiguration('noveler')) {
         return
       }
