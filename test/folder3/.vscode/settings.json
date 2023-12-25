@@ -4,4 +4,14 @@
     "editor.autoIndent": "none",
     "editor.wordWrap": "bounded"
   },
+  "noveler.confCSVFiles": [
+    {
+      "path": "简码提示.csv",
+      "hoverKey": "hoverKey",
+      "key": "key",
+      "decorationRenderOptions": {
+        "color": "#9e952f"
+      }
+    }
+  ]
 }

@@ -56,7 +56,6 @@ export const updateProvider = () => {
         }
         const items: vscode.CompletionItem[] = []
         keys.forEach(({ desc, kind, prefix }, key) => {
-          console.log(key)
           const item = new vscode.CompletionItem(`${prefix}${key}`, kind)
           item.command = command
           item.insertText = key
@@ -89,3 +88,7 @@ export const deletePrefixCommand = vscode.commands.registerCommand(
     })
   },
 )
+
+export const deactivate = () => {
+  if (provider) provider.dispose()
+}

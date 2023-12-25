@@ -2,6 +2,7 @@ import * as vscode from 'vscode'
 import * as confHandler from '@/modules/ConfigHandler'
 import { getAbsolutePaths } from 'common/utils'
 import { DiagnosticSeverityKeys, Commands } from 'common/types'
+import { initing } from '@/extension'
 
 const targetFiles = ['plaintext', 'markdown']
 
@@ -22,6 +23,7 @@ export const onChangeDocument = vscode.workspace.onDidChangeTextDocument(
 
 export const onChangConf = vscode.workspace.onDidChangeConfiguration(
   async (event) => {
+    if (initing) return
     if (event.affectsConfiguration('noveler')) {
       await vscode.commands.executeCommand(Commands.ReloadTXT)
     }
