@@ -1,3 +1,14 @@
+## [1.4.8](https://github.com/lz37/noveler/compare/v1.4.5...v1.4.8) (2023-12-25)
+
+
+### Bug Fixes
+
+* **csvreader.ts:** solve bug of failing to show default highlight when no csv settings ([ac29c89](https://github.com/lz37/noveler/commit/ac29c89d8437c111fe99077433c8a55b2e71d231))
+* stricten the onChangeConf hook ([20b40e7](https://github.com/lz37/noveler/commit/20b40e77ede217c8bfbe54a2cd41edd8dd5fd8bd))
+* word count bug ([e43f117](https://github.com/lz37/noveler/commit/e43f117b41c6c8dd8b6a3de6da87a7834d9c5c73))
+
+
+
 ## [1.4.7](https://github.com/lz37/noveler/compare/v1.4.5...v1.4.7) (2023-07-28)
 
 
