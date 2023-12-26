@@ -1,11 +1,11 @@
-import * as defaultConfig from '../common/state/defaultConfig'
+import * as defaultConfig from '@common/state/defaultConfig'
 import * as vscode from 'vscode'
 import * as R from 'ramda'
 import * as fs from 'fs/promises'
 import * as config from '.'
-import * as utils from '../common/utils'
+import * as utils from '@common/utils'
 import path from 'path'
-import { DiagnosticSeverityKeys, ITXTContent, ITXTOptions } from '../common/types'
+import { DiagnosticSeverityKeys, ITXTContent, ITXTOptions } from '../../../common/src/types'
 
 /**
  *

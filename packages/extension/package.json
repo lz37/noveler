@@ -10,8 +10,5 @@
   },
   "version": "0.0.1",
   "author": "zerozawa",
-  "license": "GPL-3.0",
-  "devDependencies": {
-    "@types/node": "^16.17"
-  }
+  "license": "GPL-3.0"
 }

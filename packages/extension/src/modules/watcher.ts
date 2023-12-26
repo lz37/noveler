@@ -1,9 +1,9 @@
 import * as vscode from 'vscode'
-import * as config from '../config'
-import * as commands from '../common/commands'
-import * as state from '../common/state'
+import * as config from '@ext/config'
+import * as commands from '@common/commands'
+import * as state from '@common/state'
 import * as R from 'ramda'
-import { IConfig, IDirs } from '../common/types'
+import { IConfig, IDirs } from '@common/types'
 
 const execInfosCommands = () => {
   vscode.commands.executeCommand(commands.Noveler.RELOAD_DECORATION)

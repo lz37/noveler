@@ -1,5 +1,5 @@
 import * as vscode from 'vscode'
-import { StatusItem } from './statusbar'
+import { StatusItem } from '@common/types/statusbar'
 
 export interface IFlags {
   showApplyRecommendPlaintextConf: boolean

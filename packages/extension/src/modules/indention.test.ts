@@ -1,9 +1,9 @@
 import * as vscode from 'vscode'
 import * as assert from 'assert'
 import * as path from 'path'
-import * as commands from '../common/commands'
-import * as config from '../config'
-import * as utils from '../common/utils'
+import * as commands from '@common/commands'
+import * as config from '@ext/config'
+import * as utils from '@common/utils'
 
 suite('Extension Indention Modules Test Suite', () => {
   vscode.window.showInformationMessage('Start modules/indention test')

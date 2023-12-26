@@ -1,11 +1,11 @@
 import * as vscode from 'vscode'
 import * as R from 'ramda'
-import * as command from '../common/commands'
-import * as utils from '../common/utils'
-import * as config from '../config'
-import { getDiagnosticsFromAllWorkspaces } from '../config/diagnostics'
-import * as state from '../common/state'
-import { DiagnosticSeverityKeys, ITXTContent } from '../common/types'
+import * as command from '@common/commands'
+import * as utils from '@common/utils'
+import * as config from '@ext/config'
+import { getDiagnosticsFromAllWorkspaces } from '@ext/config/diagnostics'
+import * as state from '@common/state'
+import { DiagnosticSeverityKeys, ITXTContent } from '@common/types'
 
 const collection = vscode.languages.createDiagnosticCollection('noveler')
 

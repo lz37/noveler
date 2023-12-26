@@ -1,9 +1,9 @@
 import * as vscode from 'vscode'
-import * as utils from '../common/utils'
-import * as config from '../config'
+import * as utils from '@common/utils'
+import * as config from '@ext/config'
 import * as R from 'ramda'
-import * as state from '../common/state'
-import { IConfig } from '../common/types'
+import * as state from '@common/state'
+import { IConfig } from '@common/types'
 
 export const init = (context: vscode.ExtensionContext) => context.subscriptions.push(formatProvider)
 

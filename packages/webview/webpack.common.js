@@ -1,13 +1,16 @@
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
 const path = require('path')
-const resolve = (dir) => path.resolve(__dirname, dir)
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
-/** @typedef {import('webpack').Configuration} WebpackConfig **/
-/** @type WebpackConfig */
+/** @type {import('webpack').Configuration} WebpackConfig **/
 module.exports = {
   entry: path.join(__dirname, 'src', 'index.tsx'),
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.jsx', '.css'],
+    alias: {
+      '@ext': path.resolve(__dirname, '..', 'extension', 'src'),
+      '@web': path.resolve(__dirname, '..', 'webview', 'src'),
+      '@common': path.resolve(__dirname, '..', 'common', 'src'),
+    },
   },
   devtool: 'inline-source-map',
   module: {

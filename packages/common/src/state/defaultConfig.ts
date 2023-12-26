@@ -1,4 +1,4 @@
-import { ICSVOption, IConfig, IRegExpRenderOptionsMap, IRenderOptions, ITXTOptions } from '../types'
+import { ICSVOption, IConfig, IRegExpRenderOptionsMap, IRenderOptions, ITXTOptions } from '@common/types'
 
 export const config: IConfig = {
   showApplyRecommendPlaintextConf: true,

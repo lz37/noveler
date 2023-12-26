@@ -11,19 +11,16 @@
   "author": "zerozawa",
   "license": "GPL-3.0",
   "dependencies": {
-    "antd": "^5.3.0",
-    "extension": "workspace:*",
+    "antd": "^5.12.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-markdown": "^8.0.5",
-    "react-router-dom": "^6.8.2",
-    "styled-components": "^6.0.8"
+    "react-markdown": "^8.0.7",
+    "react-router-dom": "^6.21.1",
+    "styled-components": "^5.3.11"
   },
   "devDependencies": {
-    "@types/react": "^18.0.28",
-    "@types/react-dom": "^18.0.11"
-  },
-  "resolutions": {
-    "styled-components": "^5"
+    "@types/react": "^18.2.45",
+    "@types/react-dom": "^18.2.18",
+    "@types/styled-components": "^5.1.34"
   }
 }

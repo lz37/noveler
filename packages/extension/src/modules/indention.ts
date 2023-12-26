@@ -3,10 +3,10 @@
  */
 
 import * as vscode from 'vscode'
-import * as command from '../common/commands'
-import * as config from '../config'
-import * as utils from '../common/utils'
-import * as state from '../common/state'
+import * as command from '@common/commands'
+import * as config from '@ext/config'
+import * as utils from '@common/utils'
+import * as state from '@common/state'
 import * as R from 'ramda'
 
 export const init = (context: vscode.ExtensionContext) => context.subscriptions.push(createIndentCommand)

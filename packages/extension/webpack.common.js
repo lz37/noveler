@@ -3,8 +3,7 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const resolve = (dir) => path.resolve(__dirname, dir)
 
 const tsConfigPath = path.join(__dirname, 'tsconfig.json')
-/** @typedef {import('webpack').Configuration} WebpackConfig **/
-/** @type WebpackConfig */
+/** @type {import('webpack').Configuration} WebpackConfig **/
 module.exports = {
   target: 'node',
   entry: './src/extension.ts',
@@ -19,6 +18,11 @@ module.exports = {
   },
   resolve: {
     extensions: ['.ts', '.js'],
+    alias: {
+      '@ext': path.resolve(__dirname, '..', 'extension', 'src'),
+      '@web': path.resolve(__dirname, '..', 'webview', 'src'),
+      '@common': path.resolve(__dirname, '..', 'common', 'src'),
+    },
   },
   module: {
     rules: [

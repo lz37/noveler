@@ -1,6 +1,6 @@
 import * as vscode from 'vscode'
-import * as state from '../common/state'
-import * as commands from '../common/commands'
+import * as state from '@common/state'
+import * as commands from '@common/commands'
 
 let handler: NovelerStatusBarHandler | undefined = undefined
 

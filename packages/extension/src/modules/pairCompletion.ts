@@ -1,8 +1,8 @@
 import * as vscode from 'vscode'
-import * as state from '../common/state'
-import * as config from '../config'
+import * as state from '@common/state'
+import * as config from '@ext/config'
 import * as R from 'ramda'
-import { IPairCompletion } from '../common/types'
+import { IPairCompletion } from '@common/types'
 
 export const init = (context: vscode.ExtensionContext) => {
   context.subscriptions.push(...onChangeDocument(config.get()), onChangeConf(context))

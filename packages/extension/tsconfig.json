@@ -11,8 +11,13 @@
     "skipLibCheck": true,
     "typeRoots": ["node_modules/@types"],
     "forceConsistentCasingInFileNames": true,
-    "baseUrl": "."
+    "baseUrl": ".",
+    "paths": {
+      "@ext/*": ["../../packages/extension/src/*"],
+      "@web/*": ["../../packages/webview/src/*"],
+      "@common/*": ["../../packages/common/src/*"]
+    }
   },
-  "include": ["./@types", "./src"],
+  "include": ["./@types", "./src", "../common"],
   "exclude": ["node_modules"]
 }

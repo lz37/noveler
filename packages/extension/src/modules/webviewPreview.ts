@@ -1,9 +1,9 @@
 import * as vscode from 'vscode'
 import * as R from 'ramda'
-import * as utils from '../common/utils'
-import * as commands from '../common/commands'
-import * as state from '../common/state'
-import {} from '../common/types'
+import * as utils from '@common/utils'
+import * as commands from '@common/commands'
+import * as state from '@common/state'
+import { IBaseDTO } from '@common/types'
 
 let panel: PanelHandler | undefined
 
@@ -31,12 +31,19 @@ class PanelHandler {
     panel.onDidDispose(() => (this.panel = undefined))
     this.panel = panel
   }
+  private postMessage = (message: Partial<IBaseDTO>) => {
+    this.panel?.webview.postMessage({ ...message, time: Date.now() } as IBaseDTO)
+  }
   show = (editor?: vscode.TextEditor) => {
     if (this.panel) {
       this.panel.dispose()
     } else if (editor && state.funcTarget.webviewPreview.includes(editor.document.languageId)) {
       this.panelCreator()
-      console.log(editor.document.getText())
+      // console.log(editor.document.getText())
+      // 等待2秒
+      setTimeout(() => {
+        this.postMessage({})
+      }, 2000)
     }
   }
 }

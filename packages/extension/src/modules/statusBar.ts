@@ -1,10 +1,10 @@
 import * as vscode from 'vscode'
-import * as config from '../config'
-import * as defaultConf from '../common/state/defaultConfig'
-import * as state from '../common/state'
-import * as utils from '../common/utils'
+import * as config from '@ext/config'
+import * as defaultConf from '@common/state/defaultConfig'
+import * as state from '@common/state'
+import * as utils from '@common/utils'
 import * as R from 'ramda'
-import { IConfig, IStatusBar, StatusItem } from '../common/types'
+import { IConfig, IStatusBar, StatusItem } from '@common/types'
 
 let handler: NovelerCountBarHandler | undefined = undefined
 

@@ -1,5 +1,5 @@
 import * as vscode from 'vscode'
-import * as diagnostics from './diagnostics'
+import * as diagnostics from '@ext/config/diagnostics'
 import * as assert from 'assert'
 import * as path from 'path'
 import * as R from 'ramda'

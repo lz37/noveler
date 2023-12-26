@@ -1,6 +1,5 @@
 const commonConf = require('./webpack.common')
-/** @typedef {import('webpack').Configuration} WebpackConfig **/
-/** @type WebpackConfig */
+/** @type {import('webpack').Configuration} WebpackConfig **/
 module.exports = {
   ...commonConf,
 }

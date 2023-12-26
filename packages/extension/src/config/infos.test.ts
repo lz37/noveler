@@ -1,9 +1,9 @@
 import * as assert from 'assert'
-import * as infos from './infos'
+import * as infos from '@ext/config/infos'
 import * as vscode from 'vscode'
 import * as path from 'path'
-import * as utils from '../common/utils'
-import { ICSVOption } from '../common/types'
+import * as utils from '@common/utils'
+import { ICSVOption } from '@common/types'
 
 suite('Extension Config Infos Modules Test Suite', () => {
   vscode.window.showInformationMessage('Start config/infos test')

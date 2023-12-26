@@ -1,12 +1,12 @@
 import * as path from 'path'
 import * as vscode from 'vscode'
-import * as defaultConfig from '../common/state/defaultConfig'
+import * as defaultConfig from '@common/state/defaultConfig'
 import * as config from '.'
-import * as utils from '../common/utils'
+import * as utils from '@common/utils'
 import * as fs from 'fs/promises'
 import * as csv from 'csv-parse/sync'
 import * as R from 'ramda'
-import { ICSVContent, ICSVData, ICSVOption } from '../common/types'
+import { ICSVContent, ICSVData, ICSVOption } from '@common/types'
 
 const isCompletionItemKind = (a: string) => Object.values(vscode.CompletionItemKind).includes(a)
 

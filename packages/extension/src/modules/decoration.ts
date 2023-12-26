@@ -1,18 +1,18 @@
 import * as vscode from 'vscode'
-import * as utils from '../common/utils'
-import * as command from '../common/commands'
-import * as state from '../common/state'
+import * as utils from '@common/utils'
+import * as command from '@common/commands'
+import * as state from '@common/state'
 import * as R from 'ramda'
-import * as config from '../config'
-import * as infos from '../config/infos'
-import * as defaultConf from '../common/state/defaultConfig'
+import * as config from '@ext/config'
+import * as infos from '@ext/config/infos'
+import * as defaultConf from '@common/state/defaultConfig'
 import {
   ICSVContent,
   ICustomHighlight,
   IDealedRenderOptions,
   IRegExpDealedRenderOptionsMap,
   IRegExpRenderOptionsMap,
-} from '../common/types'
+} from '../../../common/src/types'
 
 //#region init
 export const init = (context: vscode.ExtensionContext, roots: readonly vscode.WorkspaceFolder[]) =>

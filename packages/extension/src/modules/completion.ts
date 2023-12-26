@@ -1,12 +1,12 @@
 import * as vscode from 'vscode'
-import * as commands from '../common/commands'
-import * as config from '../config'
-import * as infos from '../config/infos'
+import * as commands from '@common/commands'
+import * as config from '@ext/config'
+import * as infos from '@ext/config/infos'
 import * as R from 'ramda'
-import * as state from '../common/state'
-import * as utils from '../common/utils'
-import { isNovelDoc } from '../common/utils'
-import { ICSVContent, ICompletion, ICompletionOption, IConfig } from '../common/types'
+import * as state from '@common/state'
+import * as utils from '@common/utils'
+import { isNovelDoc } from '@common/utils'
+import { ICSVContent, ICompletion, ICompletionOption, IConfig } from '@common/types'
 
 export const init = (context: vscode.ExtensionContext, roots: readonly vscode.WorkspaceFolder[]) => {
   context.subscriptions.push(reloadCommand(context, roots))

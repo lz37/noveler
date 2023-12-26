@@ -1,5 +1,12 @@
 {
   "editor.insertSpaces": true,
+  "typescript.suggest.paths": false,
+  "javascript.suggest.paths": false,
+  "path-intellisense.mappings": {
+    "@common": "${workspaceFolder}/packages/common/src",
+    "@ext": "${workspaceFolder}/packages/extension/src",
+    "@web": "${workspaceFolder}/packages/webview/src"
+  },
   "cSpell.words": [
     "antd",
     "cicd",
@@ -27,5 +34,6 @@
   ],
   "markdownlint.ignore": ["CHANGELOG.md"],
   // 排除changelog
-  "cSpell.files": ["**/*", "!CHANGELOG.md"]
+  "cSpell.files": ["**/*", "!CHANGELOG.md"],
+  "npm.executable.path": "/mnt/nfs/source/noveler/.devbox/nix/profile/default/bin/npm"
 }
