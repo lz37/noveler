@@ -9,9 +9,7 @@ import { isNovelDoc } from '@common/utils'
 import { ICSVContent, ICompletion, ICompletionOption, IConfig } from '@common/types'
 
 export const init = (context: vscode.ExtensionContext, roots: readonly vscode.WorkspaceFolder[]) => {
-  context.subscriptions.push(reloadCommand(context, roots))
-  context.subscriptions.push(deletePrefixCommand)
-  context.subscriptions.push(triggerCommandRegister(context))
+  context.subscriptions.push(reloadCommand(context, roots), deletePrefixCommand, triggerCommandRegister(context))
 }
 
 const deletePrefixCommand = vscode.commands.registerTextEditorCommand(

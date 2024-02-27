@@ -13,10 +13,8 @@ if (!showScrollbar) {
 const container = document.getElementById('root')
 const root = createRoot(container!)
 root.render(
-  <React.StrictMode>
-    <App>
-      <GlobalStyles />
-      <RouterProvider router={router} />
-    </App>
-  </React.StrictMode>,
+  <App>
+    <GlobalStyles />
+    <RouterProvider router={router} />
+  </App>,
 )

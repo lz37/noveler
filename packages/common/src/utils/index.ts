@@ -1,10 +1,12 @@
-import { IDirs, NovelerRouter } from '../types'
+import { IDirs, NovelerRouter } from '@common/types'
 import * as fs from 'fs/promises'
 import * as vscode from 'vscode'
 import * as R from 'ramda'
 import * as osPath from 'path'
 import * as md5 from 'ts-md5'
 import chroma from 'chroma-js'
+
+export * from './webview'
 
 const getStrLength = (str: string) =>
   R.pipe(
@@ -41,7 +43,7 @@ export const createWebviewHtml =
       <body>
         <div id="root"></div>
         <script>
-          const vscode = acquireVsCodeApi();
+          const vscodeApi = acquireVsCodeApi();
           const home = '${router}';
           const showScrollbar = ${showScrollbar};
         </script>

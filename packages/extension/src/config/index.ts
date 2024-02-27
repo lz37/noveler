@@ -28,13 +28,20 @@ export const get = R.pipe(
  * @param target 默认为工作区
  * @returns
  */
-export const set = (config: IConfig, keys?: (keyof IConfig)[], target = vscode.ConfigurationTarget.Workspace) =>
-  (keys || R.keys(config)).forEach(
+export const set = (
+  config: Partial<IConfig>,
+  keys?: (keyof IConfig)[],
+  target = vscode.ConfigurationTarget.Workspace,
+) => {
+  ;(keys ?? R.keys(config)).forEach(
     R.pipe(
-      (key) => (keys && config[key] ? undefined : key),
+      (key) => {
+        return keys && config[key] ? key : undefined
+      },
       (key) => key && vscode.workspace.getConfiguration().update(`${extPrefix}.${key}`, config[key], target),
     ),
   )
+}
 
 const judgeConfigIsRecommended = (config: vscode.WorkspaceConfiguration) =>
   R.pipe(

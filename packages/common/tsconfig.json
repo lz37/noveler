@@ -16,7 +16,7 @@
       "@web/*": ["../../packages/webview/src/*"],
       "@common/*": ["../../packages/common/src/*"]
     },
-    "typeRoots": ["node_modules/@types"]
+    "typeRoots": ["node_modules/@types", "../../node_modules/@types"]
   },
   "exclude": ["node_modules"]
 }

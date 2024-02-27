@@ -12,7 +12,7 @@ import {
   IDealedRenderOptions,
   IRegExpDealedRenderOptionsMap,
   IRegExpRenderOptionsMap,
-} from '../../../common/src/types'
+} from '@common/types'
 
 //#region init
 export const init = (context: vscode.ExtensionContext, roots: readonly vscode.WorkspaceFolder[]) =>
