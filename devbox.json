@@ -1,4 +1,4 @@
 {
-  "packages": ["nodePackages.pnpm@latest", "nodejs@18.17.1"],
+  "packages": ["nodePackages.pnpm@latest", "nodejs@20.11.1"],
   "shell": {}
 }
