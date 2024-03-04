@@ -54,7 +54,7 @@ const reloadCommand = (roots: readonly vscode.WorkspaceFolder[]) =>
         state.funcTarget.decoration.includes(editor.document.languageId) &&
         utils.isNovelDoc(editor.document)(config.get()) &&
         updateDecorations(editor)(map),
-    )(await infos.getInfosFromAllWorkspaces(roots)(false))
+    )(await infos.getInfosFromAllWorkspaces(roots))
   })
 //#endregion
 

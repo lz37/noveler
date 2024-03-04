@@ -3,11 +3,7 @@ import * as vscode from 'vscode'
 export type CompletionItemKindKeys = keyof typeof vscode.CompletionItemKind
 
 export interface ICSVOption {
-  /**对应的csv数据是去掉首尾空格的字符串 */
-  nameKey: string
-  /**对应的csv数据是去掉首尾空格的markdown字符串 */
-  hoverKey?: string
-  /**对应的csv数据是一个json数组 */
+  mainKey?: string
   aliasKey?: string
   decorationRenderOptions?: vscode.DecorationRenderOptions
   description: string

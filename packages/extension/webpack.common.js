@@ -1,6 +1,5 @@
 const path = require('path')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
-const resolve = (dir) => path.resolve(__dirname, dir)
 
 const tsConfigPath = path.join(__dirname, 'tsconfig.json')
 /** @type {import('webpack').Configuration} WebpackConfig **/
@@ -8,7 +7,7 @@ module.exports = {
   target: 'node',
   entry: './src/extension.ts',
   output: {
-    path: path.resolve(__dirname, '../../', 'dist'),
+    path: path.resolve(__dirname, '..', '..', 'dist'),
     filename: 'extension.js',
     libraryTarget: 'commonjs2',
     devtoolModuleFilenameTemplate: '../[resource-path]',

@@ -40,40 +40,33 @@ const BackgroundColoredMenu = styled(Menu)`
   background: var(--vscode-editor-background);
 `
 
-const changeConfig = (config: Partial<IPreviewConfigDTO['previewConfig']>) => {
-  console.log(config)
+const changeConfig = (config: Partial<IPreviewConfigDTO['previewConfig']>) =>
   vscodeApi.postMessage(utils.genWebviewDTO({ status: WebviewStatus.TO_UPDATE_CONFIG, previewConfig: config }))
-}
 
 const ConfigController = (props: {
   config: IPreviewConfigDTO['previewConfig']
   configKey: keyof IPreview
   delta?: number
-  onClick?: () => any
-}) => {
-  return (
-    <>
-      <PlusCircleOutlined
-        onClick={() => {
-          changeConfig({
-            ...props.config,
-            [props.configKey]: (props.config?.[props.configKey] ?? defaultConfig[props.configKey]) + (props.delta ?? 1),
-          })
-          props.onClick?.()
-        }}
-      />
-      <MinusCircleOutlined
-        onClick={() => {
-          changeConfig({
-            ...props.config,
-            [props.configKey]: (props.config?.[props.configKey] ?? defaultConfig[props.configKey]) - (props.delta ?? 1),
-          })
-          props.onClick?.()
-        }}
-      />
-    </>
-  )
-}
+}) => (
+  <>
+    <PlusCircleOutlined
+      onClick={() => {
+        changeConfig({
+          ...props.config,
+          [props.configKey]: (props.config?.[props.configKey] ?? defaultConfig[props.configKey]) + (props.delta ?? 1),
+        })
+      }}
+    />
+    <MinusCircleOutlined
+      onClick={() => {
+        changeConfig({
+          ...props.config,
+          [props.configKey]: (props.config?.[props.configKey] ?? defaultConfig[props.configKey]) - (props.delta ?? 1),
+        })
+      }}
+    />
+  </>
+)
 
 export default () => {
   const [text, setText] = useState('')
@@ -81,8 +74,7 @@ export default () => {
   const [theme, setTheme] = useState<IThemeDTO['theme']>('Light')
   const [config, setConfig] = useState<IPreviewConfigDTO['previewConfig']>(defaultConfig)
   const [menuCurrent, setMenuCurrent] = useState<keyof IPreview>()
-  const messageListener = (event: MessageEvent<IDTO>) => {
-    const message = event.data
+  const messageListener = ({ data: message }: MessageEvent<IDTO>) =>
     R.cond([
       [
         R.equals(ExtCommandToWebview.TO_INIT),
@@ -150,7 +142,6 @@ export default () => {
         },
       ],
     ])(message.command)
-  }
   useEffect(() => {
     window.addEventListener('message', messageListener)
     vscodeApi.postMessage(genWebviewDTO({ status: WebviewStatus.PREPARE_DONE }))
@@ -189,33 +180,31 @@ export default () => {
           ]}
         />
       </Affix>
-      <div>
-        <SizedDiv $fontSize={config?.previewFontSize ?? defaultConfig.previewFontSize}>
-          {R.pipe(
-            () =>
-              text
-                .split(eol || '\n')
-                .map(R.trim)
-                .filter(Boolean)
-                .map((p, i, arr) => (
-                  <Fragment key={`paragraph-group-${i}`}>
-                    <div>
-                      {'\u00A0'.repeat(config?.previewIndentionLength ?? defaultConfig.previewIndentionLength)} {p}
-                    </div>
-                    {i !== arr.length - 1 && (
-                      <ParagraphSpacing
-                        $height={
-                          (config?.previewSpaceLines ?? defaultConfig.previewSpaceLines) *
-                          (config?.previewFontSize ?? defaultConfig.previewFontSize)
-                        }
-                      />
-                    )}
-                  </Fragment>
-                )),
-            (t) => (theme?.search('Light') !== -1 ? <DarkText>{t}</DarkText> : <WhiteText>{t}</WhiteText>),
-          )()}
-        </SizedDiv>
-      </div>
+      <SizedDiv $fontSize={config?.previewFontSize ?? defaultConfig.previewFontSize}>
+        {R.pipe(
+          () =>
+            text
+              .split(eol || '\n')
+              .map(R.trim)
+              .filter(Boolean)
+              .map((p, i, arr) => (
+                <Fragment key={`paragraph-group-${i}`}>
+                  <div>
+                    {'\u00A0'.repeat(config?.previewIndentionLength ?? defaultConfig.previewIndentionLength)} {p}
+                  </div>
+                  {i !== arr.length - 1 && (
+                    <ParagraphSpacing
+                      $height={
+                        (config?.previewSpaceLines ?? defaultConfig.previewSpaceLines) *
+                        (config?.previewFontSize ?? defaultConfig.previewFontSize)
+                      }
+                    />
+                  )}
+                </Fragment>
+              )),
+          (t) => (theme?.search('Light') !== -1 ? <DarkText>{t}</DarkText> : <WhiteText>{t}</WhiteText>),
+        )()}
+      </SizedDiv>
     </div>
   )
 }

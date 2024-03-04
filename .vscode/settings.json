@@ -36,5 +36,5 @@
   "markdownlint.ignore": ["CHANGELOG.md"],
   // 排除changelog
   "cSpell.files": ["**/*", "!CHANGELOG.md"],
-  "npm.executable.path": "/mnt/nfs/source/noveler/.devbox/nix/profile/default/bin/npm"
+  "npm.packageManager": "pnpm"
 }

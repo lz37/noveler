@@ -3,7 +3,8 @@ import * as config from '@ext/config'
 import * as commands from '@common/commands'
 import * as state from '@common/state'
 import * as R from 'ramda'
-import { IConfig, IDirs } from '@common/types'
+import { IDirs } from '@common/types'
+import path from 'path'
 
 const execInfosCommands = () => {
   vscode.commands.executeCommand(commands.Noveler.RELOAD_DECORATION)
@@ -15,37 +16,41 @@ const execDiagnosticsCommands = () => {
 }
 
 export const init = (context: vscode.ExtensionContext, roots: readonly vscode.WorkspaceFolder[]) => {
-  context.subscriptions.push(onChangeConf(context, roots), ...watchInfosDir(roots), ...watchDiagnosticDir(roots))
+  context.subscriptions.push(onChangeConf(context, roots), ...watchDiagnosticDir(roots), ...watchInfosDir(roots))
   execInfosCommands()
   execDiagnosticsCommands()
 }
 
 const onChangeConf = (context: vscode.ExtensionContext, roots: readonly vscode.WorkspaceFolder[]) =>
   vscode.workspace.onDidChangeConfiguration(async (event) => {
-    if (event.affectsConfiguration(`${state.extPrefix}.${R.identity<keyof IDirs>('infoDir')}`))
+    if (event.affectsConfiguration(`${state.extPrefix}.${R.identity<keyof IDirs>('infoDir')}`)) {
       context.subscriptions.push(...watchInfosDir(roots))
-    if (event.affectsConfiguration(`${state.extPrefix}.${R.identity<keyof IDirs>('diagnosticDir')}`))
+      execInfosCommands()
+    }
+    if (event.affectsConfiguration(`${state.extPrefix}.${R.identity<keyof IDirs>('diagnosticDir')}`)) {
       context.subscriptions.push(...watchDiagnosticDir(roots))
+      execDiagnosticsCommands()
+    }
   })
 
-const watchDir = (() => {
+const watchDir = () => {
   const makeWatcher = (infoDir: string, exts: string[]) => (hook: () => any) => (workspace: vscode.WorkspaceFolder) => {
     const watcher = vscode.workspace.createFileSystemWatcher(
       // 监控csv与js
-      new vscode.RelativePattern(workspace, `${infoDir}/*.{${exts.join(',')}}`),
+      new vscode.RelativePattern(workspace, path.join(infoDir, `*.{${exts.join(',')}}`)),
     )
-    ;[watcher.onDidChange, watcher.onDidCreate, watcher.onDidDelete].forEach((fn) => fn(hook))
+    ;[watcher.onDidChange, watcher.onDidCreate, watcher.onDidDelete].map((fn) => fn(hook))
     return watcher
   }
   let watches: vscode.FileSystemWatcher[] | undefined = undefined
-  return (roots: readonly vscode.WorkspaceFolder[], { infoDir }: IConfig, exts: string[], hook: () => any) => {
+  return (roots: readonly vscode.WorkspaceFolder[], infoDir: string, exts: string[], hook: () => any) => {
     watches?.map((w) => w.dispose())
     watches = roots.map(makeWatcher(infoDir, exts)(hook))
     return watches
   }
-})()
+}
 
 const watchInfosDir = (roots: readonly vscode.WorkspaceFolder[]) =>
-  watchDir(roots, config.get(), ['csv', 'json'], execInfosCommands)
+  watchDir()(roots, config.get().infoDir, ['csv', 'json'], execInfosCommands)
 const watchDiagnosticDir = (roots: readonly vscode.WorkspaceFolder[]) =>
-  watchDir(roots, config.get(), ['txt'], execDiagnosticsCommands)
+  watchDir()(roots, config.get().diagnosticDir, ['txt'], execDiagnosticsCommands)

@@ -1,6 +1,5 @@
 import * as path from 'path'
 import * as vscode from 'vscode'
-import * as defaultConfig from '@common/state/defaultConfig'
 import * as config from '.'
 import * as utils from '@common/utils'
 import * as fs from 'fs/promises'
@@ -22,7 +21,8 @@ export const getCSVOptions = async (p: string, csvFiles: string[]) => {
   csvFiles.forEach((file) => {
     optMap[file] = {
       description: file,
-      nameKey: defaultConfig.csvOpt.nameKey,
+      mainKey: config.get().defaultHoverInfoMainKeyAlias,
+      aliasKey: config.get().defaultHoverInfoAliasKeyAlias,
     }
   })
   // 遍历，读取json文件
@@ -41,48 +41,30 @@ export const getCSVOptions = async (p: string, csvFiles: string[]) => {
   return optMap
 }
 
-export const getInfosFromAllWorkspaces = (() => {
-  const io = async (roots: readonly vscode.WorkspaceFolder[]) => {
-    const map: Record<string, Record<string, ICSVContent>> = {}
-    for await (const root of roots) {
-      const p = path.join(root.uri.fsPath, config.get().infoDir)
-      const isDir = await utils.isDirOrMkdir(p)
-      if (!isDir) continue
-      // 遍历，获取csv文件
-      const csvFiles = await utils.getFileNameInDir(p, 'csv', false)
-      const opts = await getCSVOptions(p, csvFiles)
-      if (!opts) continue
-      const datas = await getCSVDatas(root, p, csvFiles, opts)
-      if (!datas) continue
-      const csvContentMap: Record<string, ICSVContent> = {}
-      csvFiles.forEach((file) => {
-        const opt = opts[file]
-        const data = datas[file]
-        if (opt && data) {
-          csvContentMap[file] = { data, ...opt }
-        }
-      })
-      map[root.uri.path] = csvContentMap
-    }
-    return map
+export const getInfosFromAllWorkspaces = async (roots: readonly vscode.WorkspaceFolder[]) => {
+  const map: Record<string, Record<string, ICSVContent>> = {}
+  for await (const root of roots) {
+    const p = path.join(root.uri.fsPath, config.get().infoDir)
+    const isDir = await utils.isDirOrMkdir(p)
+    if (!isDir) continue
+    // 遍历，获取csv文件
+    const csvFiles = await utils.getFileNameInDir(p, 'csv', false)
+    const opts = await getCSVOptions(p, csvFiles)
+    if (!opts) continue
+    const datas = await getCSVDatas(root, p, csvFiles, opts)
+    if (!datas) continue
+    const csvContentMap: Record<string, ICSVContent> = {}
+    csvFiles.forEach((file) => {
+      const opt = opts[file]
+      const data = datas[file]
+      if (opt && data) {
+        csvContentMap[file] = { data, ...opt }
+      }
+    })
+    map[root.uri.path] = csvContentMap
   }
-  let onceIO = R.once(io)
-  /**
-   *
-   * @param fromCache 是否从缓存中读取
-   * @returns
-   */
-  return (roots: readonly vscode.WorkspaceFolder[]) =>
-    (fromCache = true) =>
-      R.ifElse(
-        () => fromCache,
-        () => onceIO(roots),
-        () => {
-          onceIO = R.once(io)
-          return onceIO(roots)
-        },
-      )()
-})()
+  return map
+}
 
 /**
  * @param root vscode.WorkspaceFolder
@@ -118,24 +100,33 @@ const readCSV = async (root: vscode.WorkspaceFolder, p: string, csvOpt: ICSVOpti
   const dataString = await fs.readFile(p, 'utf-8')
   const records = <string[][]>csv.parse(dataString)
   const firstRow = records[0]
-  const { nameKetIndex, hoverKeyIndex, aliasKeyIndex } = findKeyPos(
+  const { mainKeyIndex, aliasKeyIndex, extraKeysMap } = findKeyPos(
     firstRow,
-    csvOpt.nameKey,
-    csvOpt.hoverKey,
+    csvOpt.mainKey || config.get().defaultHoverInfoMainKeyAlias,
     csvOpt.aliasKey,
   )
-  if (nameKetIndex === -1) {
-    throw new Error(`配置文件 ${p} 中没有找到 nameKey: ${csvOpt.nameKey}`)
+  if (mainKeyIndex === -1) {
+    throw new Error(`配置文件 ${p} 中没有找到 mainKeyIndex: ${csvOpt.mainKey}`)
   }
   const datas = records.slice(1)
   if (datas.length === 0) return undefined
   const content: ICSVData = {}
   datas.forEach((row) => {
-    const key = row[nameKetIndex].trim()
+    const key = row[mainKeyIndex].trim()
     content[key] = {}
-    if (csvOpt.hoverKey && hoverKeyIndex !== -1) {
+    if (R.keys(extraKeysMap).length > 0) {
+      const extraInfosMap: Record<string, string> = Object.entries(extraKeysMap)
+        .map(([k, p]) => [k, row[p]])
+        .reduce((acc, [k, v]) => ({ ...acc, [k]: v }), {})
       // split by br tag
-      const hover = new vscode.MarkdownString(row[hoverKeyIndex].trim())
+      const hover = new vscode.MarkdownString(
+        `***${csvOpt.description}***<br />**${csvOpt.mainKey}**: ${row[mainKeyIndex]}<br />${R.ifElse(
+          () => !!csvOpt.aliasKey && aliasKeyIndex !== -1,
+          () => `**${csvOpt.aliasKey}**: ${row[aliasKeyIndex].split('|').map(R.trim)}<br />`,
+          () => '',
+        )()}${Object.entries(extraInfosMap).reduce((acc, [k, v]) => `${acc}**${k}**: ${v}<br />`, '')}
+        `,
+      )
       hover.supportThemeIcons = true
       hover.isTrusted = true
       hover.supportHtml = true
@@ -150,16 +141,16 @@ const readCSV = async (root: vscode.WorkspaceFolder, p: string, csvOpt: ICSVOpti
   return content
 }
 
-const findKeyPos = (firstRow: string[], nameKey: string, hoverKey?: string, aliasKey?: string) => {
-  let nameKetIndex = -1
-  let hoverKeyIndex = -1
+const findKeyPos = (firstRow: string[], mainKey: string, aliasKey?: string) => {
+  let mainKeyIndex = -1
   let aliasKeyIndex = -1
-  firstRow.forEach((element, i) => {
-    R.cond([
-      [R.equals(nameKey), () => (nameKetIndex = i)],
-      [R.equals(hoverKey), () => (hoverKeyIndex = i)],
+  const extraKeysMap: Record<string, number> = {}
+  firstRow.forEach((element, i) =>
+    R.cond<[b: string], any>([
+      [R.equals(mainKey), () => (mainKeyIndex = i)],
       [R.equals(aliasKey), () => (aliasKeyIndex = i)],
-    ])(element.trim())
-  })
-  return { nameKetIndex, hoverKeyIndex, aliasKeyIndex }
+      [R.T, (element) => (extraKeysMap[element] = i)],
+    ])(element.trim()),
+  )
+  return { mainKeyIndex, aliasKeyIndex, extraKeysMap }
 }

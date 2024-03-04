@@ -1,6 +1,6 @@
-import { ICSVOption, IConfig, IRegExpRenderOptionsMap, ITXTOptions } from '@common/types'
+import { IConfig, IRegExpRenderOptionsMap, ITXTOptions } from '@common/types'
 
-export const config: IConfig = {
+export const config: Omit<Required<IConfig>, 'customHighlight'> = {
   showApplyRecommendPlaintextConf: true,
   autoIndentLines: 0,
   autoIndentSpaces: 4,
@@ -20,11 +20,8 @@ export const config: IConfig = {
   statusIncludingSpace: false,
   statusShow: true,
   statusTimeUnit: 10,
-}
-
-export const csvOpt: ICSVOption = {
-  nameKey: 'name',
-  description: '',
+  defaultHoverInfoAliasKeyAlias: '别名',
+  defaultHoverInfoMainKeyAlias: '名称',
 }
 
 export const txtOpt: ITXTOptions = {

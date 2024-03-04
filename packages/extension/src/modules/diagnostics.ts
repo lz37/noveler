@@ -69,6 +69,7 @@ const regexSearch = (
 
 export const updateDiagnostics = (document: vscode.TextDocument) => {
   if (!state.funcTarget.diagnostics.includes(document.languageId)) return
+  if (!utils.isNovelDoc(document)(config.get())) return
   try {
     const diagnostics = TXTContents()
       .map(({ data, diagnosticSeverity, message }) => {

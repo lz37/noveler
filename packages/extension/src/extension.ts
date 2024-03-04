@@ -11,9 +11,6 @@
 import * as vscode from 'vscode'
 import * as config from '@ext/config'
 import * as modules from '@ext/modules'
-import { IConfig, IDirs } from '@common/types'
-import * as state from '@common/state'
-import * as R from 'ramda'
 
 // this method is called when vs code is activated
 export const activate = async (context: vscode.ExtensionContext) => {

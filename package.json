@@ -120,13 +120,23 @@
         "category": "noveler"
       },
       {
+        "command": "noveler.panelPreviewShow",
+        "title": "panel preview show",
+        "category": "noveler"
+      },
+      {
         "command": "noveler.reloadDecoration",
         "title": "reload decoration",
         "category": "noveler"
       },
       {
-        "command": "noveler.panelPreviewShow",
-        "title": "panel preview show",
+        "command": "noveler.reloadCompletion",
+        "title": "reload completion",
+        "category": "noveler"
+      },
+      {
+        "command": "noveler.reloadDiagnostic",
+        "title": "reload diagnostic",
         "category": "noveler"
       }
     ],
@@ -399,6 +409,28 @@
               }
             }
           }
+        },
+        "noveler.defaultHoverInfoExtraKeys": {
+          "type": "array",
+          "markdownDescription": "默认角色管理的额外属性（如*生日，性格，星座*等）",
+          "scope": "resource",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "简介"
+          ],
+          "uniqueItems": true
+        },
+        "noveler.defaultHoverInfoMainKeyAlias": {
+          "type": "string",
+          "markdownDescription": "默认角色管理的主键别名",
+          "scope": "resource"
+        },
+        "noveler.defaultHoverInfoAliasKeyAlias": {
+          "type": "string",
+          "markdownDescription": "默认角色管理的别名键别名",
+          "scope": "resource"
         }
       }
     }

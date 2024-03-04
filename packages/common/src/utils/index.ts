@@ -169,10 +169,11 @@ export const isNovelDoc =
       R.map((p) => osPath.join(workspace?.uri.path, String(p)), R.values(dirsConf)),
     )
     // 判断是否在配置的目录下
-    return (
-      path.startsWith(absoluteDirsConf.novelDir) &&
-      !path.startsWith(absoluteDirsConf.outlinesDir) &&
-      !path.startsWith(absoluteDirsConf.diagnosticDir) &&
-      !path.startsWith(absoluteDirsConf.infoDir)
-    )
+    return R.cond<[p: string], boolean>([
+      [(p) => p.startsWith(absoluteDirsConf.outlinesDir), R.F],
+      [(p) => p.startsWith(absoluteDirsConf.diagnosticDir), R.F],
+      [(p) => p.startsWith(absoluteDirsConf.infoDir), R.F],
+      [(p) => p.startsWith(absoluteDirsConf.novelDir), R.T],
+      [R.T, R.F],
+    ])(path)
   }

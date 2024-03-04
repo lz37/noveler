@@ -1,6 +1,5 @@
 {
-  "nameKey": "key",
-  "hoverKey": "hoverKey",
+  "mainKey": "名称",
   "aliasKey": "aliasKey",
   "description": "配角",
   "suggestKind": "Method",

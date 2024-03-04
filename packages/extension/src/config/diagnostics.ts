@@ -5,7 +5,7 @@ import * as fs from 'fs/promises'
 import * as config from '.'
 import * as utils from '@common/utils'
 import path from 'path'
-import { DiagnosticSeverityKeys, ITXTContent, ITXTOptions } from '../../../common/src/types'
+import { DiagnosticSeverityKeys, ITXTContent, ITXTOptions } from '@common/types'
 
 /**
  *

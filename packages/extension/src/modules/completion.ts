@@ -57,7 +57,7 @@ const reloadCommand = (context: vscode.ExtensionContext, roots: readonly vscode.
       createCompletionOptions,
       makeProvider(config.get()),
       storeProvider(context),
-    )(await infos.getInfosFromAllWorkspaces(roots)())
+    )(await infos.getInfosFromAllWorkspaces(roots))
   })
 
 const storeProvider = (() => {
@@ -84,7 +84,7 @@ const createCompletionOptions = (map: Record<string, ICSVContent>) => {
     Object.entries(data).forEach(([key, { alias, hover }]) => {
       const document = hover ? new vscode.MarkdownString() : undefined
       if (document) {
-        document.value = `***${description}***<br />${hover?.value}`
+        document.value = hover?.value || ''
         document.isTrusted = hover?.isTrusted
         document.baseUri = hover?.baseUri
         document.supportHtml = hover?.supportHtml

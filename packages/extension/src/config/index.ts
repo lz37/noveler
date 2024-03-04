@@ -8,7 +8,7 @@ import { IConfig } from '@common/types'
 export const get = R.pipe(
   (languageId?: string) =>
     vscode.workspace.getConfiguration(undefined, languageId ? { languageId } : undefined).get(extPrefix) as IConfig,
-  (conf) => ({ ...defaultConfig.config, ...conf } as IConfig),
+  (conf) => ({ ...defaultConfig.config, ...conf }),
   R.cond([
     [
       ({ infoDir, outlinesDir, diagnosticDir }) =>
@@ -17,7 +17,7 @@ export const get = R.pipe(
         throw new Error('请确保noveler的infoDir、outlinesDir、diagnosticDir都是相对路径')
       },
     ],
-    [R.T, R.identity<IConfig>],
+    [R.T, R.identity<typeof defaultConfig.config & IConfig>],
   ]),
 )
 

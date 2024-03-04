@@ -41,6 +41,12 @@ export interface IDirs {
   novelDir: string
 }
 
+export interface IDefaultHoverKeys {
+  /** key is en name, value is alias value of key */
+  defaultHoverInfoMainKeyAlias?: string
+  defaultHoverInfoAliasKeyAlias?: string
+}
+
 export interface IStatusBar {
   statusItems: StatusItem[]
   statusTimeUnit: number
@@ -57,4 +63,5 @@ export interface IConfig
     ICompletion,
     IPairCompletion,
     IDirs,
-    IStatusBar {}
+    IStatusBar,
+    IDefaultHoverKeys {}

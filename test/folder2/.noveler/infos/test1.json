@@ -1,7 +1,6 @@
 {
-  "nameKey": "key",
-  "hoverKey": "hoverKey",
-  "aliasKey": "aliasKey",
+  "mainKey": "姓名",
+  "aliasKey": "别名",
   "description": "主角",
   "suggestKind": "Method",
   "decorationRenderOptions": {
