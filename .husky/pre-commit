@@ -1,8 +1,5 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
 if [ -t 2 ]; then
-  exec >/dev/tty 2>&1
+	exec >/dev/tty 2>&1
 fi
 
-npm run lint-staged
+pnpm exec lint-staged --config lint-staged.config.mjs

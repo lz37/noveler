@@ -1,0 +1,13 @@
+{
+	"compilerOptions": {
+		"lib": ["ES2022"],
+		"module": "NodeNext",
+		"noEmit": false,
+		"rootDir": "src",
+		"sourceMap": true,
+		"target": "ES2022"
+	},
+	"exclude": ["node_modules", "*.cjs"],
+	"extends": "../../tsconfig.base.json",
+	"include": ["src"]
+}

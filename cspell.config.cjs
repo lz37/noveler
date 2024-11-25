@@ -1,0 +1,52 @@
+/** @type { import("@cspell/cspell-types").CSpellUserSettings } */
+const config = {
+	import: [
+		'@cspell/dict-typescript/cspell-ext.json',
+		'@cspell/dict-node/cspell-ext.json',
+		'@cspell/dict-companies/cspell-ext.json',
+		'@cspell/dict-css/cspell-ext.json',
+		'@cspell/dict-en_us/cspell-ext.json',
+		'@cspell/dict-html/cspell-ext.json',
+		'@cspell/dict-npm/cspell-ext.json',
+		'@cspell/dict-fonts/cspell-ext.json',
+	],
+	ignorePaths: [
+		'**/node_modules',
+		'**/package.json',
+		'.devenv',
+		'.direnv',
+		'.vscode',
+		'.git',
+		'pnpm-lock*',
+		'.gitignore',
+		'**/*.code-profile',
+		'**/dist',
+	],
+	words: [
+		'devenv',
+		'direnv',
+		'noveler',
+		'nixpkgs',
+		'nixos',
+		'cachix',
+		'substituters',
+		'corepack',
+		'pkgs',
+		'nixhub',
+		'procfile',
+		'tseslint',
+		'unplugin',
+		'shfmt',
+		'thenables',
+	],
+	cache: {
+		cacheFormat: 'legacy',
+		cacheStrategy: 'metadata',
+		useCache: true,
+		cacheLocation: '.cache/cspell',
+	},
+	enabled: true,
+	files: ['**/*'],
+}
+
+module.exports = config

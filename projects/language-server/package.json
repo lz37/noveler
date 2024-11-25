@@ -1,0 +1,19 @@
+{
+	"name": "noveler-lsp",
+	"type": "commonjs",
+	"engines": {
+		"node": ">=20.14.0"
+	},
+	"dependencies": {
+		"common": "workspace:../common",
+		"cosmiconfig": "^9.0.0",
+		"cosmiconfig-toml-loader": "^1.0.0",
+		"fp-ts": "^2.16.9",
+		"ramda": "^0.30.1",
+		"vscode-languageserver": "^9.0.1",
+		"vscode-languageserver-textdocument": "^1.0.12"
+	},
+	"devDependencies": {
+		"@types/ramda": "^0.30.2"
+	}
+}

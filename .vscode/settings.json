@@ -1,29 +1,21 @@
 {
-  "editor.insertSpaces": true,
-  "cSpell.words": [
-    "antd",
-    "cicd",
-    "commitlint",
-    "Confs",
-    "Dealed",
-    "epub",
-    "noveler",
-    "oldir",
-    "openai",
-    "Pangu",
-    "pnpm",
-    "postversion",
-    "preversion",
-    "schar",
-    "Setted",
-    "softprops",
-    "uglifyjs",
-    "vsix",
-    "wbvv",
-    "webv",
-    "webviews"
-  ],
-  "markdownlint.ignore": ["CHANGELOG.md"],
-  // 排除changelog
-  "cSpell.files": ["**/*", "!CHANGELOG.md"]
+	"nix.enableLanguageServer": true,
+	"nix.serverPath": "nil",
+	"nix.serverSettings": {
+		"nil": {
+			"formatting": {
+				"command": ["nixpkgs-fmt"]
+			},
+			"nix": {
+				"flake": {
+					"autoArchive": true,
+					"autoEvalInputs": true,
+					"nixpkgsInputName": "nixpkgs"
+				},
+				"maxMemoryMB": 4096
+			}
+		}
+	},
+	"typescript.tsdk": "node_modules/typescript/lib",
+	"rescript.settings.codeLens": true
 }

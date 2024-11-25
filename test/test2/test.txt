@@ -1,0 +1,14 @@
+Here is a hex color: #e244ff
+
+JavaScript
+
+BE
+
+AB
+
+CD
+
+EF
+
+TypeScript
+JAVA

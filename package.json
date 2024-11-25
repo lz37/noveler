@@ -1,357 +1,123 @@
 {
-  "name": "noveler",
-  "displayName": "Noveler",
-  "description": "一个在 vscode 上辅助码中文小说的插件",
-  "version": "1.4.8",
-  "author": "zerozawa",
-  "publisher": "zerozawa",
-  "license": "GPL-3.0",
-  "scripts": {
-    "vscode:prepublish": "./scripts/rm-out && npm run compile-prod",
-    "prepare": "husky install",
-    "package": "vsce package --no-dependencies",
-    "publish": "vsce publish --no-dependencies -p",
-    "compile-prod": "concurrently npm:compile-prod:*",
-    "compile-prod:webview": "cd ./packages/webview && npm run compile-prod",
-    "compile-prod:extension": "cd ./packages/extension && npm run compile-prod",
-    "compile": "concurrently npm:compile:*",
-    "compile:webview": "cd ./packages/webview && npm run compile",
-    "compile:extension": "cd ./packages/extension && npm run compile",
-    "watch": "concurrently npm:watch:*",
-    "watch:webview": "cd ./packages/webview && npm run watch",
-    "watch:extension": "cd ./packages/extension && npm run watch",
-    "pretest": "npm run compile && npm run lint",
-    "test": "node ./out/test/runTest.js",
-    "lint": "eslint src --ext ts",
-    "prettier": "prettier --write \"**/*.{ts,tsx,js,jsx,json,css,scss}\"",
-    "lint-staged": "lint-staged",
-    "commit": "cz",
-    "version": "conventional-changelog -p angular -i CHANGELOG.md -s && git add CHANGELOG.md"
-  },
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    }
-  },
-  "devDependencies": {
-    "@commitlint/cli": "^17.4.2",
-    "@commitlint/config-conventional": "^17.4.2",
-    "@faker-js/faker": "^7.6.0",
-    "@types/node": "^16.11.7",
-    "@types/prettier": "^2.7.1",
-    "@types/vscode": "^1.77.0",
-    "@typescript-eslint/eslint-plugin": "^5.30.0",
-    "@typescript-eslint/parser": "^5.30.0",
-    "@vscode/vsce": "^2.18.0",
-    "commitizen": "^4.3.0",
-    "concurrently": "^7.6.0",
-    "conventional-changelog-cli": "^2.2.2",
-    "css-loader": "^6.7.1",
-    "css-minimizer-webpack-plugin": "^5.0.0",
-    "cz-conventional-changelog": "^3.3.0",
-    "eslint": "^8.13.0",
-    "husky": "^8.0.3",
-    "lint-staged": "^13.1.1",
-    "prettier": "^2.7.1",
-    "speed-measure-webpack-plugin": "^1.5.0",
-    "style-loader": "^3.3.1",
-    "ts-loader": "^9.4.1",
-    "typescript": "^4.9.5",
-    "uglifyjs-webpack-plugin": "^2.2.0",
-    "webpack": "^5.74.0",
-    "webpack-bundle-analyzer": "^4.8.0",
-    "webpack-cli": "^4.10.0"
-  },
-  "engines": {
-    "vscode": "^1.77.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/lz37/noveler"
-  },
-  "extensionKind": [
-    "workspace"
-  ],
-  "qna": "marketplace",
-  "categories": [
-    "Other"
-  ],
-  "keywords": [
-    "novel",
-    "小说",
-    "小説",
-    "plaintext",
-    "markdown"
-  ],
-  "activationEvents": [
-    "onLanguage:plaintext",
-    "onLanguage:markdown"
-  ],
-  "main": "./out/extension.js",
-  "contributes": {
-    "viewsContainers": {
-      "panel": [
-        {
-          "id": "noveler-panel",
-          "title": "Noveler",
-          "icon": "$(notebook-edit)"
-        }
-      ]
-    },
-    "views": {
-      "noveler-panel": [
-        {
-          "type": "webview",
-          "id": "noveler-outline",
-          "name": "大纲",
-          "icon": "$(notebook-edit)"
-        }
-      ]
-    },
-    "commands": [
-      {
-        "command": "noveler.preview",
-        "title": "preview",
-        "category": "noveler"
-      },
-      {
-        "command": "noveler.reloadCSV",
-        "title": "reload CSV",
-        "category": "noveler",
-        "shortTitle": "刷新 CSV 配置文件"
-      }
-    ],
-    "keybindings": [
-      {
-        "command": "noveler.preview",
-        "key": "alt+\\",
-        "mac": "alt+\\",
-        "when": "editorTextFocus && editorLangId == 'plaintext'"
-      },
-      {
-        "command": "noveler.reloadCSV",
-        "key": "alt+f",
-        "mac": "alt+f",
-        "when": "editorTextFocus"
-      }
-    ],
-    "colors": [
-      {
-        "id": "number",
-        "description": "数字的颜色",
-        "defaults": {
-          "dark": "#6cd8e6",
-          "light": "#3c8dbc"
-        }
-      }
-    ],
-    "configuration": {
-      "title": "Noveler",
-      "properties": {
-        "noveler.showApplyRecommendPlaintextConf": {
-          "type": "boolean",
-          "default": true,
-          "items": {
-            "type": "boolean"
-          },
-          "markdownDescription": "是否显示 *应用推荐的 `plaintext` 配置* 的提示",
-          "scope": "resource"
-        },
-        "noveler.autoIndent": {
-          "type": "boolean",
-          "default": true,
-          "markdownDescription": "是否在回车后自动插入缩进、空行",
-          "scope": "resource"
-        },
-        "noveler.autoIndentLines": {
-          "type": "number",
-          "default": 0,
-          "markdownDescription": "回车后自动插入的行数， `noveler.autoIndent` 关闭时，此功能也会作为格式化属性读取",
-          "scope": "resource"
-        },
-        "noveler.autoIndentSpaces": {
-          "type": "number",
-          "default": 4,
-          "markdownDescription": "回车后自动插入的空格数， `noveler.autoIndent` 关闭时，此功能也会作为格式化属性读取",
-          "scope": "resource"
-        },
-        "noveler.usePangu": {
-          "type": "boolean",
-          "default": true,
-          "markdownDescription": "格式化时是否中在英文之间添加空格（不再使用第三方盘古包，改为插件内置实现）",
-          "scope": "resource"
-        },
-        "noveler.previewFontSize": {
-          "type": "number",
-          "default": 16,
-          "markdownDescription": "预览窗口的字体大小",
-          "scope": "resource"
-        },
-        "noveler.previewIndentionLength": {
-          "type": "number",
-          "default": 4,
-          "markdownDescription": "预览窗口的缩进长度",
-          "scope": "resource"
-        },
-        "noveler.previewSpaceLines": {
-          "type": "number",
-          "default": 1,
-          "markdownDescription": "预览窗口的段落间距",
-          "scope": "resource"
-        },
-        "noveler.statusShow": {
-          "type": "boolean",
-          "default": true,
-          "markdownDescription": "是否显示状态栏",
-          "scope": "resource"
-        },
-        "noveler.statusIncludingSpace": {
-          "type": "boolean",
-          "default": false,
-          "markdownDescription": "状态栏字数统计是否包含空格",
-          "scope": "resource"
-        },
-        "noveler.statusTimeUnit": {
-          "type": "number",
-          "default": 10,
-          "markdownDescription": "状态栏计数器的时间单位",
-          "scope": "resource"
-        },
-        "noveler.statusItems": {
-          "type": "array",
-          "markdownDescription": "状态栏显示的项目",
-          "items": {
-            "type": "string",
-            "enum": [
-              "Speed",
-              "Time",
-              "InputWordCount",
-              "TextWordCount"
-            ],
-            "minItems": 1,
-            "uniqueItems": true
-          },
-          "default": [
-            "Speed",
-            "Time",
-            "InputWordCount",
-            "TextWordCount"
-          ],
-          "scope": "resource"
-        },
-        "noveler.customHighlight": {
-          "type": "object",
-          "markdownDescription": "自定义高亮，键为正则表达式，值为渲染选项，值的结构参照 [DecorationRenderOptions](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions)",
-          "scope": "resource"
-        },
-        "noveler.completionChar": {
-          "type": "string",
-          "default": "@",
-          "markdownDescription": "补全时的触发字符, *注*：请尽量使用英文标点作为触发字符, 默认为@",
-          "scope": "resource"
-        },
-        "noveler.outlinesDir": {
-          "type": "string",
-          "default": ".noveler/outlines",
-          "markdownDescription": "大纲文本保存的目录，不支持绝对路径，请使用相对于文件夹的路径",
-          "scope": "resource"
-        },
-        "noveler.confCSVFiles": {
-          "type": "array",
-          "markdownDescription": "高亮与补全的文件配置",
-          "scope": "resource",
-          "items": {
-            "type": "object",
-            "properties": {
-              "path": {
-                "type": "string",
-                "markdownDescription": "配置文件的路径，可以是绝对路径，也可以是相对于根目录的路径（暂不支持工作区），支持文件路径与文件夹路径（若为文件夹，则将配置应用于其下所有.csv文件）"
-              },
-              "key": {
-                "type": "string",
-                "markdownDescription": "指定配置文件中的主键名",
-                "default": "name"
-              },
-              "hoverKey": {
-                "type": "string",
-                "markdownDescription": "指定配置文件中的键名，用于鼠标悬停时显示的内容"
-              },
-              "decorationRenderOptions": {
-                "type": "object",
-                "markdownDescription": "高亮配置，根据配置高亮对应的主键名属性，结构参照 [DecorationRenderOptions](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions)"
-              },
-              "suggestPrefix": {
-                "type": "string",
-                "markdownDescription": "补全的前缀，若不为空，则补全时会在补全项前添加此前缀",
-                "default": ""
-              },
-              "suggestKind": {
-                "type": "string",
-                "enum": [
-                  "Text",
-                  "Method",
-                  "Function",
-                  "Constructor",
-                  "Field",
-                  "Variable",
-                  "Class",
-                  "Interface",
-                  "Module",
-                  "Property",
-                  "Unit",
-                  "Value",
-                  "Enum",
-                  "Keyword",
-                  "Snippet",
-                  "Color",
-                  "Reference",
-                  "File",
-                  "Folder",
-                  "EnumMember",
-                  "Constant",
-                  "Struct",
-                  "Event",
-                  "Operator",
-                  "TypeParameter",
-                  "User",
-                  "Issue"
-                ],
-                "markdownDescription": "补全的类型，，不同类型会有不同的图标"
-              }
-            }
-          }
-        },
-        "noveler.confTXTFiles": {
-          "type": "array",
-          "markdownDescription": "敏感词配置文件",
-          "scope": "resource",
-          "items": {
-            "type": "object",
-            "properties": {
-              "path": {
-                "type": "string",
-                "markdownDescription": "配置文件的路径，可以是绝对路径，也可以是相对于根目录的路径（暂不支持工作区），支持文件路径与文件夹路径（若为文件夹，则将配置应用于其下所有.txt文件）"
-              },
-              "message": {
-                "type": "string",
-                "markdownDescription": "敏感词提示信息",
-                "default": "敏感词"
-              },
-              "diagnosticSeverity": {
-                "type": "string",
-                "enum": [
-                  "Error",
-                  "Hint",
-                  "Information",
-                  "Warning"
-                ],
-                "markdownDescription": "敏感词提示信息的等级",
-                "default": "Error"
-              }
-            }
-          }
-        }
-      }
-    }
-  }
+	"name": "noveler",
+	"version": "2.0.0",
+	"type": "commonjs",
+	"displayName": "Noveler",
+	"description": "一个在 vscode 上辅助码中文小说的插件",
+	"categories": [
+		"Other"
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/lz37/noveler"
+	},
+	"author": "zerozawa",
+	"publisher": "zerozawa",
+	"license": "GPL-3.0-only",
+	"packageManager": "pnpm@9.9.0+sha512.60c18acd138bff695d339be6ad13f7e936eea6745660d4cc4a776d5247c540d0edee1a563695c183a66eb917ef88f2b4feb1fc25f32a7adcadc7aaf3438e99c1",
+	"engines": {
+		"vscode": "^1.91.0"
+	},
+	"main": "dist/client/extension.js",
+	"keywords": [
+		"novel",
+		"小说",
+		"小説",
+		"plaintext",
+		"markdown"
+	],
+	"scripts": {
+		"build": "run-s -l build:common build:language-server build:vscode-extension",
+		"build:language-server": "cd ./projects/language-server && webpack",
+		"build:vscode-extension": "cd ./projects/vscode-extension && webpack",
+		"build:common": "cd ./projects/common && tsc",
+		"dev": "run-s build:common dev-all",
+		"dev-all": "run-p -l dev:*",
+		"dev:language-server": "cd ./projects/language-server && webpack --watch",
+		"dev:vscode-extension": "cd ./projects/vscode-extension && webpack --watch",
+		"dev:common": "cd ./projects/common && tsc -w",
+		"prepare": "husky"
+	},
+	"devDependencies": {
+		"@cspell/cspell-types": "^8.16.0",
+		"@cspell/dict-companies": "^3.1.7",
+		"@cspell/dict-css": "^4.0.16",
+		"@cspell/dict-en_us": "^4.3.27",
+		"@cspell/dict-fonts": "^4.0.3",
+		"@cspell/dict-html": "^4.0.10",
+		"@cspell/dict-node": "^5.0.5",
+		"@cspell/dict-npm": "^5.1.12",
+		"@cspell/dict-typescript": "^3.1.11",
+		"@cspell/eslint-plugin": "^8.16.0",
+		"@eslint/js": "^9.14.0",
+		"@ianvs/prettier-plugin-sort-imports": "^4.4.0",
+		"@types/eslint-config-prettier": "^6.11.3",
+		"@types/eslint__eslintrc": "^2.1.2",
+		"@types/eslint__js": "^8.42.3",
+		"@types/lint-staged": "^13.3.0",
+		"@types/micromatch": "^4.0.9",
+		"@types/node": "20.14.0",
+		"@types/ramda": "^0.30.2",
+		"@types/shebang-command": "^1.2.2",
+		"@webpack-cli/generators": "^3.0.7",
+		"crlf": "^1.1.1",
+		"cspell": "^8.16.0",
+		"eslint": "^9.14.0",
+		"eslint-config-prettier": "^9.1.0",
+		"eslint-plugin-functional": "^7.1.0",
+		"eslint-plugin-prettier": "^5.2.1",
+		"globals": "^15.12.0",
+		"husky": "^9.1.6",
+		"is-binary-path": "^3.0.0",
+		"lint-staged": "^15.2.10",
+		"micromatch": "^4.0.8",
+		"npm-run-all2": "^6.2.6",
+		"prettier": "^3.3.3",
+		"prettier-plugin-css-order": "^2.1.2",
+		"prettier-plugin-jsdoc": "^1.3.0",
+		"prettier-plugin-pkg": "^0.18.1",
+		"prettier-plugin-sort-json": "^4.0.0",
+		"ramda": "^0.30.1",
+		"shebang-command": "^2.0.0",
+		"ts-loader": "^9.5.1",
+		"typescript": "5.6.3",
+		"typescript-eslint": "^8.14.0",
+		"unplugin-parcel-macros": "^0.1.1",
+		"webpack": "^5.96.1",
+		"webpack-cli": "^5.1.4"
+	},
+	"activationEvents": [
+		"onLanguage:plaintext",
+		"onLanguage:markdown",
+		"onStartupFinished"
+	],
+	"contributes": {
+		"configuration": {
+			"type": "object",
+			"title": "Example configuration",
+			"properties": {
+				"noveler.maxNumberOfProblems": {
+					"scope": "resource",
+					"type": "number",
+					"default": 100,
+					"description": "Controls the maximum number of problems produced by the server."
+				},
+				"noveler.trace.server": {
+					"scope": "window",
+					"type": "string",
+					"enum": [
+						"off",
+						"messages",
+						"verbose"
+					],
+					"default": "off",
+					"description": "Traces the communication between VS Code and the language server."
+				}
+			}
+		}
+	},
+	"qna": "marketplace",
+	"extensionKind": [
+		"workspace"
+	]
 }

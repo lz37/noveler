@@ -1,0 +1,11 @@
+{
+	"name": "vscode-ext",
+	"version": "0.0.0",
+	"type": "commonjs",
+	"dependencies": {
+		"vscode-languageclient": "^9.0.1"
+	},
+	"devDependencies": {
+		"@types/vscode": "^1.91.0"
+	}
+}

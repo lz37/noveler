@@ -1,2 +1,4 @@
-/out
-/test
+out
+pnpm-lock.yaml
+LICENSE.md
+node_modules

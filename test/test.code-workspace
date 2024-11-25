@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "test1"
+		},
+		{
+			"path": "test2"
+		}
+	],
+	"settings": {
+		"noveler.trace.server": "messages"
+	}
+}

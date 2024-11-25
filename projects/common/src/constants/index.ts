@@ -1,0 +1,27 @@
+export const moduleName = 'noveler'
+
+export const configPaths = [
+	'package.json',
+	`.${moduleName}rc`,
+	`.${moduleName}rc.json`,
+	`.${moduleName}rc.yaml`,
+	`.${moduleName}rc.yml`,
+	`.${moduleName}rc.js`,
+	`.${moduleName}rc.ts`,
+	`.${moduleName}rc.mjs`,
+	`.${moduleName}rc.cjs`,
+	`.${moduleName}rc.toml`,
+	`.config/${moduleName}rc`,
+	`.config/${moduleName}rc.json`,
+	`.config/${moduleName}rc.yaml`,
+	`.config/${moduleName}rc.yml`,
+	`.config/${moduleName}rc.js`,
+	`.config/${moduleName}rc.ts`,
+	`.config/${moduleName}rc.mjs`,
+	`.config/${moduleName}rc.cjs`,
+	`.config/${moduleName}rc.toml`,
+	`${moduleName}.config.js`,
+	`${moduleName}.config.ts`,
+	`${moduleName}.config.mjs`,
+	`${moduleName}.config.cjs`,
+]
