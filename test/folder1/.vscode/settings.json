@@ -4,6 +4,7 @@
   "noveler.autoIndentLines": 1,
   "noveler.spaceBetweenChEn": true,
   "noveler.statusShow": true,
+  "noveler.statusWordReset": false,
   "noveler.statusTimeUnit": 10,
   "noveler.previewFontSize": 18,
   "noveler.previewIndentionLength": 4,
@@ -19,5 +20,10 @@
       "hoverKey": "信息",
       "decorationRenderOptions": { "color": "#9e952f" }
     }
-  ]
+  ],
+  "[plaintext]": {
+    "editor.wrappingIndent": "none",
+    "editor.autoIndent": "none",
+    "editor.wordWrap": "bounded"
+  }
 }

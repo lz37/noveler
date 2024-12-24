@@ -59,6 +59,7 @@ export interface IConfig {
   statusShow: boolean
   statusTimeUnit: number
   statusIncludingSpace: boolean
+  statusWordReset: boolean
   statusItems: StatusItem[]
   previewFontSize: number
   previewIndentionLength: number
