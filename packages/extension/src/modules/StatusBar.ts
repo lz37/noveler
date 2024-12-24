@@ -12,6 +12,7 @@ const statusItem = vscode.window.createStatusBarItem(
 let startLength = 0
 let textItems: StatusItem[] = []
 let includingSpace = false
+let wordReset = false
 let inputLength = 0
 let isShow = false
 let accumulateTime = 0
@@ -53,11 +54,17 @@ const updateItemTooltip = (sum: number, textLength: number) => {
 }
 
 const updateConf = () => {
-  const { statusShow, statusTimeUnit, statusIncludingSpace, statusItems } =
-    confHandler.get()
+  const {
+    statusShow,
+    statusTimeUnit,
+    statusIncludingSpace,
+    statusItems,
+    statusWordReset,
+  } = confHandler.get()
   isShow = statusShow
   timeUnit = statusTimeUnit
   includingSpace = statusIncludingSpace
+  wordReset = statusWordReset
   textItems = statusItems
   if (vscode.window.activeTextEditor) {
     startLength = textLengthHandler(vscode.window.activeTextEditor.document)
@@ -135,6 +142,11 @@ export const changeEditor = vscode.window.onDidChangeActiveTextEditor(
     if (!editor) return
     if (!targetFiles.includes(editor.document.languageId)) return
     startLength = textLengthHandler(editor.document)
+
+    if (!wordReset) {
+      // 是否开启重置切换文件重置字数
+      startLength -= inputLength // 如果不重置那么开始位置就要减去上次输入的字数
+    }
     updateItemTooltip(inputLength, startLength)
   },
 )

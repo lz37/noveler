@@ -60,7 +60,8 @@ const handleCSV = async (csvOpt: CSVOptions) => {
   // 读取
   try {
     const data = await fs.readFile(csvOpt.path, 'utf-8')
-    const records: string[][] = parse(data)
+    // 添加relax_column_count属性,支持空行,每行列数不同的csv
+    const records: string[][] = parse(data, { relax_column_count: true })
     const firstRow = records[0]
     let keyIndex = -1
     let hoverKeyIndex = -1
@@ -73,14 +74,28 @@ const handleCSV = async (csvOpt: CSVOptions) => {
         hoverKeyIndex = i
       }
     }
+
     if (keyIndex === -1) {
       throw new Error(`配置文件 ${csvOpt.path} 中没有找到 key: ${csvOpt.key}`)
     }
     const datas = records.slice(1)
+
     datas.forEach((row) => {
-      const key = row[keyIndex].trim()
+      let key = row[keyIndex]
+      // 跳过空白行或未定义行
+      if (key) {
+        key = key.trim()
+      } else {
+        return
+      }
       if (csvOpt.hoverKey && hoverKeyIndex !== -1) {
-        const hover = row[hoverKeyIndex].trim()
+        let hover = row[hoverKeyIndex]
+        // 解决hoverKey空白报错
+        if (hover) {
+          hover = hover.trim()
+        } else {
+          hover = key // 如果没有填信息,则设置为key
+        }
         completion.setKeys(key, csvOpt.suggestPrefix, hover, csvOpt.suggestKind)
         const editor = vscode.window.activeTextEditor
         if (!editor) return

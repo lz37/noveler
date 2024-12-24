@@ -2,7 +2,7 @@
   "name": "noveler",
   "displayName": "Noveler",
   "description": "一个在 vscode 上辅助码中文小说的插件",
-  "version": "1.4.8",
+  "version": "1.4.9",
   "author": "zerozawa",
   "publisher": "zerozawa",
   "license": "GPL-3.0",
@@ -209,6 +209,12 @@
           "type": "boolean",
           "default": false,
           "markdownDescription": "状态栏字数统计是否包含空格",
+          "scope": "resource"
+        },
+        "noveler.statusWordReset": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "切换文件时是否重置字数统计",
           "scope": "resource"
         },
         "noveler.statusTimeUnit": {
