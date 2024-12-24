@@ -75,7 +75,6 @@ const handleCSV = async (csvOpt: CSVOptions) => {
       }
     }
 
-    console.log('读取到数据:', records, csvOpt)
     if (keyIndex === -1) {
       throw new Error(`配置文件 ${csvOpt.path} 中没有找到 key: ${csvOpt.key}`)
     }
