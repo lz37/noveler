@@ -100,7 +100,7 @@ export const init = () => {
         true,
       )
     }
-    if (Date.now() - lastRecordTime > 5 * 1000) {
+    if (Date.now() - lastRecordTime > 30 * 1000) {
       // 限制记录次数,每x毫秒记录一次
       lastRecordTime = Date.now()
       await appendToCSV(inputLength - inputCount)

@@ -72,7 +72,7 @@ export interface IConfig {
   exportOutPath: string
   exportFilePath: string[]
   exportFormat: string
-  exportEncoding: BufferEncoding
+  exportEncoding: string
   typingRecord: boolean
 }
 

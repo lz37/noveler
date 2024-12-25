@@ -50,11 +50,14 @@ export const exportFile = async () => {
   }
 
   const targetFiles = await readPaths(conf.exportFilePath) // 读取目标文件路径
-  const text = await readFiles(targetFiles, conf.exportEncoding)
+  const text = await readFiles(
+    targetFiles,
+    conf.exportEncoding as BufferEncoding,
+  )
 
   if (conf.exportFormat == 'txt') {
     await fs.writeFile(exportOutPath, text, {
-      encoding: conf.exportEncoding,
+      encoding: conf.exportEncoding as BufferEncoding,
     })
   } else {
     vscode.window.showErrorMessage(`不支持的导出格式: ${conf.exportFormat}`)
