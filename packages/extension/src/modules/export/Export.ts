@@ -1,6 +1,6 @@
 import * as confHandler from '@/modules/ConfigHandler'
 import * as vscode from 'vscode'
-import { promises as fs, existsSync } from 'fs'
+import { promises as fs } from 'fs'
 import { isAbsolutePath, getAbsolutePaths, mkdirs } from 'common/utils'
 import { Commands, ICustomHighlightConfMap } from 'common/types'
 import { initing } from '@/extension'

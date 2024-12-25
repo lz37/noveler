@@ -372,7 +372,8 @@
         "noveler.exportOutPath": {
           "type": "string",
           "markdownDescription": "导出文本的路径，可以是绝对路径，也可以是相对于根目录的路径（暂不支持工作区）",
-          "default": "out/out.txt"
+          "default": "out/out.txt",
+          "scope": "resource"
         },
         "noveler.exportFilePath": {
           "type": "array",
@@ -386,13 +387,21 @@
         },
         "noveler.exportFormat": {
           "type": "string",
-          "markdownDescription": "格式(当前仅支持txt)",
-          "default": "txt"
+          "markdownDescription": "导出文件格式(当前仅支持txt)",
+          "default": "txt",
+          "scope": "resource"
         },
         "noveler.exportEncoding": {
           "type": "BufferEncoding",
-          "markdownDescription": "编码格式,默认utf-8",
-          "default": "utf-8"
+          "markdownDescription": "导出文件编码,默认utf-8",
+          "default": "utf-8",
+          "scope": "resource"
+        },
+        "noveler.typingRecord": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "是否开启输入记录(若开启将输入记录保存到record.csv) 默认关闭",
+          "scope": "resource"
         }
       }
     }

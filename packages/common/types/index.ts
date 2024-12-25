@@ -73,6 +73,7 @@ export interface IConfig {
   exportFilePath: string[]
   exportFormat: string
   exportEncoding: BufferEncoding
+  typingRecord: boolean
 }
 
 export type NovelerRouter = '/' | '/preview' | '/panel'

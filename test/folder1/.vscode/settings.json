@@ -13,6 +13,7 @@
     "\\d+(\\.\\d+)?": { "color": "#23e40a" },
     "《.*?》": { "color": "#8482e4" }
   },
+  "noveler.typingRecord":true,
   "noveler.confCSVFiles": [
     {
       "path": ".vscode/test.csv",

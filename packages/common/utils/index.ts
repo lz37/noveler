@@ -7,6 +7,10 @@ const getStrLength = (str: string) => {
   const cArr = str.match(/[^\x00-\xff]/gi)
   return str.length + (cArr == null ? 0 : cArr.length)
 }
+export const isMultipleWorkspaces = () => {
+  // 检测当前是否多个工作区
+  return vscode.workspace.workspaceFolders?.length != 1
+}
 export const mkdirs = async (path: string) => {
   // 创建导出文件的目录(如果不存在)
   if (!existsSync(path)) {
@@ -19,6 +23,19 @@ export const mkdirs = async (path: string) => {
   }
   return true
 }
+export const formatTime = () => {
+  const now = new Date()
+  return `${now.getFullYear()}-${(now.getMonth() + 1)
+    .toString()
+    .padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')} ${now
+    .getHours()
+    .toString()
+    .padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now
+    .getSeconds()
+    .toString()
+    .padStart(2, '0')}`
+}
+
 export const splitStr = (sChars: string) => {
   let str = ''
   for (let i = 0; i < sChars.length; i++) {
