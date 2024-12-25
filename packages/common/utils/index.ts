@@ -1,5 +1,5 @@
 import { NovelerRouter } from '../types'
-import { promises as fs } from 'fs'
+import { promises as fs, existsSync } from 'fs'
 import * as vscode from 'vscode'
 
 const getStrLength = (str: string) => {
@@ -7,7 +7,18 @@ const getStrLength = (str: string) => {
   const cArr = str.match(/[^\x00-\xff]/gi)
   return str.length + (cArr == null ? 0 : cArr.length)
 }
-
+export const mkdirs = async (path: string) => {
+  // 创建导出文件的目录(如果不存在)
+  if (!existsSync(path)) {
+    try {
+      fs.mkdir(path, { recursive: true })
+    } catch (err) {
+      vscode.window.showErrorMessage(`导出文件夹创建失败: ${err}`)
+      return false
+    }
+  }
+  return true
+}
 export const splitStr = (sChars: string) => {
   let str = ''
   for (let i = 0; i < sChars.length; i++) {

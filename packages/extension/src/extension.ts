@@ -18,6 +18,7 @@ import * as decoration from '@/modules/Decoration'
 import * as completion from '@/modules/Completion'
 import * as CSVReader from '@/modules/reader/CSVReader'
 import * as TXTReader from '@/modules/reader/TXTReader'
+import * as FileExport from '@/modules/export/export'
 import * as diagnostic from '@/modules/Diagnostic'
 import * as panel from '@/modules/webviews/Panel'
 import { Commands } from 'common/types'
@@ -52,6 +53,7 @@ export const activate = async (context: vscode.ExtensionContext) => {
     CSVReader.reloadCommand,
     CSVReader.onChangeConf,
     TXTReader.reloadCommand,
+    FileExport.exportCommand,
     completion.deletePrefixCommand,
     diagnostic.onChangeEditor,
     diagnostic.onChangeDocument,

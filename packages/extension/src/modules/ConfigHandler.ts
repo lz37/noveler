@@ -9,6 +9,7 @@ export const get = () => {
   const userConf = vscode.workspace
     .getConfiguration(undefined)
     .get(extPrefix) as IConfig
+
   const res = { ...defaultConfig, ...userConf } as IConfig
   res.confCSVFiles = res.confCSVFiles?.map((file) => {
     file.suggestPrefix = file.suggestPrefix ?? CSVOpt.suggestPrefix
