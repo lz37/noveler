@@ -9,7 +9,7 @@ const statusItem = vscode.window.createStatusBarItem(
   vscode.StatusBarAlignment.Left,
   11.4514,
 )
-let startLength = 0
+// let startLength = 0
 let textItems: StatusItem[] = []
 let includingSpace = false
 let wordReset = false
@@ -17,9 +17,13 @@ let isShow = false
 let accumulateTime = 0
 let timeUnit = 10
 let maxTime = 0
-let inputLength = 0
-let inputCount = 0 // 上次记录的输入长度 用于记录码字字数
-let lastRecordTime = 0 // 上次记录的事件,用于记录码字字数
+
+let recordInputCount = 0 // 上次记录的输入长度 用于记录码字字数
+let recordLastTime = 0 // 上次记录的事件,用于记录码字字数
+
+let inputLength = 0 // 记录已输入所有文本的长度
+const inputLengthMap: Map<string, number> = new Map() // 记录每个文档输入的长度 待定
+const lastLengthMap: Map<string, number> = new Map() // 记录上次的文档长度
 
 const updateItemText = (
   sum: number,
@@ -69,7 +73,8 @@ const updateConf = () => {
   wordReset = statusWordReset
   textItems = statusItems
   if (vscode.window.activeTextEditor) {
-    startLength = textLengthHandler(vscode.window.activeTextEditor.document)
+    const doc = vscode.window.activeTextEditor.document
+    lastLengthMap.set(doc.fileName, textLengthHandler(doc))
   }
   if (isShow) {
     statusItem.show()
@@ -100,11 +105,11 @@ export const init = () => {
         true,
       )
     }
-    if (Date.now() - lastRecordTime > 60 * 1000) {
+    if (Date.now() - recordLastTime > 60 * 1000) {
       // 限制记录次数,每x毫秒记录一次
-      lastRecordTime = Date.now()
-      await appendToCSV(inputLength - inputCount)
-      inputCount = inputLength
+      recordLastTime = Date.now()
+      await appendToCSV(inputLength - recordInputCount)
+      recordInputCount = inputLength
     }
   }, 1000)
 
@@ -142,8 +147,11 @@ const update = (event: vscode.TextDocumentChangeEvent) => {
   }
   maxTime = Date.now() + timeUnit * 1000
   // 获取总计的输入长度，删除掉的部分计算为负数
-  inputLength = textLengthHandler(event.document) - startLength
   const textLength = textLengthHandler(event.document)
+  inputLength +=
+    textLength - (lastLengthMap.get(event.document.fileName) || textLength)
+  lastLengthMap.set(event.document.fileName, textLength)
+
   updateItemText(inputLength, textLength, accumulateTime, false)
   updateItemTooltip(inputLength, textLength)
 }
@@ -159,19 +167,24 @@ export const changeEditor = vscode.window.onDidChangeActiveTextEditor(
   (editor) => {
     if (!editor) return
     if (!targetFiles.includes(editor.document.languageId)) return
-    startLength = textLengthHandler(editor.document)
+    const currentDocLength = textLengthHandler(editor.document)
 
-    if (!wordReset) {
-      // 是否开启重置切换文件重置字数
-      startLength -= inputLength // 如果不重置那么开始位置就要减去上次输入的字数
-      console.log('startLength', inputLength, startLength)
+    // 如果切换文档,并且上次没有记录长度,则记录一下
+    if (!lastLengthMap.has(editor.document.fileName)) {
+      lastLengthMap.set(editor.document.fileName, currentDocLength)
     }
-    updateItemTooltip(inputLength, startLength)
+    if (wordReset) {
+      // 是否开启重置切换文件重置字数
+      inputLength = 0
+    }
+    updateItemTooltip(inputLength, currentDocLength)
   },
 )
 
 export const changeConf = vscode.workspace.onDidChangeConfiguration((event) => {
   if (initing) return
   if (!event.affectsConfiguration('noveler')) return
+  console.log('触发changeConf')
+
   updateConf()
 })
