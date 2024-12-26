@@ -400,7 +400,7 @@
         "noveler.typingRecord": {
           "type": "boolean",
           "default": false,
-          "markdownDescription": "是否开启输入记录(若开启将输入记录保存到record.csv) 默认关闭",
+          "markdownDescription": "是否开启输入记录(若开启将输入记录保存到.noveler/record) 默认关闭",
           "scope": "resource"
         }
       }

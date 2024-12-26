@@ -2,7 +2,7 @@
   "noveler.showApplyRecommendPlaintextConf": true,
   "noveler.autoIndentSpaces": 4,
   "noveler.autoIndentLines": 1,
-  "noveler.spaceBetweenChEn": true,
+  "noveler.statusIncludingSpace": false,
   "noveler.statusShow": true,
   "noveler.statusWordReset": false,
   "noveler.statusTimeUnit": 10,

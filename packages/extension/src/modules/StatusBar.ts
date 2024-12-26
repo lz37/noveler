@@ -100,7 +100,7 @@ export const init = () => {
         true,
       )
     }
-    if (Date.now() - lastRecordTime > 30 * 1000) {
+    if (Date.now() - lastRecordTime > 60 * 1000) {
       // 限制记录次数,每x毫秒记录一次
       lastRecordTime = Date.now()
       await appendToCSV(inputLength - inputCount)
@@ -113,7 +113,15 @@ export const init = () => {
 }
 
 const textLengthHandler = (doc: vscode.TextDocument) => {
-  const textLength = doc.getText().replace(/\s/, '').length
+  const text = doc.getText()
+  let cleanedText
+  if (!includingSpace) {
+    cleanedText = text.replace(/\s/g, '')
+  } else {
+    cleanedText = text.replace(/[\r\n]/g, '')
+  }
+
+  return cleanedText.length
   // doc.getText().replace(/\s/,"")
   // doc
   //   .getText()
@@ -125,7 +133,7 @@ const textLengthHandler = (doc: vscode.TextDocument) => {
   //       if (char == '\r' || char == '\n') textLength -= 1
   //     }
   //   })
-  return textLength
+  // return textLength
 }
 
 const update = (event: vscode.TextDocumentChangeEvent) => {

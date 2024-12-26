@@ -15,7 +15,7 @@ export async function appendToCSV(count: number) {
   const noveler = `${vscode.workspace.workspaceFolders?.[0].uri.fsPath}/.noveler`
 
   await mkdirs(noveler)
-  const csvFilePath = `${noveler}/record.csv`
+  const csvFilePath = `${noveler}/record.log`
 
   const data = `${formatTime()},${count}\n`
   try {
