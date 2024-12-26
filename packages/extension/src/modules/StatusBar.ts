@@ -105,7 +105,6 @@ export const init = () => {
       lastRecordTime = Date.now()
       await appendToCSV(inputLength - inputCount)
       inputCount = inputLength
-      console.log(inputLength, inputCount)
     }
   }, 1000)
 
@@ -144,7 +143,6 @@ const update = (event: vscode.TextDocumentChangeEvent) => {
   maxTime = Date.now() + timeUnit * 1000
   // 获取总计的输入长度，删除掉的部分计算为负数
   inputLength = textLengthHandler(event.document) - startLength
-  console.log('inputLength', inputLength, startLength)
   const textLength = textLengthHandler(event.document)
   updateItemText(inputLength, textLength, accumulateTime, false)
   updateItemTooltip(inputLength, textLength)
