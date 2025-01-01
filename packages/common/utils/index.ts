@@ -1,11 +1,39 @@
 import { NovelerRouter } from '../types'
-import { promises as fs } from 'fs'
+import { promises as fs, existsSync } from 'fs'
 import * as vscode from 'vscode'
 
 const getStrLength = (str: string) => {
   // eslint-disable-next-line no-control-regex
   const cArr = str.match(/[^\x00-\xff]/gi)
   return str.length + (cArr == null ? 0 : cArr.length)
+}
+export const isMultipleWorkspaces = () => {
+  // 检测当前是否多个工作区
+  return vscode.workspace.workspaceFolders?.length != 1
+}
+export const mkdirs = async (path: string) => {
+  // 创建导出文件的目录(如果不存在)
+  if (!existsSync(path)) {
+    try {
+      fs.mkdir(path, { recursive: true })
+    } catch (err) {
+      vscode.window.showErrorMessage(`导出文件夹创建失败: ${err}`)
+      return false
+    }
+  }
+  return true
+}
+export const formatTime = () => {
+  const now = new Date()
+  return `${now.getFullYear()}-${(now.getMonth() + 1)
+    .toString()
+    .padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')} ${now
+    .getHours()
+    .toString()
+    .padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now
+    .getSeconds()
+    .toString()
+    .padStart(2, '0')}`
 }
 
 export const splitStr = (sChars: string) => {

@@ -1,3 +1,13 @@
+
+## [1.4.10](https://github.com/lz37/noveler/compare/v1.4.9...v1.4.10) (2024-12-25)
+
+
+### Bug Fixes
+
+* 添加statusWordReset设置选项,允许切换文件时不重置字数(默认为不重置) ([82c234c](https://github.com/lz37/noveler/commit/82c234c01264a8d560b34439a06e4c52ce61871a))
+
+
+
 ## [1.4.9](https://github.com/lz37/noveler/compare/v1.4.8...v1.4.9) (2024-12-24)
 
 

@@ -2,7 +2,7 @@
   "noveler.showApplyRecommendPlaintextConf": true,
   "noveler.autoIndentSpaces": 4,
   "noveler.autoIndentLines": 1,
-  "noveler.spaceBetweenChEn": true,
+  "noveler.statusIncludingSpace": false,
   "noveler.statusShow": true,
   "noveler.statusWordReset": false,
   "noveler.statusTimeUnit": 10,
@@ -13,6 +13,7 @@
     "\\d+(\\.\\d+)?": { "color": "#23e40a" },
     "《.*?》": { "color": "#8482e4" }
   },
+  "noveler.typingRecord":true,
   "noveler.confCSVFiles": [
     {
       "path": ".vscode/test.csv",

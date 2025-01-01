@@ -2,7 +2,7 @@
   "name": "noveler",
   "displayName": "Noveler",
   "description": "一个在 vscode 上辅助码中文小说的插件",
-  "version": "1.4.9",
+  "version": "1.4.10",
   "author": "zerozawa",
   "publisher": "zerozawa",
   "license": "GPL-3.0",
@@ -119,6 +119,12 @@
         "title": "reload CSV",
         "category": "noveler",
         "shortTitle": "刷新 CSV 配置文件"
+      },
+      {
+        "command": "noveler.exportTXT",
+        "title": "export TXT",
+        "category": "noveler",
+        "shortTitle": "导出txt到单独文件"
       }
     ],
     "keybindings": [
@@ -132,6 +138,12 @@
         "command": "noveler.reloadCSV",
         "key": "alt+f",
         "mac": "alt+f",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "noveler.exportTXT",
+        "key": "ctrl+alt+e",
+        "mac": "ctrl+alt+e",
         "when": "editorTextFocus"
       }
     ],
@@ -356,6 +368,40 @@
               }
             }
           }
+        },
+        "noveler.exportOutPath": {
+          "type": "string",
+          "markdownDescription": "导出文本的路径，可以是绝对路径，也可以是相对于根目录的路径（暂不支持工作区）",
+          "default": "out/out.txt",
+          "scope": "resource"
+        },
+        "noveler.exportFilePath": {
+          "type": "array",
+          "markdownDescription": "要导出为txt的文本目录,支持通配符",
+          "minItems": 1,
+          "uniqueItems": true,
+          "default": [
+            "*.txt",
+            "*.text"
+          ]
+        },
+        "noveler.exportFormat": {
+          "type": "string",
+          "markdownDescription": "导出文件格式(当前仅支持txt)",
+          "default": "txt",
+          "scope": "resource"
+        },
+        "noveler.exportEncoding": {
+          "type": "string",
+          "markdownDescription": "导出文件编码,默认utf-8",
+          "default": "utf-8",
+          "scope": "resource"
+        },
+        "noveler.typingRecord": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "是否开启输入记录(若开启将输入记录保存到.noveler/record) 默认关闭",
+          "scope": "resource"
         }
       }
     }
