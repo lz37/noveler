@@ -10,7 +10,7 @@
       "args": [
         "--disable-extensions",
         "--extensionDevelopmentPath=${workspaceRoot}",
-        "${workspaceRoot}/test/folder2"
+        "${workspaceRoot}/test/folder1"
       ],
       "sourceMaps": true,
       "outFiles": ["${workspaceRoot}/out/**/*.js"]

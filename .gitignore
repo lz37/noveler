@@ -5,3 +5,4 @@ accesstoken.txt
 local
 .direnv
 .devenv
+*.log
