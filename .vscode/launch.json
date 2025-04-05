@@ -9,7 +9,8 @@
       "runtimeExecutable": "${execPath}",
       "args": [
         "--disable-extensions",
-        "--extensionDevelopmentPath=${workspaceRoot}"
+        "--extensionDevelopmentPath=${workspaceRoot}",
+        "${workspaceRoot}/test/folder1"
       ],
       "sourceMaps": true,
       "outFiles": ["${workspaceRoot}/out/**/*.js"]

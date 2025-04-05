@@ -25,5 +25,17 @@
   ],
   "markdownlint.ignore": ["CHANGELOG.md"],
   // 排除changelog
-  "cSpell.files": ["**/*", "!CHANGELOG.md"]
+  "cSpell.files": ["**/*", "!CHANGELOG.md"],
+  "nix.enableLanguageServer": true, // Enable LSP.
+  "nix.serverPath": "nil",
+  "nix.formatterPath": "nixfmt",
+  "nix.serverSettings": {
+    "nil": {
+      "formatting": {
+        "command": [
+          "nixfmt"
+        ]
+      }
+    }
+  },
 }

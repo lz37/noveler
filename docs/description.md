@@ -1,4 +1,3 @@
 ## 修改
 
-- 添加导出为单体txt格式功能
-- 添加字数记录功能,后续或许可以添加时间饼图分析之类功能
+- 解决 `noveler.typingRecord` 不生效的问题 [issue-28](https://github.com/lz37/noveler/issues/28)

@@ -1,4 +1,5 @@
 import * as vscode from 'vscode'
+import * as confHandler from '@/modules/ConfigHandler'
 
 import { formatTime, isMultipleWorkspaces, mkdirs } from 'common/utils'
 import { promises as fs, existsSync } from 'fs'
@@ -10,6 +11,9 @@ export async function appendToCSV(count: number) {
     return
   }
   if (count == 0) {
+    return
+  }
+  if (confHandler.get().typingRecord === false) {
     return
   }
   const noveler = `${vscode.workspace.workspaceFolders?.[0].uri.fsPath}/.noveler`

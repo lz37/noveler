@@ -1,3 +1,14 @@
+## [1.4.11](https://github.com/lz37/noveler/compare/v1.4.10...v1.4.11) (2025-04-05)
+
+
+### Bug Fixes
+
+* devbox 2 devenv & update node ver ([6cf1ef7](https://github.com/lz37/noveler/commit/6cf1ef7e727ac9d6839025b9a25b41fb7a88793b))
+* typingRecord judge ([ab1f56c](https://github.com/lz37/noveler/commit/ab1f56c5259a2822413ff451d3ed8d244ca88eab))
+* update some version ([17a5164](https://github.com/lz37/noveler/commit/17a51644e3826993c2931324ce7178af0308eb12))
+
+
+
 
 ## [1.4.10](https://github.com/lz37/noveler/compare/v1.4.9...v1.4.10) (2024-12-25)
 
