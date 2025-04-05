@@ -11,15 +11,14 @@ jobs:
         node-version: [22.2.0]
     steps:
       - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
           cache: "pnpm"
-      - name: Install corepack
-        run: corepack use pnpm@10.7.1
       - name: Install dependencies
-        run: corepack install
+        run: pnpm install
       - name: publish
         env:
           VSCE_TOKEN: ${{ secrets.VSCE_TOKEN }}
