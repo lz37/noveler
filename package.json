@@ -2,7 +2,7 @@
   "name": "noveler",
   "displayName": "Noveler",
   "description": "一个在 vscode 上辅助码中文小说的插件",
-  "version": "1.4.10",
+  "version": "1.4.11",
   "author": "zerozawa",
   "publisher": "zerozawa",
   "license": "GPL-3.0",
