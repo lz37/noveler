@@ -96,6 +96,9 @@ const handleCSV = async (csvOpt: CSVOptions) => {
         } else {
           hover = key // 如果没有填信息,则设置为key
         }
+        if (!hover) {
+          return // 如果为空,则跳出
+        }
         completion.setKeys(key, csvOpt.suggestPrefix, hover, csvOpt.suggestKind)
         const editor = vscode.window.activeTextEditor
         if (!editor) return

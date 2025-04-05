@@ -69,6 +69,11 @@ export interface IConfig {
   outlinesDir: string
   confCSVFiles?: CSVOptions[]
   confTXTFiles?: TXTOptions[]
+  exportOutPath: string
+  exportFilePath: string[]
+  exportFormat: string
+  exportEncoding: string
+  typingRecord: boolean
 }
 
 export type NovelerRouter = '/' | '/preview' | '/panel'
@@ -117,6 +122,7 @@ export interface PanelExtRecDto {
 export enum Commands {
   ReloadCSV = 'noveler.reloadCSV',
   ReloadTXT = 'noveler.reloadTXT',
+  ExportTXT = 'noveler.exportTXT',
   Preview = 'noveler.preview',
   DeletePrefix = 'noveler.deletePrefix',
 }
