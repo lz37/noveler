@@ -2,7 +2,6 @@
   "noveler.showApplyRecommendPlaintextConf": false,
   "noveler.autoIndentSpaces": 4,
   "noveler.autoIndentLines": 1,
-  "noveler.spaceBetweenChEn": true,
   "noveler.statusShow": true,
   "noveler.statusTimeUnit": 10,
   "noveler.previewFontSize": 18,
@@ -14,7 +13,7 @@
   },
   "noveler.confCSVFiles": [
     {
-      "path": "test.csv",
+      "path": "test1.csv",
       "key": "key",
       "hoverKey": "hoverKey",
       "decorationRenderOptions": { "color": "#9e952f" }
