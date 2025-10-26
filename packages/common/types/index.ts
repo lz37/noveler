@@ -76,7 +76,7 @@ export interface IConfig {
   typingRecord: boolean
 }
 
-export type NovelerRouter = '/' | '/preview' | '/panel'
+export type NovelerRouter = '/' | '/preview' | '/panel' | '/ai-chat'
 export interface PreviewDto {
   /**if undefined will not take effect */
   text?: string
@@ -125,4 +125,88 @@ export enum Commands {
   ExportTXT = 'noveler.exportTXT',
   Preview = 'noveler.preview',
   DeletePrefix = 'noveler.deletePrefix',
+  AIChat = 'noveler.aiChat',
+  AIRandomName = 'noveler.aiRandomName',
+  AIWordReplace = 'noveler.aiWordReplace',
+  AIContinueWriting = 'noveler.aiContinueWriting',
+  AICharacterDesign = 'noveler.aiCharacterDesign',
+}
+
+export interface AIChatDto {
+  messages: ChatMessage[]
+  themeKind?: Theme
+}
+
+export interface ChatMessage {
+  id: string
+  role: 'user' | 'assistant' | 'system'
+  content: string
+  timestamp: number
+  reasoning_content?: string // 深度思考内容
+}
+
+export interface AIChatExtRecDto {
+  type:
+    | 'message'
+    | 'clear'
+    | 'getConfig'
+    | 'saveConfig'
+    | 'stop'
+    | 'newSession'
+    | 'switchSession'
+  message?: ChatMessage
+  config?: AIConfig
+}
+
+// 流式消息类型
+export interface AIStreamDto {
+  type: 'stream'
+  messageId: string
+  content: string
+  isComplete: boolean
+  themeKind?: Theme
+  reasoning_content?: string // 深度思考内容
+}
+
+// API提供商接口
+export interface ApiProvider {
+  id: string
+  name: string
+  apiUrl: string
+  apiKey: string
+  models: Model[]
+  isActive: boolean
+}
+
+// 模型接口
+export interface Model {
+  id: string
+  name: string
+  isActive: boolean
+}
+
+export interface AIConfig {
+  // 新的多提供商配置
+  apiProviders?: ApiProvider[]
+  selectedProviderId?: string
+  selectedModelId?: string
+
+  prompts?: {
+    randomName?: {
+      withSelection?: string
+      withoutSelection?: string
+    }
+    wordReplace?: {
+      withSelection?: string
+      withoutSelection?: string
+    }
+    continueWriting?: {
+      withSelection?: string
+      withoutSelection?: string
+    }
+    characterDesign?: {
+      withSelection?: string
+      withoutSelection?: string
+    }
+  }
 }

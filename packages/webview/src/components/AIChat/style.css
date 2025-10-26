@@ -1,0 +1,633 @@
+.ai-chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: var(--vscode-editor-background);
+  color: var(--vscode-editor-foreground);
+  font-family: var(--vscode-font-family);
+  font-size: var(--vscode-font-size);
+}
+
+.ai-chat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--vscode-panel-border);
+}
+
+.ai-chat-header h2 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.header-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.config-button {
+  background-color: var(--vscode-button-secondaryBackground);
+  color: var(--vscode-button-secondaryForeground);
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.config-button:hover {
+  background-color: var(--vscode-button-secondaryHoverBackground);
+}
+
+/* 停止按钮样式 */
+.stop-button {
+  background-color: var(--vscode-button-secondaryBackground);
+  color: var(--vscode-button-secondaryForeground);
+  border: 1px solid var(--vscode-button-border);
+  border-radius: 4px;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-size: 12px;
+  margin-left: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 60px;
+}
+
+.stop-button:hover {
+  background-color: var(--vscode-button-secondaryHoverBackground);
+}
+
+.stop-button:active {
+  background-color: var(--vscode-button-background);
+  color: var(--vscode-button-foreground);
+}
+
+/* 系统消息（分割线）样式 */
+.system-message {
+  margin: 16px 0;
+  text-align: center;
+}
+
+.system-divider {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: var(--vscode-button-secondaryBackground);
+  color: var(--vscode-button-secondaryForeground);
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* 清除按钮样式 */
+.clear-button {
+  background-color: var(--vscode-button-secondaryBackground);
+  color: var(--vscode-button-secondaryForeground);
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.clear-button:hover {
+  background-color: var(--vscode-button-secondaryHoverBackground);
+}
+
+/* 新对话按钮样式 */
+.new-session-button {
+  background-color: var(--vscode-button-secondaryBackground);
+  color: var(--vscode-button-secondaryForeground);
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.new-session-button:hover {
+  background-color: var(--vscode-button-secondaryHoverBackground);
+}
+
+.config-panel {
+  padding: 16px;
+  border-bottom: 1px solid var(--vscode-panel-border);
+  background-color: var(--vscode-editor-background);
+}
+
+.config-tabs {
+  display: flex;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--vscode-panel-border);
+}
+
+.tab-button {
+  background-color: transparent;
+  color: var(--vscode-foreground);
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+.tab-button.active {
+  border-bottom-color: var(--vscode-textLink-foreground);
+  color: var(--vscode-textLink-foreground);
+}
+
+.tab-button:hover:not(.active) {
+  color: var(--vscode-textLink-activeForeground);
+}
+
+.config-content {
+  margin-bottom: 16px;
+}
+
+.config-panel h3 {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.prompt-config-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.prompt-category {
+  border: 1px solid var(--vscode-input-border);
+  border-radius: 6px;
+  padding: 12px;
+}
+
+.prompt-category h4 {
+  margin: 0 0 12px 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--vscode-textLink-foreground);
+}
+
+.config-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.form-group label {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.form-group input {
+  background-color: var(--vscode-input-background);
+  color: var(--vscode-input-foreground);
+  border: 1px solid var(--vscode-input-border);
+  border-radius: 4px;
+  padding: 6px 8px;
+  font-family: var(--vscode-font-family);
+  font-size: var(--vscode-font-size);
+}
+
+.form-group input:focus {
+  border-color: var(--vscode-focusBorder);
+  outline: none;
+}
+
+.form-group textarea {
+  background-color: var(--vscode-input-background);
+  color: var(--vscode-input-foreground);
+  border: 1px solid var(--vscode-input-border);
+  border-radius: 4px;
+  padding: 6px 8px;
+  font-family: var(--vscode-font-family);
+  font-size: var(--vscode-font-size);
+  resize: vertical;
+  width: 100%;
+}
+
+.form-group textarea:focus {
+  border-color: var(--vscode-focusBorder);
+  outline: none;
+}
+
+.form-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.save-config-button {
+  background-color: var(--vscode-button-background);
+  color: var(--vscode-button-foreground);
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.save-config-button:hover {
+  background-color: var(--vscode-button-hoverBackground);
+}
+
+.cancel-config-button {
+  background-color: var(--vscode-button-secondaryBackground);
+  color: var(--vscode-button-secondaryForeground);
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.cancel-config-button:hover {
+  background-color: var(--vscode-button-secondaryHoverBackground);
+}
+
+.config-note {
+  margin: 12px 0px;
+  padding: 8px;
+  background-color: var(--vscode-textBlockQuote-background);
+  border-left: 4px solid var(--vscode-textBlockQuote-border);
+}
+
+.config-note p {
+  margin: 0;
+  font-size: 11px;
+  color: var(--vscode-descriptionForeground);
+}
+
+.messages-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: var(--vscode-descriptionForeground);
+  gap: 8px;
+}
+
+.config-warning {
+  color: var(--vscode-errorForeground);
+  font-size: 12px;
+}
+
+.message {
+  max-width: 80%;
+  padding: 12px 16px;
+  border-radius: 8px;
+  word-wrap: break-word;
+}
+
+.user-message {
+  align-self: flex-end;
+  background-color: var(--vscode-button-background);
+  color: var(--vscode-button-foreground);
+}
+
+.assistant-message {
+  align-self: flex-start;
+  background-color: var(--vscode-input-background);
+  border: 1px solid var(--vscode-input-border);
+}
+
+.message-content {
+  margin-bottom: 4px;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.message-content.loading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.message-content.loading::after {
+  content: '';
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--vscode-progressBar-background);
+  border-radius: 50%;
+  border-top-color: var(--vscode-progressBar-foreground);
+  animation: spin 1s ease-in-out infinite;
+}
+
+/* 深度思考内容样式 */
+.reasoning-container {
+  margin-bottom: 12px;
+  border: 1px solid var(--vscode-input-border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.reasoning-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background-color: var(--vscode-textBlockQuote-background);
+  cursor: pointer;
+  user-select: none;
+}
+
+.reasoning-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--vscode-textLink-foreground);
+}
+
+.reasoning-toggle {
+  font-size: 10px;
+  color: var(--vscode-textLink-foreground);
+  transition: transform 0.2s ease;
+}
+
+.reasoning-content {
+  padding: 12px;
+  background-color: var(--vscode-textBlockQuote-background);
+  border-top: 1px solid var(--vscode-input-border);
+  font-size: 12px;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.message-timestamp {
+  font-size: 10px;
+  color: var(--vscode-descriptionForeground);
+  text-align: right;
+}
+
+.input-container {
+  display: flex;
+  padding: 16px;
+  border-top: 1px solid var(--vscode-panel-border);
+  gap: 12px;
+}
+
+.message-input {
+  flex: 1;
+  background-color: var(--vscode-input-background);
+  color: var(--vscode-input-foreground);
+  border: 1px solid var(--vscode-input-border);
+  border-radius: 4px;
+  padding: 8px 12px;
+  resize: none;
+  outline: none;
+  font-family: var(--vscode-font-family);
+  font-size: var(--vscode-font-size);
+}
+
+.message-input:focus {
+  border-color: var(--vscode-focusBorder);
+}
+
+.message-input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.send-button {
+  background-color: var(--vscode-button-background);
+  color: var(--vscode-button-foreground);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  align-self: flex-end;
+}
+
+.send-button:hover:not(:disabled) {
+  background-color: var(--vscode-button-hoverBackground);
+}
+
+.send-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+/* 停止按钮样式（与发送按钮结合使用） */
+.send-button.stop-button {
+  background-color: var(--vscode-button-secondaryBackground);
+  color: var(--vscode-button-secondaryForeground);
+}
+
+.send-button.stop-button:hover:not(:disabled) {
+  background-color: var(--vscode-button-secondaryHoverBackground);
+}
+
+/* API提供商和模型管理样式 */
+.provider-list {
+  margin-bottom: 16px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.section-header h4 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.add-button {
+  background-color: var(--vscode-button-secondaryBackground);
+  color: var(--vscode-button-secondaryForeground);
+  border: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.add-button:hover {
+  background-color: var(--vscode-button-secondaryHoverBackground);
+}
+
+.empty-message {
+  font-style: italic;
+  color: var(--vscode-descriptionForeground);
+  font-size: 12px;
+  margin: 8px 0;
+}
+
+.provider-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.provider-tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border: 1px solid var(--vscode-input-border);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.provider-tab:hover {
+  background-color: var(--vscode-list-hoverBackground);
+}
+
+.provider-tab.active {
+  background-color: var(--vscode-list-activeSelectionBackground);
+  color: var(--vscode-list-activeSelectionForeground);
+  border-color: var(--vscode-focusBorder);
+}
+
+.provider-name {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.provider-config {
+  border: 1px solid var(--vscode-input-border);
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 16px;
+}
+
+.model-list {
+  margin-top: 16px;
+}
+
+.model-items {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.model-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+}
+
+.model-name-input {
+  flex: 1;
+  background-color: var(--vscode-input-background);
+  color: var(--vscode-input-foreground);
+  border: 1px solid var(--vscode-input-border);
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-family: var(--vscode-font-family);
+  font-size: var(--vscode-font-size);
+}
+
+.model-name-input:focus {
+  border-color: var(--vscode-focusBorder);
+  outline: none;
+}
+
+/* 增加radio按钮的点击区域 */
+input[type='radio'] {
+  transform: scale(1.2);
+  margin-right: 4px;
+  cursor: pointer;
+}
+
+/* 为radio标签添加更大的点击区域 */
+.radio-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  flex: 1;
+}
+
+/* 为provider-tab中的radio按钮添加更大的点击区域 */
+.provider-tab .radio-label {
+  margin: 0;
+}
+
+/* 为model-item中的radio按钮添加更大的点击区域 */
+.model-item .radio-label {
+  gap: 8px;
+}
+
+.delete-button {
+  background-color: transparent;
+  color: var(--vscode-descriptionForeground);
+  border: 1px solid var(--vscode-input-border);
+  padding: 2px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 20px;
+}
+
+.delete-button:hover {
+  background-color: var(--vscode-errorForeground);
+  color: var(--vscode-button-foreground);
+  opacity: 0.8;
+}
+
+/* 验证错误信息样式 */
+.validation-errors {
+  margin: 12px 0;
+  padding: 12px;
+  background-color: var(--vscode-inputValidation-errorBackground);
+  border: 1px solid var(--vscode-inputValidation-errorBorder);
+  border-radius: 4px;
+}
+
+.validation-errors h4 {
+  margin: 0 0 8px 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--vscode-errorForeground);
+}
+
+.validation-errors ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.validation-errors li {
+  margin-bottom: 4px;
+  font-size: 12px;
+  color: var(--vscode-errorForeground);
+}

@@ -2,7 +2,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      // lanuch前运行一下yarn watch
+      // lanuch前运行一下pnpm watch  版本更新：pnpm version patch
       "name": "Launch Extension",
       "type": "extensionHost",
       "request": "launch",

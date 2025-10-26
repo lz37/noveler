@@ -1,3 +1,3 @@
 ## 修改
 
-- 解决 `noveler.typingRecord` 不生效的问题 [issue-28](https://github.com/lz37/noveler/issues/28)
+- 新增ai助手功能，包括随机名称、单词替换、续写、角色设计四个功能（通过右键菜单栏触发）

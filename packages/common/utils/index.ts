@@ -126,6 +126,8 @@ export const createWebviewHtml = (
       <div id="root"></div>
       <script>
         const vscode = acquireVsCodeApi();
+        // 将VS Code API挂载到全局window对象上，供组件使用
+        window.vscode = vscode;
         const home = '${router}'
         const showScrollbar = ${showScrollbar}
       </script>

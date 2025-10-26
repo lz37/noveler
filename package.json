@@ -2,7 +2,7 @@
   "name": "noveler",
   "displayName": "Noveler",
   "description": "一个在 vscode 上辅助码中文小说的插件",
-  "version": "1.4.11",
+  "version": "1.4.13",
   "author": "zerozawa",
   "publisher": "zerozawa",
   "license": "GPL-3.0",
@@ -125,6 +125,32 @@
         "title": "export TXT",
         "category": "noveler",
         "shortTitle": "导出txt到单独文件"
+      },
+      {
+        "command": "noveler.aiChat",
+        "title": "打开对话页面",
+        "category": "noveler",
+        "icon": "$(comment-discussion)"
+      },
+      {
+        "command": "noveler.aiRandomName",
+        "title": "随机取名",
+        "category": "noveler"
+      },
+      {
+        "command": "noveler.aiWordReplace",
+        "title": "词汇替换",
+        "category": "noveler"
+      },
+      {
+        "command": "noveler.aiContinueWriting",
+        "title": "续写",
+        "category": "noveler"
+      },
+      {
+        "command": "noveler.aiCharacterDesign",
+        "title": "角色设计",
+        "category": "noveler"
       }
     ],
     "keybindings": [
@@ -147,6 +173,44 @@
         "when": "editorTextFocus"
       }
     ],
+    "submenus": [
+      {
+        "id": "noveler.ai.submenu",
+        "label": "NOVELER AI助手"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "submenu": "noveler.ai.submenu",
+          "group": "navigation",
+          "when": "editorTextFocus",
+          "label": "NOVELER AI助手"
+        }
+      ],
+      "noveler.ai.submenu": [
+        {
+          "command": "noveler.aiChat",
+          "group": "ai@0"
+        },
+        {
+          "command": "noveler.aiRandomName",
+          "group": "ai@1"
+        },
+        {
+          "command": "noveler.aiWordReplace",
+          "group": "ai@2"
+        },
+        {
+          "command": "noveler.aiContinueWriting",
+          "group": "ai@3"
+        },
+        {
+          "command": "noveler.aiCharacterDesign",
+          "group": "ai@4"
+        }
+      ]
+    },
     "colors": [
       {
         "id": "number",
@@ -402,6 +466,164 @@
           "default": false,
           "markdownDescription": "是否开启输入记录(若开启将输入记录保存到.noveler/record) 默认关闭",
           "scope": "resource"
+        },
+        "noveler.ai.apiProviders": {
+          "type": "array",
+          "default": [],
+          "markdownDescription": "AI API 提供商列表",
+          "scope": "resource",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "markdownDescription": "提供商的唯一标识符"
+              },
+              "name": {
+                "type": "string",
+                "markdownDescription": "提供商的显示名称"
+              },
+              "apiUrl": {
+                "type": "string",
+                "markdownDescription": "API 的 URL 地址"
+              },
+              "apiKey": {
+                "type": "string",
+                "markdownDescription": "API 的密钥"
+              },
+              "models": {
+                "type": "array",
+                "markdownDescription": "该提供商支持的模型列表",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "markdownDescription": "模型的唯一标识符"
+                    },
+                    "name": {
+                      "type": "string",
+                      "markdownDescription": "模型的显示名称"
+                    },
+                    "isActive": {
+                      "type": "boolean",
+                      "markdownDescription": "模型是否激活",
+                      "default": true
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name"
+                  ]
+                }
+              },
+              "isActive": {
+                "type": "boolean",
+                "markdownDescription": "提供商是否激活",
+                "default": true
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "apiUrl",
+              "apiKey",
+              "models"
+            ]
+          }
+        },
+        "noveler.ai.selectedProviderId": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "当前选中的API提供商ID",
+          "scope": "resource"
+        },
+        "noveler.ai.selectedModelId": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "当前选中的模型ID",
+          "scope": "resource"
+        },
+        "noveler.ai.prompts": {
+          "type": "object",
+          "default": {
+            "randomName": {
+              "withSelection": "请根据内容：${selectedText}，随机取十个适合小说的人物姓名",
+              "withoutSelection": "请随机生成十个适合小说的人物姓名"
+            },
+            "wordReplace": {
+              "withSelection": "[${paragraphText}]\n${selectedText}能替换成什么？",
+              "withoutSelection": "请为当前段落提供一些词汇替换建议：\n${paragraphText}"
+            },
+            "continueWriting": {
+              "withSelection": "请根据选中的内容继续续写：\n${selectedText}",
+              "withoutSelection": "请根据以下内容继续续写：\n${contentText}"
+            },
+            "characterDesign": {
+              "withSelection": "请根据以下内容设计一个角色：\n${selectedText}",
+              "withoutSelection": "帮我随机设计一个角色"
+            }
+          },
+          "markdownDescription": "AI 提示词配置，可使用占位符：${selectedText}（选中文本）、${selectedTextWithContext}（选中文本及上下文）、${contentText}（全文）、${paragraphText}（当前段落）",
+          "scope": "resource",
+          "properties": {
+            "randomName": {
+              "type": "object",
+              "markdownDescription": "随机取名提示词",
+              "properties": {
+                "withSelection": {
+                  "type": "string",
+                  "markdownDescription": "有选中文本时的提示词"
+                },
+                "withoutSelection": {
+                  "type": "string",
+                  "markdownDescription": "无选中文本时的提示词"
+                }
+              }
+            },
+            "wordReplace": {
+              "type": "object",
+              "markdownDescription": "词汇替换提示词",
+              "properties": {
+                "withSelection": {
+                  "type": "string",
+                  "markdownDescription": "有选中文本时的提示词"
+                },
+                "withoutSelection": {
+                  "type": "string",
+                  "markdownDescription": "无选中文本时的提示词"
+                }
+              }
+            },
+            "continueWriting": {
+              "type": "object",
+              "markdownDescription": "续写提示词",
+              "properties": {
+                "withSelection": {
+                  "type": "string",
+                  "markdownDescription": "有选中文本时的提示词"
+                },
+                "withoutSelection": {
+                  "type": "string",
+                  "markdownDescription": "无选中文本时的提示词"
+                }
+              }
+            },
+            "characterDesign": {
+              "type": "object",
+              "markdownDescription": "角色设计提示词",
+              "properties": {
+                "withSelection": {
+                  "type": "string",
+                  "markdownDescription": "有选中文本时的提示词"
+                },
+                "withoutSelection": {
+                  "type": "string",
+                  "markdownDescription": "无选中文本时的提示词"
+                }
+              }
+            }
+          }
         }
       }
     }

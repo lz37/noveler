@@ -7,6 +7,7 @@ import {
 import { NovelerRouter } from 'common/types'
 import Preview from '@app/components/Preview'
 import Panel from '@app/components/Panel'
+import AIChat from '@app/components/AIChat'
 import React from 'react'
 
 interface NovelerIndexRouteObject extends IndexRouteObject {
@@ -34,6 +35,11 @@ const routes: NovelerRouteObject[] = [
     path: '/panel',
     element: <Panel />,
     id: 'panel',
+  },
+  {
+    path: '/ai-chat',
+    element: <AIChat />,
+    id: 'ai-chat',
   },
 ]
 

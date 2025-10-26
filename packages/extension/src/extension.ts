@@ -14,6 +14,7 @@ import * as statusBar from '@/modules/StatusBar'
 import * as formatter from '@/modules/Formatter'
 import * as indention from '@/modules/Indention'
 import * as preview from '@/modules/webviews/Preview'
+import * as aiChat from '@/modules/webviews/AIChat'
 import * as decoration from '@/modules/Decoration'
 import * as completion from '@/modules/Completion'
 import * as CSVReader from '@/modules/reader/CSVReader'
@@ -33,6 +34,7 @@ export const activate = async (context: vscode.ExtensionContext) => {
   await confHandler.askForPlaintextConf()
   // ------------------ setcontext ------------------
   const previewProvider = preview.provider(context)
+  const aiChatProvider = aiChat.provider(context)
   completion.setContext(context)
   panel.init(context, os.platform(), editor)
   // ------------------ register ------------------
@@ -48,6 +50,11 @@ export const activate = async (context: vscode.ExtensionContext) => {
     previewProvider.onChangeDocument,
     previewProvider.onChangeEditor,
     previewProvider.onScroll,
+    aiChatProvider.command,
+    aiChatProvider.commandRandomName,
+    aiChatProvider.commandWordReplace,
+    aiChatProvider.commandContinueWriting,
+    aiChatProvider.commandCharacterDesign,
     decoration.onChangeConf,
     decoration.onChangeDocument,
     CSVReader.reloadCommand,

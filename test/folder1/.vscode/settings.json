@@ -13,6 +13,23 @@
     "\\d+(\\.\\d+)?": { "color": "#23e40a" },
     "《.*?》": { "color": "#8482e4" }
   },
+  "noveler.ai.apiProviders": [
+    {
+      "apiKey": "",
+      "id": "guijiliudong",
+      "isActive": true,
+      "models": [
+        {
+          "name": "deepseek-ai/DeepSeek-V3.2-Exp",
+          "id": "deepseek-ai/DeepSeek-V3.2-Exp"
+        }
+      ],
+      "apiUrl": "https://api.siliconflow.cn/v1/chat/completions",
+      "name": "guijiliudong"
+    }
+  ],
+  "noveler.ai.selectedModelId": "deepseek-ai/DeepSeek-V3.2-Exp",
+  "noveler.ai.selectedProviderId": "guijiliudong",
   "noveler.typingRecord":true,
   "noveler.confCSVFiles": [
     {
