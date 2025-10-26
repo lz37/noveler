@@ -7,6 +7,7 @@ import {
 } from 'common/types'
 import ConfigPanel from './setting'
 import './style.css'
+import ReactMarkdown from 'react-markdown'
 console.log('AIChat 组件加载')
 
 const AIChat: React.FC = () => {
@@ -250,7 +251,7 @@ const AIChat: React.FC = () => {
                         )}
                       </div>
                     )}
-                  <div className='message-content'>{message.content}</div>
+                  <ReactMarkdown>{message.content}</ReactMarkdown>
                   <div className='message-timestamp'>
                     {new Date(message.timestamp).toLocaleTimeString()}
                   </div>
