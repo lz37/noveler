@@ -183,7 +183,7 @@ export const newAIResponse = async (
           content: msg.content,
         })),
         temperature: 0.7,
-        max_tokens: 1000,
+        max_tokens: 8192,
         stream: true, // 启用流式响应
       })
 
