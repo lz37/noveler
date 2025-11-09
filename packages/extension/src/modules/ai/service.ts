@@ -7,7 +7,6 @@ import {
   AIStreamDto,
   Theme,
   ApiProvider,
-  Model,
 } from 'common/types'
 
 // 当前HTTP请求

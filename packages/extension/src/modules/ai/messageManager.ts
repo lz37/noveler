@@ -1,4 +1,3 @@
-import * as vscode from 'vscode'
 import { ChatMessage } from 'common/types'
 
 // 会话接口
@@ -14,10 +13,10 @@ export interface ChatSession {
 export class MessageManager {
   private sessions: Map<string, ChatSession> = new Map()
   private currentSessionId: string | null = null
-  private maxMessagesPerSession: number = 100 // 每个会话最大消息数量
-  private maxContextMessages: number = 20 // 上下文最大消息数量，用于API调用
+  private maxMessagesPerSession = 100 // 每个会话最大消息数量
+  private maxContextMessages = 20 // 上下文最大消息数量，用于API调用
   private storageKey = 'ai.chatSessions'
-  private isInitialized: boolean = false
+  private isInitialized = false
 
   // 初始化，从持久化存储加载会话数据
   async initialize(): Promise<void> {
@@ -220,9 +219,7 @@ export class MessageManager {
   }
 
   // 获取会话统计信息
-  getSessionStats(
-    sessionId?: string,
-  ): {
+  getSessionStats(sessionId?: string): {
     messageCount: number
     userMessageCount: number
     assistantMessageCount: number
