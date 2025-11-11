@@ -1,3 +1,17 @@
+## [1.4.14](https://github.com/lz37/noveler/compare/v1.4.13...v1.4.14) (2025-11-11)
+
+
+### Bug Fixes
+
+* 修复保存配置时，prompts保存不正确的问题 ([c9a54b8](https://github.com/lz37/noveler/commit/c9a54b8d0915c048b12dc0a921058d0d089994f1))
+
+
+### Features
+
+* desc ([28f0037](https://github.com/lz37/noveler/commit/28f00377ecc9495cdf345e8db3404132afeb1800))
+
+
+
 ## [1.4.13](https://github.com/lz37/noveler/compare/v1.4.12...v1.4.13) (2025-10-19)
 
 

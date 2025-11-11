@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import ApiConfig, { ApiConfigRef } from './ApiConfig'
-import PromptConfig from './PromptConfig'
+import PromptConfig, { PromptConfigRef } from './PromptConfig'
 import { ApiProvider, Model } from './types'
 
 interface ConfigPanelProps {
@@ -35,6 +35,9 @@ const ConfigPanel: React.FC<ConfigPanelProps> = ({ isVisible, onClose }) => {
   // API配置组件的引用
   const apiConfigRef = useRef<ApiConfigRef>(null)
 
+  // 提示词配置组件的引用
+  const promptConfigRef = useRef<PromptConfigRef>(null)
+
   // 组件初始化时获取配置
   useEffect(() => {
     if (isVisible) {
@@ -56,59 +59,18 @@ const ConfigPanel: React.FC<ConfigPanelProps> = ({ isVisible, onClose }) => {
       if (message && message.type === 'config') {
         if (message.config && apiConfigRef.current) {
           // 将配置加载到ApiConfig组件中
+          console.log('message.config ', message.config)
+
           apiConfigRef.current.loadConfig({
             apiProviders: message.config.apiProviders || [],
             selectedProviderId: message.config.selectedProviderId || '',
             selectedModelId: message.config.selectedModelId || '',
           })
-        }
-      }
-      // 处理提示词配置消息
-      else if (message && message.type === 'promptConfig') {
-        if (message.promptConfig) {
-          // 合并默认配置和用户配置，确保所有必需的键都存在
-          setPromptConfig((prev: any) => ({
-            randomName: {
-              withSelection:
-                message.promptConfig.randomName?.withSelection ||
-                prev.randomName?.withSelection ||
-                '',
-              withoutSelection:
-                message.promptConfig.randomName?.withoutSelection ||
-                prev.randomName?.withoutSelection ||
-                '',
-            },
-            wordReplace: {
-              withSelection:
-                message.promptConfig.wordReplace?.withSelection ||
-                prev.wordReplace?.withSelection ||
-                '',
-              withoutSelection:
-                message.promptConfig.wordReplace?.withoutSelection ||
-                prev.wordReplace?.withoutSelection ||
-                '',
-            },
-            continueWriting: {
-              withSelection:
-                message.promptConfig.continueWriting?.withSelection ||
-                prev.continueWriting?.withSelection ||
-                '',
-              withoutSelection:
-                message.promptConfig.continueWriting?.withoutSelection ||
-                prev.continueWriting?.withoutSelection ||
-                '',
-            },
-            characterDesign: {
-              withSelection:
-                message.promptConfig.characterDesign?.withSelection ||
-                prev.characterDesign?.withSelection ||
-                '',
-              withoutSelection:
-                message.promptConfig.characterDesign?.withoutSelection ||
-                prev.characterDesign?.withoutSelection ||
-                '',
-            },
-          }))
+
+          // 将提示词配置加载到PromptConfig组件中
+          if (message.config.prompts && promptConfigRef.current) {
+            promptConfigRef.current.loadConfig(message.config.prompts)
+          }
         }
       }
     }
@@ -147,6 +109,9 @@ const ConfigPanel: React.FC<ConfigPanelProps> = ({ isVisible, onClose }) => {
       // 获取API配置
       const apiConfig = apiConfigRef.current?.getConfig()
 
+      // 获取提示词配置
+      const promptsConfig = promptConfigRef.current?.getConfig()
+
       // 发送配置到主进程
       const vscode = (window as any).vscode
       if (vscode) {
@@ -156,7 +121,7 @@ const ConfigPanel: React.FC<ConfigPanelProps> = ({ isVisible, onClose }) => {
             apiProviders: apiConfig?.apiProviders,
             selectedProviderId: apiConfig?.selectedProviderId,
             selectedModelId: apiConfig?.selectedModelId,
-            prompts: promptConfig,
+            prompts: promptsConfig,
           },
         })
       }
@@ -194,6 +159,7 @@ const ConfigPanel: React.FC<ConfigPanelProps> = ({ isVisible, onClose }) => {
 
       <div style={{ display: configTab === 'prompt' ? 'block' : 'none' }}>
         <PromptConfig
+          ref={promptConfigRef}
           promptConfig={promptConfig}
           updatePromptConfig={updatePromptConfig}
         />
